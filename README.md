@@ -2,9 +2,9 @@
 under development
 
 ## Procedure
-現在はROS2で考える．
+現在はROS2で考える．（迷い中）
 1. Ubuntu20.04 install
-2. ROS2 Foxy install
+2. ROS2 Foxy install（）
 3. tello_ros (tello_driver) install (https://github.com/clydemcqueen/tello_ros)
 4. ORB-SLAM2 install
 5. Octomap install
@@ -38,3 +38,18 @@ https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
 ### tello_ros install
 https://github.com/clydemcqueen/tello_ros
 
+- git install
+```
+sudo apt-get install git
+git config --global user.name [任意のユーザ名]
+git config --global user.email [任意のユーザ名]
+```
+- ssh
+```
+ssh-keygen -t rsa -C "メールアドレス"
+cat ~/.ssh/id_rsa.pub | clip.exe
+```
+- Githubへ登録後
+```
+ssh -T git@github.com
+```
