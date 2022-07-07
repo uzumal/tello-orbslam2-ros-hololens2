@@ -2,25 +2,25 @@
 under development
 
 ## Procedure
-現在はROS2で考える．（迷い中）
-1. Ubuntu20.04 install
-2. ROS2 Foxy install（）
-3. tello_ros (tello_driver) install (https://github.com/clydemcqueen/tello_ros)
-4. ORB-SLAM2 install
-5. Octomap install
-6. Convert 3D point to Octomap
-7. Send to Unity
-8. positioning
-9. Check correctly for Position
-10. Merge multiple uav's OCtomap
+1. Ubuntu18.04 install
+2. ROS Melodic
+3. https://github.com/tau-adl/Tello_ROS_ORBSLAM　を参考に作成
+4. Octomap install
+5. Convert 3D point to Octomap
+6. Send to Unity
+7. positioning
+8. Check correctly for Position
+9. Merge multiple uav's OCtomap
 
-### Ubuntu20.04 install
+### Ubuntu18.04 install
 VirtualBox install
 https://www.virtualbox.org/
-Ubuntu20.04 install
+Ubuntu18.04 install
 https://www.ubuntulinux.jp/News/ubuntu2004-ja-remix
 - memory size
-  - 2048MB
+  - 7000MB
+- プロセッサー
+  - 6
 - File size
   - 20.00GB
 - 光学ディスク
@@ -32,12 +32,11 @@ https://www.ubuntulinux.jp/News/ubuntu2004-ja-remix
 sudo apt update
 sudo apt upgrade
 ```
-### ROS2 Foxy install
-https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
+### ROS Melodic install
+[https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
+](http://wiki.ros.org/melodic/Installation/Ubuntu)
 
-### tello_ros install
-https://github.com/clydemcqueen/tello_ros
-
+### GitHub
 - git install
 ```
 sudo apt-get install git
@@ -54,26 +53,27 @@ cat ~/.ssh/id_rsa.pub | clip.exe
 ssh -T git@github.com
 ```
 
-- cmakeのversion-update
+## Requirement Packages(全て自身でインストールしたい人)
 ```
-cd ~/Downloads/cmake-3.14.0   # or wherever you downloaded cmake
-./bootstrap --prefix=$HOME/cmake-install
-make 
-make install
-export PATH=$HOME/cmake-install/bin:$PATH
-export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
+### catking tools
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install python-catkin-tools
 ```
--  lock対処
+### ffmpeg
 ```
-sudo rm /var/lib/apt/lists/lock
-sudo rm /var/lib/dpkg/lock
-sudo rm /var/lib/dpkg/lock-frontend
+sudo apt install ffmpeg
 ```
-## Requirement Packages
-### Pangolin本体のインストール
+### Python PIL
+```
+sudo apt-get install python-imaging-tk
+```
+
+### Pangolin(ver.0.5)本体のインストール
 ```
 cd ~/ROS/
-git clone https://github.com/stevenlovegrove/Pangolin.git
+git clone --recursive https://github.com/stevenlovegrove/Pangolin.git -b v0.5
 sudo apt install libgl1-mesa-dev
 sudo apt install libglew-dev
 sudo apt-get install libxkbcommon-dev
@@ -84,8 +84,15 @@ cmake ..
 cmake --build .
 sudo make install
 ```
-- install
-sudo apt install pybind11-dev
+### Pybind11
+```
+git clone https://github.com/pybind/pybind11.git
+cd pybind
+mkdir build
+cmake ..
+make -j6
+sudo make install
+```
 
 ### OpenCV 3.4.0
 ```
@@ -129,4 +136,84 @@ ldconfig -v
 # きちんとインストールされていることを確認する
 #   opencvっていうコマンドはないので注意
 opencv_version
+
+exit
+```
+### Eigen3
+```
+cd ~
+mkdir eigen_ws
+wget https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
+tar xvf eigen-3.3.7.tar.gz
+cd eigen-3.3.7
+mkdir build
+cd build
+cmake ..
+# make check (not definitely)
+sudo make install
+```
+### g2o
+```
+sudo apt install libsuitesparse-dev - qtdeclarative5-dev - qt5-qmake - libqglviewer-dev
+mkdir ~/g2o_ws
+cd ~/g2o_ws
+git clone https://github.com/RainerKuemmerle/g2o.git
+cd g2o
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+### DBoW2
+```
+sudo apt-get install libboost-dev
+mkdir ~/DBoW2_ws
+cd ~/DBoW2_ws
+git clone https://github.com/dorian3d/DBoW2.git
+cd DBoW2
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
+# Building
+## Getting the code
+git clone
+## Install
+### Pangolin(ver.0.5)本体のインストール
+### Pybind11
+### Eigen3
+### g2o
+### DBoW2
+### h264decoder
+cd ~/ROS/
+
+##Build
+catkin build --mem-limit 70% -j1
+## ORB-SLAMの違い
+元コードを改修
+- Tello_ROS_ORBSLAM > ROS > tello_catkin_ws > src > orb_slam_2_ros > CMakeLists
+  - CmakeFile_changed2の使用
+- 
+
+## Appendix
+### cmakeのversion-update
+```
+wget https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz
+tar xvf cmake-3.14.0.tar.gz
+cd ~/Downloads/cmake-3.14.0   # or wherever you downloaded cmake
+./bootstrap --prefix=$HOME/cmake-install
+make 
+make install
+export PATH=$HOME/cmake-install/bin:$PATH
+export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
+```
+### lock対処
+```
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock-frontend
 ```
