@@ -1,0 +1,1 @@
+/usr/bin/gcc    CMakeFiles/exit_code.dir/exit_code.c.o  -o exit_code 

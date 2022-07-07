@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/uzu/eigen_ws/eigen-3.3.7/unsupported/test/kronecker_product.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildUnsupported"
+		],
+		"name" : "kronecker_product_2"
+	}
+}

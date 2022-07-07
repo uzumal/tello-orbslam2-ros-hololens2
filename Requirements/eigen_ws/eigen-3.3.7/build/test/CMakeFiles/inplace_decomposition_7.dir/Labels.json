@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/uzu/eigen_ws/eigen-3.3.7/test/inplace_decomposition.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildOfficial"
+		],
+		"name" : "inplace_decomposition_7"
+	}
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch>
+
+<arg name="dist" default="0"/>
+
+<!-- -start disturber before group ns -->
+<group if="$(arg dist)">
+  <node pkg="ccmslam" type="ccmslamCommTestDisturber" name="Disturber" args="0.0 0.0 0.0" output="screen" />
+</group>
+
+  <group ns="ccmslam">
+
+  <node pkg="tf" type="static_transform_publisher" name="linkS0_broadcaster" args="0 0 0 0 0 0 world odomS0 100" />
+  <node pkg="tf" type="static_transform_publisher" name="linkS1_broadcaster" args="5 5 0 0 0 0 world odomS1 100" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="linkS2_broadcaster" args="0 0 5 -1.571 0 -2 world odomS2 100" /> -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="linkS3_broadcaster" args="0 0 5 -1.571 0 -2 world odomS3 100" /> -->
+
+<node pkg="ccmslam" type="ccmslamServerNode" name="ccmslamServerNode" args="$(find ccmslam)/conf/ORBvoc.txt" output="screen">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- !!! ADJUST INPUT TOPIC NAMES IF NECESSARY !!! -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <param name="NumOfClients" type="int" value="2" />
+
+  <!-- Client 0 -->
+
+  <param name="FrameId0" type="string" value="odomS0" />
+  <param name="~MapInTopicName0" type="string" value="MapOutClient0" unless="$(arg dist)" />
+  <param name="~MapInTopicName0" type="string" value="MapOutClient0Disturbed" if="$(arg dist)" />
+
+  <!-- Client 1 -->
+
+  <param name="FrameId1" type="string" value="odomS1" />
+  <param name="~MapInTopicName1" type="string" value="MapOutClient1" unless="$(arg dist)" />
+  <param name="~MapInTopicName1" type="string" value="MapOutClient1Disturbed" if="$(arg dist)" />
+
+</node>
+
+  </group>
+
+
+  <!-- <node name="cloud_map_saver_for_server" pkg="flock_driver" type="cloud_map_saver_for_server.py" output="screen"> -->
+
+    <!-- <param name="CLOUD0_TOPIC_NAME" type="string" value="/ccmslam/ClientMapPointsMap0" />
+    <param name="CLOUD1_TOPIC_NAME" type="string" value="/ccmslam/ClientMapPointsMap1" /> -->
+
+   <!--  <param name="CLOUD0_TOPIC_NAME" type="string" value="/tello0/point_cloud" />
+    <param name="CLOUD1_TOPIC_NAME" type="string" value="/tello1/point_cloud" />
+ -->
+    
+    <!-- <param name="POSE0_TOPIC_NAME" type="string" value="/ccmslam/PoseOutClient0" /> -->
+    <!-- <param name="POSE1_TOPIC_NAME" type="string" value="/ccmslam/PoseOutClient1" /> -->
+    <!-- <param name="POSE0_TOPIC_NAME" type="string" value="/tello0/pose" />
+    <param name="POSE1_TOPIC_NAME" type="string" value="/tello1/pose" />
+    <param name="CAMERA0_TOPIC_NAME" type="string" value="/ccmslam/ImageClient0" />
+    <param name="CAMERA1_TOPIC_NAME" type="string" value="/ccmslam/ImageClient1" />
+  
+</node> -->
+
+<node name="ccm_transformer" pkg="flock_driver" type="ccm_transformer.py" output="screen">
+  <!-- <param name="~ID" type="int" value="$(arg GLOBAL_ID)" /> -->
+  <!-- <remap from="orb_slam2_mono/pose" to="/tello$(arg GLOBAL_ID)/pose" /> -->
+</node>
+
+
+</launch>

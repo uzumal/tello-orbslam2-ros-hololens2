@@ -1,0 +1,26 @@
+<launch>
+
+
+    <node name="tello_slam_simulation" pkg="flock_driver" type="tello_slam_simulation.py" output="screen" >
+      <!-- <remap from="/orb_slam2_mono/pose2" to="/orb_slam2_mono/pose" /> -->
+      <!-- <remap from="flight_data2" to="flight_data" /> -->
+      	<param name="~POSE_TOPIC_NAME" type="string" value="/tello0/pose" />
+  		<param name="ID" type="string" value="" />
+    </node>
+
+    <node name="tello_slam_control" pkg="flock_driver" type="tello_slam_control.py" output="screen">
+  <param name="~POSE_TOPIC_NAME" type="string" value="/tello0/pose" />
+  <param name="ID" type="string" value="" />
+</node>
+
+
+<node name="tello_ui" pkg="flock_driver" type="tello_ui.py" output="screen">
+  <param name="ID" type="string" value="" />
+  <param name="~POSE_TOPIC_NAME" type="string" value="/tello0/pose" />
+</node> 
+
+
+    <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" /> -->
+
+
+</launch>

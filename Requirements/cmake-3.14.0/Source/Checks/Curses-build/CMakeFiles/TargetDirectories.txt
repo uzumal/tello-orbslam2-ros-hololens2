@@ -1,0 +1,2 @@
+/home/uzu/ダウンロード/cmake-3.14.0/Source/Checks/Curses-build/CMakeFiles/rebuild_cache.dir
+/home/uzu/ダウンロード/cmake-3.14.0/Source/Checks/Curses-build/CMakeFiles/edit_cache.dir
