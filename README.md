@@ -53,3 +53,80 @@ cat ~/.ssh/id_rsa.pub | clip.exe
 ```
 ssh -T git@github.com
 ```
+
+- cmakeのversion-update
+```
+cd ~/Downloads/cmake-3.14.0   # or wherever you downloaded cmake
+./bootstrap --prefix=$HOME/cmake-install
+make 
+make install
+export PATH=$HOME/cmake-install/bin:$PATH
+export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
+```
+-  lock対処
+```
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock-frontend
+```
+## Requirement Packages
+### Pangolin本体のインストール
+```
+cd ~/ROS/
+git clone https://github.com/stevenlovegrove/Pangolin.git
+sudo apt install libgl1-mesa-dev
+sudo apt install libglew-dev
+sudo apt-get install libxkbcommon-dev
+cd Pangolin
+mkdir build
+cd build
+cmake ..
+cmake --build .
+sudo make install
+```
+- install
+sudo apt install pybind11-dev
+
+### OpenCV 3.4.0
+```
+# root権限
+sudo su -
+
+apt-get update
+apt-get upgrade
+
+# libjasper-devを入れるためにリポジトリを追加
+add-apt-repository "deb http://security.ubuntu.com/ubuntu bionic-security main"
+
+# 依存パッケージをインストールする
+apt-get -y install build-essential checkinstall cmake unzip pkg-config yasm
+apt-get -y install git gfortran python3-dev
+apt-get -y install libjpeg8-dev libjasper-dev libpng12-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine2-dev libv4l-dev
+apt-get -y install libjpeg-dev libpng-dev libtiff-dev libtbb-dev
+apt-get -y install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev libxvidcore-dev libx264-dev libgtk-3-dev
+
+# opencvとopencv_contribのソースをgithubからダウンロードする（zipに圧縮しているものでも可）
+#  masterにチェックアウトしているものも見かけるけど、それだと開発中のバージョンになるので、タグから最新のバージョンを指定する
+cd /usr/local/src
+git clone https://github.com/opencv/opencv.git
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv_contrib
+# 本環境は3.２.0を使用したが、Github上のバージョンを要確認
+cd opencv_contrib
+git checkout -b 3.4.0 refs/tags/3.2.0
+cd ../opencv/
+git checkout -b 3.4.0 refs/tags/3.2.0
+
+# ビルドしてインストールする
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_FFMPEG=ON ..
+make
+make install
+echo /usr/local/lib > /etc/ld.so.conf.d/opencv.conf
+ldconfig -v
+
+# きちんとインストールされていることを確認する
+#   opencvっていうコマンドはないので注意
+opencv_version
+```
