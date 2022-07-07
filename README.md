@@ -183,16 +183,81 @@ sudo make install
 ## Getting the code
 git clone
 ## Install
-### Pangolin(ver.0.5)本体のインストール
-### Pybind11
+基本的に必要なライブラリは揃えているため，フォルダーに移動し，各パッケージをインストール
+```
+cd ~/drone-slam-octomap/Requirements/
+```
+
+### Pangolin
+```
+sudo apt install libgl1-mesa-dev
+sudo apt install libglew-dev
+sudo apt-get install libxkbcommon-dev
+cd Pangolin
+mkdir build
+cd build
+cmake ..
+cmake --build .
+sudo make install
+```
+
+Pybind11
+```
+cd pybind
+mkdir build
+cmake ..
+make -j6
+sudo make install
+```
+
 ### Eigen3
-### g2o
-### DBoW2
+```
+cd eigen-3.3.7
+mkdir build
+cd build
+cmake ..
+# make check (not definitely)
+sudo make install
+```
+
+### g2o, DBoW2
+```
+cd DBoW2(対象のフォルダー)
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
 ### h264decoder
-cd ~/ROS/
+```
+cd h264decoder
+mkdir build
+cd build
+cmake ..
+make
+```
+now copy it to python path
+```
+sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
+```
 
 ##Build
+### Installing our version of TelloPy
+based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
+```
+cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
+sudo python setup.py install
+```
+### Installing orbslam2
+based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
+```
+cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
+catkin init
+catkin clean
 catkin build --mem-limit 70% -j1
+```
+
 ## ORB-SLAMの違い
 元コードを改修
 - Tello_ROS_ORBSLAM > ROS > tello_catkin_ws > src > orb_slam_2_ros > CMakeLists
