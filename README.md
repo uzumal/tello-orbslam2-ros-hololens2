@@ -262,6 +262,7 @@ catkin build --mem-limit 70% -j1
 元コードを改修
 - Tello_ROS_ORBSLAM > ROS > tello_catkin_ws > src > orb_slam_2_ros > CMakeLists
   - CmakeFile_changed2の使用
+  - $ {PROJECT_SOURCE_DIR} /orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.soの追加
 - 
 
 ## Appendix
