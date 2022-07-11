@@ -12,6 +12,12 @@ under development
 8. Check correctly for Position
 9. Merge multiple uav's OCtomap
 
+### Usage
+if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
+```
+roslaunch flock_driver orbslam2_with_cloud_map.launch
+```
+
 ### Ubuntu18.04 install
 VirtualBox install
 https://www.virtualbox.org/
