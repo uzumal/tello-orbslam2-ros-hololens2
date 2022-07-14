@@ -25,6 +25,8 @@ class FlockDriver(object):
         rospy.init_node('flock_driver_node', anonymous=False)
 
         rospy.loginfo('flock_driver is starting')
+        rospy.loginfo('debug=log')
+
         signal.signal(signal.SIGINT, self.cleanup)
         signal.signal(signal.SIGTERM, self.cleanup)
 
@@ -82,6 +84,7 @@ class FlockDriver(object):
         self._light_strength_data_pub = rospy.Publisher(self.publish_prefix+'light_strength', Int32, queue_size=10)
         self._camera_info_pub = rospy.Publisher(self.publish_prefix+'camera/camera_info', CameraInfo, queue_size=10)
 
+
         
 
         # ROS subscriptions
@@ -117,7 +120,7 @@ class FlockDriver(object):
         self._drone.start_video()
         # self._drone.set_loglevel('LOG_ERROR')
 
-        # print('debug')
+        print('DEBUG, libh264: '+ str(libh264decoder))
         # Listen to flight data messages
         self._drone.subscribe(self._drone.EVENT_FLIGHT_DATA, self.flight_data_callback)
 
@@ -129,9 +132,11 @@ class FlockDriver(object):
 
         # video_thread = threading.Thread(target=self.video_worker)
         # video_thread.start()
+        rospy.loginfo(str(self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)))
         self.packet_data = ""
         self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)
-
+	print('videoFrameHandler: '+str(self.videoFrameHandler))
+	print('EVENTFRAME: '+str(self._drone.EVENT_VIDEO_FRAME))
         # rospy.on_shutdown(self.cleanup)
 
 
@@ -168,6 +173,7 @@ class FlockDriver(object):
 
 
     def flight_data_callback(self, event, sender, data, **args):
+        rospy.loginfo("flight^data^callback")
         flight_data = FlightData()
 
         # Battery state
@@ -349,12 +355,15 @@ class FlockDriver(object):
         Runs as a thread, sets self.frame to the most recent frame Tello captured.
 
         """
-        # print("received {} bytes".format(len(data)))
+	print('videoFrameHandlerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+        rospy.loginfo('kazuuuma received {} bytes'.format(len(data)))
+        print("kazuuuma received {} bytes".format(len(data)))
         self.packet_data += data
         # print(len(data))
         # end of frame
         if len(data) != 1460:
             # print("trying to decode")
+	    #rospy.loginfo('trying to decode')
             for frame in self._h264_decode(self.packet_data):
                 # print("decoded frame")  
                 # Convert PyAV frame => PIL image => OpenCV Mat

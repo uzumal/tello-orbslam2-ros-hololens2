@@ -29,6 +29,7 @@ wid = None
 pygame_screen = None
 bridge = None
 date_fmt = '%Y-%m-%d_%H%M%S'
+id = None
 
 # import sys, select, termios, tty
 # import keyboard
@@ -219,9 +220,16 @@ if __name__=="__main__":
 
     time.sleep(1)
 
-    pub_twist = rospy.Publisher('/tello/cmd_vel', Twist, queue_size = 1)
-    pub_takeoff = rospy.Publisher('/tello/takeoff', Empty, queue_size=1)
-    pub_land = rospy.Publisher('/tello/land', Empty, queue_size=1)
+    try:
+	id = rospy.get_param('~ID')
+    except:
+	id = ''
+    publish_prefix = "tello{}/".format(id)
+    print('keyboard: '+ str(publish_prefix))
+
+    pub_twist = rospy.Publisher(publish_prefix+'cmd_vel', Twist, queue_size = 1)
+    pub_takeoff = rospy.Publisher(publish_prefix+'takeoff', Empty, queue_size=1)
+    pub_land = rospy.Publisher(publish_prefix+'land', Empty, queue_size=1)
     # rospy.Subscriber("camera/image_raw", Image, videoFrameHandler)
     rospy.Subscriber("/camera/image_raw", Image, videoFrameHandler)
     

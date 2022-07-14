@@ -64,12 +64,13 @@
   <param name="~POSE_TOPIC_NAME" type="string" value="/orb_slam2_mono/pose" />
 </node> 
 
-  <!-- <node name="tello_keyboard_node" pkg="flock_driver" type="tello_keyboard.py" output="screen">
-      <remap from="/tello/cmd_vel" to="/tello0/cmd_vel" />
-      <remap from="/tello/takeoff" to="/tello0/takeoff" />
-      <remap from="/tello/land" to="/tello0/land" />
+<node name="tello_keyboard_node" pkg="flock_driver" type="tello_keyboard.py" output="screen">
+  <param name="ID" type="string" value="" />
+  <!-- <remap from="/tello/cmd_vel" to="/tello0/cmd_vel" /> -->
+  <!-- <remap from="/tello/takeoff" to="/tello0/takeoff" /> -->
+  <!-- <remap from="/tello/land" to="/tello0/land" /> -->
 
-  </node> -->
+</node>
 
 
 
