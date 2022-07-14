@@ -225,13 +225,12 @@ if __name__=="__main__":
     except:
 	id = ''
     publish_prefix = "tello{}/".format(id)
-    print('keyboard: '+ str(publish_prefix))
 
     pub_twist = rospy.Publisher(publish_prefix+'cmd_vel', Twist, queue_size = 1)
     pub_takeoff = rospy.Publisher(publish_prefix+'takeoff', Empty, queue_size=1)
     pub_land = rospy.Publisher(publish_prefix+'land', Empty, queue_size=1)
     # rospy.Subscriber("camera/image_raw", Image, videoFrameHandler)
-    rospy.Subscriber("/camera/image_raw", Image, videoFrameHandler)
+    # rospy.Subscriber("/camera/image_raw", Image, videoFrameHandler)
     
 
     pygame.init()
@@ -239,7 +238,7 @@ if __name__=="__main__":
     pygame_screen = pygame.display.set_mode((960, 720))
     pygame.font.init()
 
-    bridge = CvBridge()
+    # bridge = CvBridge()
 
     font = pygame.font.SysFont("dejavusansmono", 32)
     if 'window' in pygame.display.get_wm_info():
