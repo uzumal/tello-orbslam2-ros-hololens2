@@ -18,6 +18,28 @@ if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
 roslaunch flock_driver orbslam2_with_cloud_map.launch
 ```
 
+##Build
+### Installing our version of TelloPy
+based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
+```
+cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
+sudo python setup.py install
+```
+### Installing orbslam2
+based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
+```
+cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
+catkin init
+catkin clean
+catkin build --mem-limit 70% -j1
+```
+
+## Add the enviroment setup to bashrc
+```
+echo "source $PWD/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
 ### Ubuntu18.04 install
 VirtualBox install
 https://www.virtualbox.org/
@@ -246,22 +268,6 @@ make
 now copy it to python path
 ```
 sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
-```
-
-##Build
-### Installing our version of TelloPy
-based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
-```
-cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
-sudo python setup.py install
-```
-### Installing orbslam2
-based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
-```
-cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
-catkin init
-catkin clean
-catkin build --mem-limit 70% -j1
 ```
 
 ## ORB-SLAMの違い
