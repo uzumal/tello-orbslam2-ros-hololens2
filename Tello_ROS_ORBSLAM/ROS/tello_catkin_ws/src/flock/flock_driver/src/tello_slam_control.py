@@ -162,8 +162,11 @@ class TelloSlamControler(object):
         self.pub_twist.publish(self.speed_to_twist())
 
     def save_trajectory_to_log(self):
+	# print('----------------------------saveTrajectory-------------------------------------')
         if time.time() - self.last_time_saved_trajectory > 1:
+	    print('lie save trajectory to log')
             with open('log_file_trajectory.txt', 'a') as file:
+		print('PRINT save trajectory to log')
                 file.write("%.3f,%.3f,%.3f,%.1f,%.3f,%.3f,%.3f,%.1f\n"%(self.real_world.pose.position.x, self.real_world.pose.position.y, self.real_world.pose.position.z, self.slam_orientation_deg.z, self.command_pos.x, self.command_pos.y, self.command_pos.z, self.command_orientation_deg.z))
             self.last_time_saved_trajectory = time.time()
 

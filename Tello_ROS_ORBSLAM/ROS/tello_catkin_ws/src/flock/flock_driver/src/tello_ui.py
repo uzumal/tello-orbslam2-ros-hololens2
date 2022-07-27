@@ -1255,7 +1255,7 @@ class TelloUI(object):
         self.take_picure_publisher.publish()
 
     def trajectory_load_callback(self):
-        trajectory_path = tkFileDialog.askopenfilename(initialdir = "~/ROS/ccmslam_ws/src/flock/flock_driver/src/",title = "Select Trajectory file",filetypes = (("csv files","*.csv"),("all files","*.*")))    
+        trajectory_path = tkFileDialog.askopenfilename(initialdir = "~/ROS/tello_catkin_ws/src/flock/flock_driver/src/",title = "Select Trajectory file",filetypes = (("csv files","*.csv"),("all files","*.*")))    
         if trajectory_path == '':
             return
         self.trajectory_list = self.load_trajectory_from_csv(trajectory_path)

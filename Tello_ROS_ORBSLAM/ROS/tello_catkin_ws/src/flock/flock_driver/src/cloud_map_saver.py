@@ -445,6 +445,8 @@ class CloudMapSaver(object):
 
         self.plot_to_gui()
 
+	print('--------------------------------------------self.filePath--------------------------------------------------------')
+	print(self.file_path)
         if self.once:
             # write the points to file
             rospy.loginfo("Saving Point Cloud from topic {} to file {}".format(self.cloud_topic_name, self.file_path))

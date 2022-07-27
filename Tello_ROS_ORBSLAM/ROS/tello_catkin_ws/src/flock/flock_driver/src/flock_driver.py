@@ -120,7 +120,6 @@ class FlockDriver(object):
         self._drone.start_video()
         # self._drone.set_loglevel('LOG_ERROR')
 
-        print('DEBUG, libh264: '+ str(libh264decoder))
         # Listen to flight data messages
         self._drone.subscribe(self._drone.EVENT_FLIGHT_DATA, self.flight_data_callback)
 
@@ -132,11 +131,8 @@ class FlockDriver(object):
 
         # video_thread = threading.Thread(target=self.video_worker)
         # video_thread.start()
-        rospy.loginfo(str(self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)))
         self.packet_data = ""
         self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)
-	print('videoFrameHandler: '+str(self.videoFrameHandler))
-	print('EVENTFRAME: '+str(self._drone.EVENT_VIDEO_FRAME))
         # rospy.on_shutdown(self.cleanup)
 
 
@@ -355,9 +351,8 @@ class FlockDriver(object):
         Runs as a thread, sets self.frame to the most recent frame Tello captured.
 
         """
-	print('videoFrameHandlerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-        rospy.loginfo('kazuuuma received {} bytes'.format(len(data)))
-        print("kazuuuma received {} bytes".format(len(data)))
+	# rospy.loginfo('DEBUG : -------------------------------------videoFrameHandler-----------------------------------------')
+        # rospy.loginfo('kazuuuma received {} bytes'.format(len(data)))
         self.packet_data += data
         # print(len(data))
         # end of frame
