@@ -5,7 +5,7 @@ under development
 1. Ubuntu18.04 install
 2. ROS Melodic
 3. https://github.com/tau-adl/Tello_ROS_ORBSLAM　を参考に作成
-4. Octomap install
+4. Octomap install（https://github.com/OctoMap/octomap_mapping）
 5. Convert 3D point to Octomap
 6. Send to Unity
 7. positioning
@@ -268,6 +268,23 @@ make
 now copy it to python path
 ```
 sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
+```
+
+## Octomap
+```
+sudo apt-get install ros-melodic-octomap ros-melodic-octomap-server ros-melodic-octomap-mapping ros-melodic-octomap-ros ros-melodic-octomap-msgs
+```
+run:
+```
+cd ~/octomap_catkin_ws
+catkin build
+source devel/setup.bash
+```
+
+then just run:
+
+```
+roslaunch octomap_server octomap_mapping.launch
 ```
 
 ## ORB-SLAMの違い
