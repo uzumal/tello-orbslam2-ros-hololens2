@@ -1,0 +1,1 @@
+/home/uzu/Training/catkin_ws/devel/./cmake.lock 1

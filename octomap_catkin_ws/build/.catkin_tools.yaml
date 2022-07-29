@@ -1,0 +1,6 @@
+devel_space: /home/uzu/Training/catkin_ws/devel
+install: false
+install_space: /home/uzu/Training/catkin_ws/install
+profile: default
+source_space: /home/uzu/Training/catkin_ws/src
+workspace: /home/uzu/Training/catkin_ws

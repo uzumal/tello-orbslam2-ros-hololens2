@@ -1,0 +1,8 @@
+prefix=/home/uzu/Training/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_driver
+
+Name: flock_driver
+Description: Description of flock_driver
+Version: 0.1.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: cv_bridge flock_msgs geometry_msgs rospy sensor_msgs std_msgs

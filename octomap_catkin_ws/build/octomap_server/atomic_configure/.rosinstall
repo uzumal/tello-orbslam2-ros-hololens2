@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/uzu/Training/catkin_ws/devel/.private/octomap_server/setup.sh

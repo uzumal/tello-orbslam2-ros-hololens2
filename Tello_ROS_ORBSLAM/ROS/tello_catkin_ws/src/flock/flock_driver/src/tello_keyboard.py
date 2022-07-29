@@ -215,6 +215,9 @@ def limit_twist(twist):
     twist.linear.z = ((twist.linear.z > 0)*2-1) * min(abs(twist.linear.z), 0.3)
     return twist
 
+# def takeoff():
+    # return pub_takeoff.publish()
+
 if __name__=="__main__":
     # settings = termios.tcgetattr(sys.stdin)
 
@@ -225,13 +228,15 @@ if __name__=="__main__":
     except:
 	id = ''
     publish_prefix = "tello{}/".format(id)
+    print('keyboard: '+ str(publish_prefix))
+
 
     pub_twist = rospy.Publisher(publish_prefix+'cmd_vel', Twist, queue_size = 1)
     pub_takeoff = rospy.Publisher(publish_prefix+'takeoff', Empty, queue_size=1)
     pub_land = rospy.Publisher(publish_prefix+'land', Empty, queue_size=1)
     # rospy.Subscriber("camera/image_raw", Image, videoFrameHandler)
     # rospy.Subscriber("/camera/image_raw", Image, videoFrameHandler)
-    
+
 
     pygame.init()
     pygame.display.init()
@@ -259,13 +264,14 @@ if __name__=="__main__":
         while not rospy.is_shutdown():
 
             for keyname in list_of_pressed_keys:
+                print('raise_com: ' + keyname)
                 twist = raise_command(keyname, twist)
 
             for e in pygame.event.get():
                 # WASD for movement
                 if e.type == pygame.locals.KEYDOWN:
                     keyname = pygame.key.name(e.key)
-                    print('+' + keyname)
+                    print('keyname: ' + keyname)
                     if keyname == 'escape':
                         # drone.quit()
                         raise KeyboardInterrupt
@@ -274,7 +280,9 @@ if __name__=="__main__":
                         pub_land.publish()
                         continue
                     elif keyname == 'tab':
+			print('haitterunoka----')
                         pub_takeoff.publish()
+			print('uwaaaaaaaaaaa----')
                         continue
                     else:
                         if not keyname in list_of_pressed_keys:
@@ -294,7 +302,6 @@ if __name__=="__main__":
 
                 
             
-
             twist = limit_twist(twist)
             pub_twist.publish(twist)
 
@@ -321,3 +328,4 @@ if __name__=="__main__":
         pub_land.publish()
 
         # termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+

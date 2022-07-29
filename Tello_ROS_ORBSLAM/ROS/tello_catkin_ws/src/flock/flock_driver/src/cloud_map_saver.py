@@ -47,6 +47,9 @@ class CloudMapSaver(object):
 
         self.bridge = CvBridge()
 
+        self.uzu_pub = rospy.Publisher('uzu_data', PointCloud2, queue_size=10)
+
+
         self.file_path = rospy.get_param('~OUT_FILE_PATH')
         self.cloud_topic_name = rospy.get_param('~CLOUD_TOPIC_NAME')
         self.trigger_topic_name = rospy.get_param('~TRIGGER_TOPIC_NAME')
@@ -414,6 +417,8 @@ class CloudMapSaver(object):
 
     def point_cloud_callback(self, point_cloud):
         fields_str = str(point_cloud.fields)
+	print('-------------------------POINT-CLOUD-------------------------------------------')
+	print(fields_str)
         # file.write(fields_str+'\n')
 
         # point_cloud.data is list of uint8[].
@@ -445,13 +450,14 @@ class CloudMapSaver(object):
 
         self.plot_to_gui()
 
-	print('--------------------------------------------self.filePath--------------------------------------------------------')
-	print(self.file_path)
+	# print('--------------------------------------------self.filePath--------------------------------------------------------')
+	# print(self.list_of_pure_lines)
+        # self.uzu_pub.publish(self.list_of_pure_lines)
         if self.once:
             # write the points to file
-            rospy.loginfo("Saving Point Cloud from topic {} to file {}".format(self.cloud_topic_name, self.file_path))
-            with open(self.file_path, 'w') as file:
-                [file.write(','.join(element)+'\n') for element in self.list_of_pure_lines]
+		rospy.loginfo("Saving Point Cloud from topic {} to file {}".format(self.cloud_topic_name, self.file_path))
+		with open(self.file_path, 'w') as file:
+			[file.write(','.join(element)+'\n') for element in self.list_of_pure_lines]
 
 
     def point_cloud_server1_callback(self, point_cloud):

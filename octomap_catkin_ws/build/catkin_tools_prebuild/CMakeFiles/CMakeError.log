@@ -1,0 +1,55 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_17752/fast"
+/usr/bin/make -f CMakeFiles/cmTC_17752.dir/build.make CMakeFiles/cmTC_17752.dir/build
+make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_17752.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_17752.dir/CheckSymbolExists.c.o   -c /home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_17752
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_17752.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_17752.dir/CheckSymbolExists.c.o  -o cmTC_17752 
+CMakeFiles/cmTC_17752.dir/CheckSymbolExists.c.o: 関数 `main' 内:
+CheckSymbolExists.c:(.text+0x1b): `pthread_create' に対する定義されていない参照です
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_17752.dir/build.make:97: recipe for target 'cmTC_17752' failed
+make[1]: *** [cmTC_17752] Error 1
+make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp' から出ます
+Makefile:126: recipe for target 'cmTC_17752/fast' failed
+make: *** [cmTC_17752/fast] Error 2
+
+File /home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b6492/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b6492.dir/build.make CMakeFiles/cmTC_b6492.dir/build
+make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_b6492.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b6492.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b6492
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b6492.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_b6492.dir/CheckFunctionExists.c.o  -o cmTC_b6492 -lpthreads 
+/usr/bin/ld: -lpthreads が見つかりません
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_b6492.dir/build.make:97: recipe for target 'cmTC_b6492' failed
+make[1]: *** [cmTC_b6492] Error 1
+make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp' から出ます
+Makefile:126: recipe for target 'cmTC_b6492/fast' failed
+make: *** [cmTC_b6492/fast] Error 2
+
+

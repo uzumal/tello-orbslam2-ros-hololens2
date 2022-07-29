@@ -1,0 +1,8 @@
+prefix=/home/uzu/Training/catkin_ws/install
+
+Name: octomap_server
+Description: Description of octomap_server
+Version: 0.6.7
+Cflags: -I${prefix}/include -I/opt/ros/melodic/include
+Libs: -L${prefix}/lib -loctomap_server /opt/ros/melodic/lib/liboctomap.so /opt/ros/melodic/lib/liboctomath.so
+Requires: roscpp visualization_msgs sensor_msgs pcl_ros pcl_conversions nav_msgs std_msgs std_srvs octomap_ros octomap_msgs dynamic_reconfigure nodelet

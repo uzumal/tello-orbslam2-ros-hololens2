@@ -23,7 +23,6 @@ ENDIF()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/orb_slam2/cmake_modules)
 
-
 find_package (catkin REQUIRED COMPONENTS
 roscpp
 rospy
@@ -69,10 +68,9 @@ ${PROJECT_SOURCE_DIR}/orb_slam2/Thirdparty/g2o/lib/libg2o.so
 
 set(LIBS_ROS
 ${PROJECT_SOURCE_DIR}/orb_slam2/lib/lib${PROJECT_NAME}.so
+${PROJECT_SOURCE_DIR}/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.so
 ${OpenCV_LIBS}
 ${catkin_LIBRARIES}
-${PROJECT_SOURCE_DIR}/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.so
-
 )
 
 add_service_files(
@@ -172,6 +170,9 @@ target_link_libraries(${PROJECT_NAME}_rgbd
 ${LIBS_ROS}
 ${Pangolin_LIBRARIES}
 )
+
+message(STATUS "printing CATKIN_PACKAGE_LIB_DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}" )
+message(STATUS "printing CATKIN_PACKAGE_BIN_DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}" )
 
 install(TARGETS ${PROJECT_NAME}_mono ${PROJECT_NAME}_stereo ${PROJECT_NAME}_rgbd
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

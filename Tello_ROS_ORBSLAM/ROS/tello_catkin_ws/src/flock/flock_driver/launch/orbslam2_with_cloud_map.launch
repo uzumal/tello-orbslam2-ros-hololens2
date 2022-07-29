@@ -2,7 +2,7 @@
 
   <node pkg="tf" type="static_transform_publisher" name="world" args="0 0 0 0 0 0 map world 100" /> 
 
-	<node name="orb_slam2_mono" pkg="orb_slam2_ros" type="orb_slam2_ros_mono" output="screen">
+  <node name="orb_slam2_mono" pkg="orb_slam2_ros" type="orb_slam2_ros_mono" output="screen">
         
 
       <remap from="/camera/image_raw" to="/tello/camera/image_raw" />
@@ -27,7 +27,7 @@
   <!-- <node name="image_muxer" pkg="flock_driver" type="image_muxer.py" output="screen" /> -->
 
   <node name="cloud_map_saver" pkg="flock_driver" type="cloud_map_saver.py" output="screen">
-  <param name="OUT_FILE_PATH" type="string" value="/home/uzu/drone-slam-octomap/output/map_point.txt" />
+  <param name="OUT_FILE_PATH" type="string" value="/home/uzu/map_point.txt" />
   <param name="CLOUD_TOPIC_NAME" type="string" value="/orb_slam2_mono/map_points" />
   <param name="TRIGGER_TOPIC_NAME" type="string" value="/save_cloud_trigger" />
   <param name="POSE_TOPIC_NAME" type="string" value="/orb_slam2_mono/pose" />
@@ -37,7 +37,7 @@
 </node>
 
 
- <node name="flock_driver_node" pkg="flock_driver" type="flock_driver.py" output="screen" >
+ <node name="flock_driver_node" pkg="flock_driver" type="flock_driver.py" output="screen">
     <param name="network_interface" type="string" value="" />
     <param name="ID" type="string" value="" />
 
@@ -64,13 +64,15 @@
   <param name="~POSE_TOPIC_NAME" type="string" value="/orb_slam2_mono/pose" />
 </node> 
 
-<node name="tello_keyboard_node" pkg="flock_driver" type="tello_keyboard.py" output="screen">
-  <param name="ID" type="string" value="" />
-  <!-- <remap from="/tello/cmd_vel" to="/tello0/cmd_vel" /> -->
-  <!-- <remap from="/tello/takeoff" to="/tello0/takeoff" /> -->
-  <!-- <remap from="/tello/land" to="/tello0/land" /> -->
+  <node name="tello_keyboard_node" pkg="flock_driver" type="tello_keyboard.py" output="screen">
+      <param name="ID" type="string" value="" />
+      <!-- <remap from="/tello/cmd_vel" to="/tello0/cmd_vel" /> -->
+      <!-- <remap from="/tello/takeoff" to="/tello0/takeoff" /> -->
+      <!-- <remap from="/tello/land" to="/tello0/land" /> -->
 
-</node>
+  </node>
+
+<node name="rviz" pkg="rviz" type="rviz" output="screen" />
 
 
 

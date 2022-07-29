@@ -25,8 +25,6 @@ class FlockDriver(object):
         rospy.init_node('flock_driver_node', anonymous=False)
 
         rospy.loginfo('flock_driver is starting')
-        rospy.loginfo('debug=log')
-
         signal.signal(signal.SIGINT, self.cleanup)
         signal.signal(signal.SIGTERM, self.cleanup)
 
@@ -84,12 +82,12 @@ class FlockDriver(object):
         self._light_strength_data_pub = rospy.Publisher(self.publish_prefix+'light_strength', Int32, queue_size=10)
         self._camera_info_pub = rospy.Publisher(self.publish_prefix+'camera/camera_info', CameraInfo, queue_size=10)
 
-
         
 
         # ROS subscriptions
         rospy.Subscriber(self.publish_prefix+'cmd_vel', Twist, self.cmd_vel_callback)
         rospy.Subscriber(self.publish_prefix+'takeoff', Empty, self.takeoff_callback)
+        rospy.Subscriber(self.publish_prefix+'moveforward', Empty, self.moveforward_callback)
         rospy.Subscriber(self.publish_prefix+'land', Empty, self.land_callback)
         rospy.Subscriber(self.publish_prefix+'flip', Flip, self.flip_callback)
         rospy.Subscriber(self.publish_prefix+'zoom_mode', Bool, self.zoom_callback)
@@ -120,6 +118,7 @@ class FlockDriver(object):
         self._drone.start_video()
         # self._drone.set_loglevel('LOG_ERROR')
 
+        # print('debug')
         # Listen to flight data messages
         self._drone.subscribe(self._drone.EVENT_FLIGHT_DATA, self.flight_data_callback)
 
@@ -131,8 +130,12 @@ class FlockDriver(object):
 
         # video_thread = threading.Thread(target=self.video_worker)
         # video_thread.start()
+        rospy.loginfo(self._drone)
         self.packet_data = ""
         self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)
+        rospy.loginfo(FlightData())
+	print('CvBridge: '+str(self._cv_bridge))
+	print('EVENTFRAME: '+str(self._drone.EVENT_VIDEO_FRAME))
         # rospy.on_shutdown(self.cleanup)
 
 
@@ -169,7 +172,6 @@ class FlockDriver(object):
 
 
     def flight_data_callback(self, event, sender, data, **args):
-        rospy.loginfo("flight^data^callback")
         flight_data = FlightData()
 
         # Battery state
@@ -269,6 +271,9 @@ class FlockDriver(object):
     def takeoff_callback(self, msg):
         self._drone.takeoff()
 
+    def moveforward_callback(self, msg):
+        self._drone.move_forward(0.3)
+
     def land_callback(self, msg):
         self._drone.land()
 
@@ -351,14 +356,12 @@ class FlockDriver(object):
         Runs as a thread, sets self.frame to the most recent frame Tello captured.
 
         """
-	# rospy.loginfo('DEBUG : -------------------------------------videoFrameHandler-----------------------------------------')
-        # rospy.loginfo('kazuuuma received {} bytes'.format(len(data)))
+        # print("received {} bytes".format(len(data)))
         self.packet_data += data
         # print(len(data))
         # end of frame
         if len(data) != 1460:
             # print("trying to decode")
-	    #rospy.loginfo('trying to decode')
             for frame in self._h264_decode(self.packet_data):
                 # print("decoded frame")  
                 # Convert PyAV frame => PIL image => OpenCV Mat
