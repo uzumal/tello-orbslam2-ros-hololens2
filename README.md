@@ -13,6 +13,9 @@ under development
 9. Merge multiple uav's OCtomap
 
 sudo apt-get install ros-melodic-rosbridge-suite
+https://qiita.com/srs/items/1fcbd720e2489a0ce7cf
+
+https://www.youtube.com/watch?v=yPPFK_74rro
 
 ### Usage
 if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
