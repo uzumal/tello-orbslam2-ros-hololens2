@@ -160,7 +160,8 @@ git checkout -b 3.4.0 refs/tags/3.2.0
 # ビルドしてインストールする
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_FFMPEG=ON ..
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_FFMPEG=ON -D WITH_CUDA=ON -DWITH_NVCUVID=ON -DBUILD_opencv_cudacodec=OFF -DCUDA_GENERATION=Pascal ..
+// cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_FFMPEG=ON ..
 make
 make install
 echo /usr/local/lib > /etc/ld.so.conf.d/opencv.conf
