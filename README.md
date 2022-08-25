@@ -39,6 +39,10 @@ catkin clean
 catkin build --mem-limit 70% -j1
 ```
 
+sudo apt-get install ros-<rosdistro>-rosbridge-server
+roslaunch rosbridge_server rosbridge_websocket.launch
+
+
 ## Add the enviroment setup to bashrc
 ```
 echo "source $PWD/devel/setup.bash" >> ~/.bashrc
