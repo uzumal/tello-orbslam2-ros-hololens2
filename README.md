@@ -49,6 +49,9 @@ echo "source $PWD/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+sudo apt-get install ros-melodic-octomap ros-melodic-octomap-mapping ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-octomap-rviz-plugins ros-melodic-octomap-server
+
+
 ### Ubuntu18.04 install
 VirtualBox install
 https://www.virtualbox.org/
