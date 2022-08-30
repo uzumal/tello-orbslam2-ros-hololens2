@@ -52,9 +52,9 @@ namespace RosSharp.RosBridgeClient
         private Vector3 GetPosition(MessageTypes.Geometry.PoseStamped message)
         {
             return new Vector3(
-                (float)message.pose.position.x,
-                (float)message.pose.position.y,
-                (float)message.pose.position.z);
+                (float)message.pose.position.x * 10,
+                (float)message.pose.position.y * 10,
+                (float)message.pose.position.z * 10);
         }
 
         private Quaternion GetRotation(MessageTypes.Geometry.PoseStamped message)

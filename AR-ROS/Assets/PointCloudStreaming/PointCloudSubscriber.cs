@@ -28,7 +28,6 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             base.Start();
-
         }
 
         public void Update()
@@ -82,10 +81,11 @@ namespace RosSharp.RosBridgeClient
             float r;
             float g;
             float b;
-
+            
             //この部分でbyte型をfloatに変換         
             for (int n = 0; n < size; n++)
             {
+                
                 x_posi = n * point_step + 0;
                 y_posi = n * point_step + 4;
                 z_posi = n * point_step + 8;
@@ -104,11 +104,17 @@ namespace RosSharp.RosBridgeClient
                 //r = r / rgb_max;
                 //g = g / rgb_max;
                 //b = b / rgb_max;
-
-                pcl[n] = new Vector3(x, z, y);
-                pcl_color[n] = new Color(255, 0, 0);
-
-
+                if(x != 0 & y !=0 & z != 0){
+                    int isPosition = Array.IndexOf(pcl, new Vector3(x, z, y) * 5);
+                    // Check if exists
+                    if(isPosition < 0){
+                        pcl[n] = new Vector3(x, z, y) * 5;
+                        pcl_color[n] = new Color(255, 0, 0);
+                        // preview pointcloud
+                        GameObject obj = (GameObject)Resources.Load ("Point");
+                        Instantiate (obj, pcl[n], Quaternion.identity);
+                    }
+                }
             }
         }
 

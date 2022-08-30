@@ -15,7 +15,7 @@ public class PointCloudRenderer : MonoBehaviour
     MeshFilter mf;
 
     // The size, positions and colours of each of the pointcloud
-    public float pointSize = 1f;
+    public float pointSize = 5;
     
 
     [Header("MAKE SURE THESE LISTS ARE MINIMISED OR EDITOR WILL CRASH")]
@@ -55,6 +55,7 @@ public class PointCloudRenderer : MonoBehaviour
         mesh.Clear();
         mesh.vertices = positions;
         mesh.colors = colours;
+        Debug.Log(positions[0].x) ;
         int[] indices = new int[positions.Length];
 
         for (int i = 0; i < positions.Length; i++)

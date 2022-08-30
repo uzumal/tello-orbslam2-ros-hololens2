@@ -1,51 +1,39 @@
-﻿Shader "Custom/PointCloudShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/PointCloudShader"
 {
-	Properties
-	{
-		_PointSize("PointSize", Float) = 1
-	}
-
-	SubShader
-	{
-		Pass
-		{
-			LOD 200
-
-			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
-
-			struct VertexInput
-			{
-				float4 v : POSITION;
-				float4 color: COLOR;
-			};
-
-			struct VertexOutput
-			{
-				float4 pos : SV_POSITION;
-				float4 col : COLOR;
-				float size : PSIZE;
-			};
-
-			float _PointSize;
-
-			VertexOutput vert(VertexInput v)
-			{
-				VertexOutput o;
-				o.pos = UnityObjectToClipPos(v.v);
-				o.size = _PointSize;
-				o.col = v.color;
-
-				return o;
-			}
-
-			float4 frag(VertexOutput o) : COLOR
-			{
-				return o.col;
-			}
-
-			ENDCG
-		}
-	}
+	Properties {
+        _Color ("Color", Color) = (1, 1, 1, 1)
+    }
+    SubShader {
+        Tags { "RenderType"="Transparent" }
+        Blend SrcAlpha One
+        Pass {
+            CGPROGRAM
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            
+            struct v2f {
+                float4 pos : SV_POSITION;
+            };
+            
+            float4 _Color;
+            
+            v2f vert(appdata_base v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos (v.vertex);
+                return o;
+            }
+            
+            half4 frag (v2f i) : COLOR
+            {
+                return _Color;
+            }
+            ENDCG
+        }
+    } 
+    FallBack Off
 }
