@@ -56,11 +56,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Debug\PointcloudSubscriber.cs" />
-     <Compile Include="Assets\Debug\Trasnaprent.cs" />
+     <Compile Include="Assets\Debug\Temporarily.cs" />
      <Compile Include="Assets\MeshSplit\MeshSplitController.cs" />
      <Compile Include="Assets\MeshSplit\MeshSplitParameters.cs" />
      <Compile Include="Assets\MeshSplit\MeshSplitter.cs" />
-     <Compile Include="Assets\PointCloudStreaming\PointCloudRenderer.cs" />
+     <Compile Include="Assets\PointCloudStreaming\MeshPointCloud\PointCloudRenderer.cs" />
+     <Compile Include="Assets\PointCloudStreaming\MeshPointCloud\PointCloudSub.cs" />
      <Compile Include="Assets\PointCloudStreaming\PointCloudSubscriber.cs" />
      <Compile Include="Assets\PointCloudStreaming\enableOpenGL.cs" />
      <Compile Include="Assets\RosSharp\Scripts\Extensions\HeaderExtensions.cs" />
@@ -123,8 +124,9 @@
      <Compile Include="Assets\RosSharp\Scripts\Urdf\UrdfComponents\UrdfRobot.cs" />
      <Compile Include="Assets\RosSharp\Scripts\Urdf\UrdfComponents\UrdfVisual.cs" />
      <Compile Include="Assets\RosSharp\Scripts\Urdf\UrdfComponents\UrdfVisuals.cs" />
+     <Compile Include="Assets\Visualization\ShieldPenetration.cs" />
      <None Include="Assets\RosSharp\Plugins\Microsoft\System.Threading.Tasks.Extensions.xml" />
-     <None Include="Assets\PointCloudStreaming\PointCloudShader.shader" />
+     <None Include="Assets\PointCloudStreaming\MeshPointCloud\PointCloudShader.shader" />
      <None Include="Assets\RosSharp\Plugins\External\websocket-sharp.xml" />
      <None Include="Assets\RosSharp\Plugins\External\Newtonsoft.Json.xml" />
      <None Include="Assets\RosSharp\Plugins\External\Newtonsoft.Json.Bson.xml" />
@@ -727,6 +729,15 @@
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>/Users/takeuchikazuma/git/drone-slam-octomap/AR-ROS/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Toolchain.Macos-x86_64-Linux-x86_64">
+ <HintPath>/Users/takeuchikazuma/git/drone-slam-octomap/AR-ROS/Library/ScriptAssemblies/Unity.Toolchain.Macos-x86_64-Linux-x86_64.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Sysroot.Linux_x86_64">
+ <HintPath>/Users/takeuchikazuma/git/drone-slam-octomap/AR-ROS/Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.SysrootPackage.Editor">
+ <HintPath>/Users/takeuchikazuma/git/drone-slam-octomap/AR-ROS/Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
