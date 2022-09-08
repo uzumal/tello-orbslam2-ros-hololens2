@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;  // Except
 
-public class ShieldPenetration : MonoBehaviour
+public class OnlyShieldPenetration : MonoBehaviour
 {
     private GameObject drone;
     /// <summary>
     /// 今回の Update で検出された遮蔽物の Renderer コンポーネント。
     /// </summary>
     private List<Renderer> rendererHitsList_ = new List<Renderer>();
-
-    /// <summary>
-    /// Renderer コンポーネントのキャッシュ
-    /// </summary>
-    private List<Renderer> rendererHitsCache_ = new List<Renderer>();
 
     /// <summary>
     /// 前回の Update で検出された遮蔽物の Renderer コンポーネント。
@@ -52,29 +47,9 @@ public class ShieldPenetration : MonoBehaviour
     private bool obst = false;
 
     /// <summary>
-    /// 建物のMeshRenderer
-    /// </summary>
-    private Renderer _mesh;
-
-    /// <summary>
     /// ドローンの位置情報保持オブジェクト
     /// </summary>
-    private Vector3 prevDronePosition;
-
-    /// <summary>
-    /// ドローンの現在位置情報保持オブジェクト
-    /// </summary>
-    private Vector3 nowDronePosition;
-
-    /// <summary>
-    /// ユーザの現在の位置情報保持オブジェクト
-    /// </summary>
-    private Vector3 nowUserPosition;
-
-    /// <summary>
-    /// ユーザの過去の位置情報保持オブジェクト
-    /// </summary>
-    private Vector3 prevUserPosition;
+    private Renderer _mesh;
 
     // Start is called before the first frame update
     void Start()
@@ -82,8 +57,6 @@ public class ShieldPenetration : MonoBehaviour
         drone = GameObject.Find("droneModel");
         mat = Resources.Load<Material>("Temparent_obj") as Material;
         mat_default = Resources.Load<Material>("Default") as Material;
-        prevDronePosition = new Vector3(100,100,100);
-        prevUserPosition = new Vector3(100,100,100);
         if(drone == null){
             Debug.Log("null");
         }
@@ -106,41 +79,33 @@ public class ShieldPenetration : MonoBehaviour
         //MaskObjectのRendererコンポーネント
 
         rendererHitsPrevs_ = rendererHitsList_.ToArray();
-        // rendererHitsCache_ = new List<Renderer>(rendererHitsList_);
         rendererHitsList_.Clear();
 
-        nowDronePosition = drone.transform.position;
-        nowUserPosition = this.transform.position;
-
-        if(prevDronePosition != nowDronePosition | prevDronePosition != nowUserPosition){
         // 遮蔽物は一時的にすべて描画機能を無効にする。
-            foreach (RaycastHit _hit in _hits)
-            {
-                if(_hit.collider.gameObject.CompareTag("Building")){
-                    // 遮蔽物の Renderer コンポーネントを無効にする
-                    Renderer _renderer = _hit.collider.gameObject.GetComponent<Renderer>();
-                    if (_renderer != null)
-                    {   
-                        _renderer.material = mat;
-                        rendererHitsList_.Add(_renderer);
-                        obst = true;
-                        float distance = Vector3.SqrMagnitude(nowDronePosition - _hit.collider.gameObject.transform.position);
-                        if(distance <= 3){
-                            _renderer.material.color = new Color32(0,0,0,0);
-                        }
-                    }
+        foreach (RaycastHit _hit in _hits)
+        {
+            if(_hit.collider.gameObject.CompareTag("Building")){
+                // 遮蔽物の Renderer コンポーネントを無効にする
+                Renderer _renderer = _hit.collider.gameObject.GetComponent<Renderer>();
+                if (_renderer != null)
+                {   
+                    // Material mat = Resources.Load<Material>("Temparent_obj");
+                    // _renderer.enabled = false;
+                    _renderer.material = mat;
+                    rendererHitsList_.Add(_renderer);
+                    obst = true;
                 }
-            }
-            // 前回まで対象で、今回対象でなくなったものは、表示を元に戻す。
-            foreach (Renderer _renderer in rendererHitsPrevs_.Except<Renderer>(rendererHitsList_))
-            {
-                _renderer.material = mat_default;
-                obst = false;
             }
         }
 
-        prevDronePosition = nowDronePosition;
-        prevUserPosition = nowUserPosition;
-
+        // 前回まで対象で、今回対象でなくなったものは、表示を元に戻す。
+        foreach (Renderer _renderer in rendererHitsPrevs_.Except<Renderer>(rendererHitsList_))
+        {
+            // Debug.Log("return" + _renderer.material.name);
+            // _renderer.enabled = true;
+            // Compare_Material = (_renderer.material.name).SequenceEqual(mat.name + " (Instance");
+            _renderer.material = mat_default;
+            obst = false;
+        }
     }
 }

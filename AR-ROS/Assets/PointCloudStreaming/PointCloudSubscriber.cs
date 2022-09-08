@@ -18,8 +18,8 @@ namespace RosSharp.RosBridgeClient
         private int size;
 
         private Vector3[] pcl;
-        private Vector3[] positions = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 1, 0) };
-        private List<Vector3> myPositions = new List<Vector3>();
+        // private Vector3[] positions = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 1, 0) };
+        // private List<Vector3> myPositions = new List<Vector3>();
         private Color[] pcl_color;
 
         int width;
@@ -27,16 +27,16 @@ namespace RosSharp.RosBridgeClient
         int row_step;
         int point_step;
         
-        private GameObject drone;
-        private GameObject pointCloud;
-        private GameObject obj;
+        // private GameObject drone;
+        // private GameObject pointCloud;
+        // private GameObject obj;
         
         protected override void Start()
         {
-            drone = GameObject.Find("droneModel");
-            pointCloud = GameObject.Find("PointCloud1");
-            obj = (GameObject)Resources.Load ("Point");
-            myPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
+            // drone = GameObject.Find("droneModel");
+            // pointCloud = GameObject.Find("PointCloud1");
+            // obj = (GameObject)Resources.Load ("Point");
+            // myPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
             base.Start();
 
         }
@@ -97,7 +97,7 @@ namespace RosSharp.RosBridgeClient
             int _disNum = 5;
             
             // Cubeの重なり判定
-            Vector3 halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
+            // Vector3 halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 
             //この部分でbyte型をfloatに変換         
             for (int n = 0; n < size; n++)
@@ -136,32 +136,31 @@ namespace RosSharp.RosBridgeClient
 
                 if(Mathf.Approximately(x, 0.0f) == false & Mathf.Approximately(y, 0.0f) == false & Mathf.Approximately(z, 0.0f) == false ){
                     pcl[n] = new Vector3(x, z, y);
-                    Debug.Log("pcl :" + n + " " + pcl[n]);
+                    // Debug.Log("pcl :" + n + " " + pcl[n]);
                     // pcl_color[n] = new Color(255, 0, 0);
                     // preview pointcloud
                 }
 //                 pcl_color[n] = new Color(r, g, b);
 
-
             }
-            positions = GetPCL();
-            if (positions == null)
-            {
-                return;
-            }
-            for(int i = 0; i < positions.Length; i++){
-                int isPosition = myPositions.IndexOf(positions[i]);
-                if (!Physics.CheckBox(positions[i], halfExtents, Quaternion.identity)){
-                    // Check if exists
-                    if(isPosition < 0){
-//                         Debug.Log("position :" + i + " " + positions[i]);
-                        GameObject cloneObject = Instantiate (obj, Vector3.zero, Quaternion.identity);
-                        cloneObject.transform.parent = pointCloud.transform;
-                        cloneObject.transform.position = positions[i];
-                        myPositions.Add (positions[i]);
-                    }
-                }
-            }
+//             positions = GetPCL();
+//             if (positions == null)
+//             {
+//                 return;
+//             }
+//             for(int i = 0; i < positions.Length; i++){
+//                 int isPosition = myPositions.IndexOf(positions[i]);
+//                 if (!Physics.CheckBox(positions[i], halfExtents, Quaternion.identity)){
+//                     // Check if exists
+//                     if(isPosition < 0){
+// //                         Debug.Log("position :" + i + " " + positions[i]);
+//                         GameObject cloneObject = Instantiate (obj, Vector3.zero, Quaternion.identity);
+//                         cloneObject.transform.parent = pointCloud.transform;
+//                         cloneObject.transform.position = positions[i];
+//                         myPositions.Add (positions[i]);
+//                     }
+//                 }
+//             }
         }
 
         public Vector3[] GetPCL()
