@@ -1,4 +1,4 @@
-prefix=/home/uzu/Training/catkin_ws/install
+prefix=/home/uzu/drone-slam-octomap/octomap_catkin_ws/install
 
 Name: octomap_server
 Description: Description of octomap_server

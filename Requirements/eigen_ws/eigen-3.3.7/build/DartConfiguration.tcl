@@ -4,17 +4,17 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/uzu/eigen_ws/eigen-3.3.7
-BuildDirectory: /home/uzu/eigen_ws/eigen-3.3.7/build
+SourceDirectory: /home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7
+BuildDirectory: /home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: uzu-VirtualBox
+Site: uzu-ROG
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: linux-5.4.0-121-generic-_-7.5.0-sse2-64bit
+BuildName: linux-5.4.0-124-generic-_-7.5.0-sse2-64bit
 
 # Subprojects
 LabelsForSubprojects: 
@@ -36,7 +36,7 @@ ScpCommand: /usr/bin/scp
 NightlyStartTime: 00:00:00 UTC
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/uzu/eigen_ws/eigen-3.3.7"
+ConfigureCommand: "/usr/bin/cmake" "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7"
 MakeCommand: /usr/bin/cmake --build . --target buildtests --config "${CTEST_CONFIGURATION_TYPE}" -- -i 
 DefaultCTestConfigurationType: Release
 

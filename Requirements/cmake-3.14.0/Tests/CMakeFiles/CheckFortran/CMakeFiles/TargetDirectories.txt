@@ -1,2 +1,0 @@
-/home/uzu/ダウンロード/cmake-3.14.0/Tests/CMakeFiles/CheckFortran/CMakeFiles/rebuild_cache.dir
-/home/uzu/ダウンロード/cmake-3.14.0/Tests/CMakeFiles/CheckFortran/CMakeFiles/edit_cache.dir

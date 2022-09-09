@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server
+CMAKE_SOURCE_DIR = /home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/uzu/Training/catkin_ws/build/octomap_server
+CMAKE_BINARY_DIR = /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server
 
 # Utility rule file for actionlib_msgs_generate_messages_lisp.
 
@@ -67,6 +67,6 @@ CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/clean:
 .PHONY : CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/clean
 
 CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/depend:
-	cd /home/uzu/Training/catkin_ws/build/octomap_server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server /home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server /home/uzu/Training/catkin_ws/build/octomap_server /home/uzu/Training/catkin_ws/build/octomap_server /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server /home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/depend
 

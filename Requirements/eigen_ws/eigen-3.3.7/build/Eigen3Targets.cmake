@@ -49,7 +49,7 @@ unset(_expectedTargets)
 add_library(Eigen3::Eigen INTERFACE IMPORTED)
 
 set_target_properties(Eigen3::Eigen PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/home/uzu/eigen_ws/eigen-3.3.7"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7"
 )
 
 # This file does not depend on other imported targets which have

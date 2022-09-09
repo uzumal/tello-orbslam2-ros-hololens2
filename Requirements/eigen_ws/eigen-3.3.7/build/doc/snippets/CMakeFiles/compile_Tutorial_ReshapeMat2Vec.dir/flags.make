@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subs
 
 CXX_DEFINES = -DEIGEN_MAKING_DOCS
 
-CXX_INCLUDES = -I/home/uzu/eigen_ws/eigen-3.3.7/build/doc/snippets -I/home/uzu/eigen_ws/eigen-3.3.7/doc/snippets -I/home/uzu/eigen_ws/eigen-3.3.7 -I/home/uzu/eigen_ws/eigen-3.3.7/build 
+CXX_INCLUDES = -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build/doc/snippets -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/doc/snippets -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7 -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build 
 

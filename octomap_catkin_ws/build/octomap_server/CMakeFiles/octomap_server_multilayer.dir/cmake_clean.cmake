@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/octomap_server_multilayer.dir/src/octomap_server_multilayer.cpp.o"
-  "/home/uzu/Training/catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_server_multilayer.pdb"
-  "/home/uzu/Training/catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_server_multilayer"
+  "/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_server_multilayer.pdb"
+  "/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_server_multilayer"
 )
 
 # Per-language clean rules from dependency scanning.

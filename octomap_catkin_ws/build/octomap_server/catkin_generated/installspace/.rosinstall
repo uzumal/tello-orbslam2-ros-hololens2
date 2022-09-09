@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/uzu/Training/catkin_ws/install/setup.sh
+    local-name: /home/uzu/drone-slam-octomap/octomap_catkin_ws/install/setup.sh

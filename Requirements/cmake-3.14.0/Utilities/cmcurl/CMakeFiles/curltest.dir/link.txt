@@ -1,1 +1,0 @@
-/usr/bin/gcc   -w   CMakeFiles/curltest.dir/curltest.c.o  -o curltest lib/libcmcurl.a -ldl /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so ../cmzlib/libcmzlib.a 

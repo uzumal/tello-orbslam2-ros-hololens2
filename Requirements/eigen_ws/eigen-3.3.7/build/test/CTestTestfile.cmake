@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/uzu/eigen_ws/eigen-3.3.7/test
-# Build directory: /home/uzu/eigen_ws/eigen-3.3.7/build/test
+# Source directory: /home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/test
+# Build directory: /home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build/test
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
@@ -1356,5 +1356,5 @@ add_test(boostmultiprec_9 "boostmultiprec_9")
 set_tests_properties(boostmultiprec_9 PROPERTIES  LABELS "Official")
 add_test(boostmultiprec_10 "boostmultiprec_10")
 set_tests_properties(boostmultiprec_10 PROPERTIES  LABELS "Official")
-add_test(failtests "/usr/bin/cmake" "/home/uzu/eigen_ws/eigen-3.3.7" "-G" "Unix Makefiles" "-DEIGEN_FAILTEST=ON")
-set_tests_properties(failtests PROPERTIES  WORKING_DIRECTORY "/home/uzu/eigen_ws/eigen-3.3.7/build/test/failtests")
+add_test(failtests "/usr/bin/cmake" "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7" "-G" "Unix Makefiles" "-DEIGEN_FAILTEST=ON")
+set_tests_properties(failtests PROPERTIES  WORKING_DIRECTORY "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build/test/failtests")

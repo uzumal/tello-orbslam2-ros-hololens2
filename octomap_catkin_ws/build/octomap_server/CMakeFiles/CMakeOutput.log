@@ -1,4 +1,4 @@
-The system is: Linux - 5.4.0-122-generic - x86_64
+The system is: Linux - 5.4.0-124-generic - x86_64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
 Compiler: /usr/bin/cc 
 Build flags: 
@@ -10,7 +10,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is GNU, found in "/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/3.10.2/CompilerIdC/a.out"
+The C compiler identification is GNU, found in "/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/3.10.2/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /usr/bin/c++ 
@@ -23,33 +23,33 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is GNU, found in "/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/3.10.2/CompilerIdCXX/a.out"
+The CXX compiler identification is GNU, found in "/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/3.10.2/CompilerIdCXX/a.out"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_2d15c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_2d15c.dir/build.make CMakeFiles/cmTC_2d15c.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_2d15c.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_2d15c.dir/testCCompiler.c.o   -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_2d15c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2d15c.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_2d15c.dir/testCCompiler.c.o  -o cmTC_2d15c 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_b5fa7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b5fa7.dir/build.make CMakeFiles/cmTC_b5fa7.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_b5fa7.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_b5fa7.dir/testCCompiler.c.o   -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_b5fa7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b5fa7.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_b5fa7.dir/testCCompiler.c.o  -o cmTC_b5fa7 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_28fd3/fast"
-/usr/bin/make -f CMakeFiles/cmTC_28fd3.dir/build.make CMakeFiles/cmTC_28fd3.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_28fd3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28fd3.dir/link.txt --verbose=1
-/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o  -o cmTC_28fd3 
+Run Build Command:"/usr/bin/make" "cmTC_9d03c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9d03c.dir/build.make CMakeFiles/cmTC_9d03c.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_9d03c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d03c.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o  -o cmTC_9d03c 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -61,24 +61,24 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_28fd3' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccs5IKZG.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_28fd3 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_28fd3' '-mtune=generic' '-march=x86-64'
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_9d03c' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cchbx10Z.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_9d03c /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_9d03c' '-mtune=generic' '-march=x86-64'
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_28fd3/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_28fd3.dir/build.make CMakeFiles/cmTC_28fd3.dir/build]
-  ignore line: [make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります]
-  ignore line: [Building C object CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_28fd3]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28fd3.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o  -o cmTC_28fd3 ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_9d03c/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_9d03c.dir/build.make CMakeFiles/cmTC_9d03c.dir/build]
+  ignore line: [make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります]
+  ignore line: [Building C object CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_9d03c]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d03c.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o  -o cmTC_9d03c ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -90,13 +90,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_28fd3' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccs5IKZG.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_28fd3 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_9d03c' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cchbx10Z.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_9d03c /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccs5IKZG.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cchbx10Z.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -115,7 +115,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_28fd3] ==> ignore
+    arg [cmTC_9d03c] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -127,7 +127,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_28fd3.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_9d03c.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -157,17 +157,17 @@ Parsed C implicit link information from above output:
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_82e0f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_82e0f.dir/build.make CMakeFiles/cmTC_82e0f.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_82e0f.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_82e0f.dir/feature_tests.c.o   -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
-Linking C executable cmTC_82e0f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_82e0f.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_82e0f.dir/feature_tests.c.o  -o cmTC_82e0f 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_9a5fc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9a5fc.dir/build.make CMakeFiles/cmTC_9a5fc.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_9a5fc.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_9a5fc.dir/feature_tests.c.o   -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
+Linking C executable cmTC_9a5fc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9a5fc.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_9a5fc.dir/feature_tests.c.o  -o cmTC_9a5fc 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -177,17 +177,17 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e3d77/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e3d77.dir/build.make CMakeFiles/cmTC_e3d77.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_e3d77.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_e3d77.dir/feature_tests.c.o   -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
-Linking C executable cmTC_e3d77
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e3d77.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_e3d77.dir/feature_tests.c.o  -o cmTC_e3d77 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_323ba/fast"
+/usr/bin/make -f CMakeFiles/cmTC_323ba.dir/build.make CMakeFiles/cmTC_323ba.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_323ba.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_323ba.dir/feature_tests.c.o   -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
+Linking C executable cmTC_323ba
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_323ba.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_323ba.dir/feature_tests.c.o  -o cmTC_323ba 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -197,17 +197,17 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a893d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a893d.dir/build.make CMakeFiles/cmTC_a893d.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_a893d.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_a893d.dir/feature_tests.c.o   -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
-Linking C executable cmTC_a893d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a893d.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_a893d.dir/feature_tests.c.o  -o cmTC_a893d 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_bd3cb/fast"
+/usr/bin/make -f CMakeFiles/cmTC_bd3cb.dir/build.make CMakeFiles/cmTC_bd3cb.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_bd3cb.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_bd3cb.dir/feature_tests.c.o   -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.c
+Linking C executable cmTC_bd3cb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bd3cb.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_bd3cb.dir/feature_tests.c.o  -o cmTC_bd3cb 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -215,30 +215,30 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c33ed/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c33ed.dir/build.make CMakeFiles/cmTC_c33ed.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_c33ed.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTC_c33ed.dir/testCXXCompiler.cxx.o -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_c33ed
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c33ed.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_c33ed.dir/testCXXCompiler.cxx.o  -o cmTC_c33ed 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_90ed7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_90ed7.dir/build.make CMakeFiles/cmTC_90ed7.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_90ed7.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_90ed7.dir/testCXXCompiler.cxx.o -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_90ed7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90ed7.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_90ed7.dir/testCXXCompiler.cxx.o  -o cmTC_90ed7 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_06562/fast"
-/usr/bin/make -f CMakeFiles/cmTC_06562.dir/build.make CMakeFiles/cmTC_06562.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++     -o CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_06562
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06562.dir/link.txt --verbose=1
-/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_06562 
+Run Build Command:"/usr/bin/make" "cmTC_d8f79/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d8f79.dir/build.make CMakeFiles/cmTC_d8f79.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_d8f79
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d8f79.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_d8f79 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -250,24 +250,24 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_06562' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccwBVwwc.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_06562 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_06562' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d8f79' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc03LAzt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_d8f79 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d8f79' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_06562/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_06562.dir/build.make CMakeFiles/cmTC_06562.dir/build]
-  ignore line: [make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります]
-  ignore line: [Building CXX object CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_06562]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06562.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_06562 ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_d8f79/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_d8f79.dir/build.make CMakeFiles/cmTC_d8f79.dir/build]
+  ignore line: [make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります]
+  ignore line: [Building CXX object CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_d8f79]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d8f79.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_d8f79 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -279,13 +279,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_06562' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccwBVwwc.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_06562 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d8f79' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc03LAzt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_d8f79 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccwBVwwc.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc03LAzt.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -304,7 +304,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_06562] ==> ignore
+    arg [cmTC_d8f79] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -316,7 +316,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_06562.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_d8f79.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -342,17 +342,17 @@ Parsed CXX implicit link information from above output:
 
 
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e6ba7/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e6ba7.dir/build.make CMakeFiles/cmTC_e6ba7.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_e6ba7.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_e6ba7.dir/feature_tests.cxx.o -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_e6ba7
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e6ba7.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_e6ba7.dir/feature_tests.cxx.o  -o cmTC_e6ba7 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_9feec/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9feec.dir/build.make CMakeFiles/cmTC_9feec.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_9feec.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_9feec.dir/feature_tests.cxx.o -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_9feec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9feec.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_9feec.dir/feature_tests.cxx.o  -o cmTC_9feec 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -415,17 +415,17 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ad9df/fast"
-/usr/bin/make -f CMakeFiles/cmTC_ad9df.dir/build.make CMakeFiles/cmTC_ad9df.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_ad9df.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_ad9df.dir/feature_tests.cxx.o -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_ad9df
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ad9df.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_ad9df.dir/feature_tests.cxx.o  -o cmTC_ad9df 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_5a8f5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5a8f5.dir/build.make CMakeFiles/cmTC_5a8f5.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_5a8f5.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_5a8f5.dir/feature_tests.cxx.o -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_5a8f5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5a8f5.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5a8f5.dir/feature_tests.cxx.o  -o cmTC_5a8f5 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -488,17 +488,17 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_efebb/fast"
-/usr/bin/make -f CMakeFiles/cmTC_efebb.dir/build.make CMakeFiles/cmTC_efebb.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_efebb.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_efebb.dir/feature_tests.cxx.o -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_efebb
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_efebb.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_efebb.dir/feature_tests.cxx.o  -o cmTC_efebb 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_f5b36/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f5b36.dir/build.make CMakeFiles/cmTC_f5b36.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_f5b36.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_f5b36.dir/feature_tests.cxx.o -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_f5b36
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f5b36.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_f5b36.dir/feature_tests.cxx.o  -o cmTC_f5b36 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -561,17 +561,17 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_778d9/fast"
-/usr/bin/make -f CMakeFiles/cmTC_778d9.dir/build.make CMakeFiles/cmTC_778d9.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building CXX object CMakeFiles/cmTC_778d9.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_778d9.dir/feature_tests.cxx.o -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_778d9
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_778d9.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_778d9.dir/feature_tests.cxx.o  -o cmTC_778d9 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_eb2ca/fast"
+/usr/bin/make -f CMakeFiles/cmTC_eb2ca.dir/build.make CMakeFiles/cmTC_eb2ca.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building CXX object CMakeFiles/cmTC_eb2ca.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_eb2ca.dir/feature_tests.cxx.o -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_eb2ca
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eb2ca.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_eb2ca.dir/feature_tests.cxx.o  -o cmTC_eb2ca 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -632,30 +632,30 @@ make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/C
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
 Determining if the include file pthread.h exists passed with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_1261c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_1261c.dir/build.make CMakeFiles/cmTC_1261c.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_1261c.dir/CheckIncludeFile.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_1261c.dir/CheckIncludeFile.c.o   -c /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-Linking C executable cmTC_1261c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1261c.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_1261c.dir/CheckIncludeFile.c.o  -o cmTC_1261c 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_f6dc6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f6dc6.dir/build.make CMakeFiles/cmTC_f6dc6.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_f6dc6.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_f6dc6.dir/CheckIncludeFile.c.o   -c /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_f6dc6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f6dc6.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_f6dc6.dir/CheckIncludeFile.c.o  -o cmTC_f6dc6 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 
 Determining if the function pthread_create exists in the pthread passed with the following output:
-Change Dir: /home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
+Change Dir: /home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a789b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a789b.dir/build.make CMakeFiles/cmTC_a789b.dir/build
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
-Building C object CMakeFiles/cmTC_a789b.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_a789b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
-Linking C executable cmTC_a789b
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a789b.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_a789b.dir/CheckFunctionExists.c.o  -o cmTC_a789b -lpthread 
-make[1]: ディレクトリ '/home/uzu/Training/catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
+Run Build Command:"/usr/bin/make" "cmTC_9ed45/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9ed45.dir/build.make CMakeFiles/cmTC_9ed45.dir/build
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_9ed45.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_9ed45.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9ed45
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9ed45.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_9ed45.dir/CheckFunctionExists.c.o  -o cmTC_9ed45 -lpthread 
+make[1]: ディレクトリ '/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/octomap_server/CMakeFiles/CMakeTmp' から出ます
 
 

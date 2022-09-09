@@ -1,1 +1,1 @@
-/home/uzu/Training/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/catkin_tools_prebuild/_setup_util.py
+/home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/catkin_tools_prebuild/_setup_util.py

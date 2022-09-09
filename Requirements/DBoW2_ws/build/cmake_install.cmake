@@ -1,4 +1,4 @@
-# Install script for directory: /home/uzu/DBoW2_ws/DBoW2
+# Install script for directory: /home/uzu/drone-slam-octomap/Requirements/DBoW2_ws
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -52,20 +52,13 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/uzu/DBoW2_ws/DBoW2/build/libDBoW2.so")
+file(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/build/libDBoW2.so")
   if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libDBoW2.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libDBoW2.so")
-    file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}/usr/local/lib/libDBoW2.so"
-         OLD_RPATH "/usr/local/lib:"
-         NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libDBoW2.so")
     endif()
   endif()
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -77,7 +70,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/include" TYPE DIRECTORY FILES "/home/uzu/DBoW2_ws/DBoW2/include/DBoW2")
+file(INSTALL DESTINATION "/usr/local/include" TYPE DIRECTORY FILES "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/include/DBoW2")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -89,7 +82,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/include/DBoW2" TYPE FILE FILES "/home/uzu/DBoW2_ws/DBoW2/build/DBoW2Config.cmake")
+file(INSTALL DESTINATION "/usr/local/include/DBoW2" TYPE FILE FILES "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/build/DBoW2Config.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -101,7 +94,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/lib/cmake/DBoW2" TYPE FILE FILES "/home/uzu/DBoW2_ws/DBoW2/build/DBoW2Config.cmake")
+file(INSTALL DESTINATION "/usr/local/lib/cmake/DBoW2" TYPE FILE FILES "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/build/DBoW2Config.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -113,7 +106,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local" TYPE DIRECTORY OPTIONAL FILES "/home/uzu/DBoW2_ws/DBoW2/build/dependencies/install/")
+file(INSTALL DESTINATION "/usr/local" TYPE DIRECTORY OPTIONAL FILES "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/build/dependencies/install/")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -124,5 +117,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/uzu/DBoW2_ws/DBoW2/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/uzu/drone-slam-octomap/Requirements/DBoW2_ws/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

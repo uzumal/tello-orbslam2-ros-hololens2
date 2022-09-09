@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/uzu/Training/catkin_ws/devel/.private/octomap_server/include/octomap_server/OctomapServerConfig.h
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/include/octomap_server/OctomapServerConfig.h
 dynamic_reconfigure/config_tools.h
 -
 limits
@@ -24,7 +24,7 @@ dynamic_reconfigure/config_init_mutex.h
 boost/any.hpp
 -
 
-/home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server/include/octomap_server/OctomapServer.h
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server/include/octomap_server/OctomapServer.h
 ros/ros.h
 -
 visualization_msgs/MarkerArray.h
@@ -84,11 +84,11 @@ octomap/OcTreeKey.h
 octomap/ColorOcTree.h
 -
 
-/home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server/include/octomap_server/OctomapServerMultilayer.h
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server/include/octomap_server/OctomapServerMultilayer.h
 octomap_server/OctomapServer.h
 -
 
-/home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server/src/octomap_server_multilayer.cpp
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server/src/octomap_server_multilayer.cpp
 ros/ros.h
 -
 octomap_server/OctomapServerMultilayer.h

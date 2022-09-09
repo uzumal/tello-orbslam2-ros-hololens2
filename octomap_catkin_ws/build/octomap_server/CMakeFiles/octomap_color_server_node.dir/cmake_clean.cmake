@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/octomap_color_server_node.dir/src/octomap_server_node.cpp.o"
-  "/home/uzu/Training/catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_color_server_node.pdb"
-  "/home/uzu/Training/catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_color_server_node"
+  "/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_color_server_node.pdb"
+  "/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/lib/octomap_server/octomap_color_server_node"
 )
 
 # Per-language clean rules from dependency scanning.

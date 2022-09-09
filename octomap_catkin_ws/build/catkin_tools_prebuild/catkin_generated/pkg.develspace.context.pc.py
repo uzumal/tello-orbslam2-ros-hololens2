@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "catkin_tools_prebuild"
-PROJECT_SPACE_DIR = "/home/uzu/Training/catkin_ws/devel/.private/catkin_tools_prebuild"
+PROJECT_SPACE_DIR = "/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/catkin_tools_prebuild"
 PROJECT_VERSION = "0.0.0"

@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server/src/octomap_server_static.cpp
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server/src/octomap_server_static.cpp
 ros/ros.h
 -
 octomap_msgs/conversions.h

@@ -2,7 +2,7 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/uzu/eigen_ws/eigen-3.3.7/test/sparse_solvers.cpp"
+			"file" : "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/test/sparse_solvers.cpp"
 		}
 	],
 	"target" : 

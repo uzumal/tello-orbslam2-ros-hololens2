@@ -8,8 +8,7 @@ extend_path: null
 install: false
 install_space: install
 isolate_install: false
-jobs_args:
-- -j1
+jobs_args: []
 log_space: logs
 make_args: []
 source_space: src

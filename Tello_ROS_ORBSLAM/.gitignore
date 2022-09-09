@@ -1617,7 +1617,7 @@
 /ROS/tello_catkin_ws/.catkin_tools/
 /ROS/tello_catkin_ws/src/rqt_tello/
 *.pyc
-# /ROS/tello_catkin_ws/devel/
+/ROS/tello_catkin_ws/devel/
 /ROS/tello_catkin_ws/build/
 /Hard Copy/
 /ROS/ccmslam_ws/logs/

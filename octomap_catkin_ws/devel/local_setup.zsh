@@ -1,1 +1,1 @@
-/home/uzu/Training/catkin_ws/devel/.private/catkin_tools_prebuild/local_setup.zsh
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/catkin_tools_prebuild/local_setup.zsh

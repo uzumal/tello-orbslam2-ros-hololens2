@@ -15,13 +15,20 @@
       <!-- static parameters -->
       <param name="use_viewer" type="bool" value="true" />
       <param name="load_map" type="bool" value="false" />
-      <param name="map_file" type="string" value="labaratory_rot.bin" />
+      <param name="map_file" type="string" value="map.bin" />
       <param name="settings_file" type="string" value="$(find orb_slam2_ros)/orb_slam2/config/Tello.yaml" />
       <param name="voc_file" type="string" value="$(find orb_slam2_ros)/orb_slam2/Vocabulary/ORBvoc.txt" />
 
       <param name="pointcloud_frame_id" type="string" value="map" />
       <param name="camera_frame_id" type="string" value="camera_link" />
       <param name="min_num_kf_in_map" type="int" value="15" />
+
+       <!-- ORB parameters -->
+       <param name="/ORBextractor/nFeatures" type="int" value="2000" />
+       <param name="/ORBextractor/scaleFactor" type="double" value="1.2" />
+       <param name="/ORBextractor/nLevels" type="int" value="8" />
+       <param name="/ORBextractor/iniThFAST" type="int" value="20" />
+       <param name="/ORBextractor/minThFAST" type="int" value="7" />
   </node>
 
   <!-- <node name="image_muxer" pkg="flock_driver" type="image_muxer.py" output="screen" /> -->

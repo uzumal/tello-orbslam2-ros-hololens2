@@ -1,4 +1,4 @@
-prefix=/home/uzu/Training/catkin_ws/devel/.private/catkin_tools_prebuild
+prefix=/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/catkin_tools_prebuild
 
 Name: catkin_tools_prebuild
 Description: Description of catkin_tools_prebuild

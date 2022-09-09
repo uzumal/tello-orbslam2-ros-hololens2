@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subs
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/uzu/eigen_ws/eigen-3.3.7/build/unsupported/test -I/home/uzu/eigen_ws/eigen-3.3.7/unsupported/test -I/home/uzu/eigen_ws/eigen-3.3.7 -I/home/uzu/eigen_ws/eigen-3.3.7/build -I/home/uzu/eigen_ws/eigen-3.3.7/unsupported/test/../../test -I/home/uzu/eigen_ws/eigen-3.3.7/unsupported/test/../../unsupported -I/home/uzu/eigen_ws/eigen-3.3.7/unsupported/test/../../Eigen -I/home/uzu/eigen_ws/eigen-3.3.7/build/unsupported/test/../../test 
+CXX_INCLUDES = -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build/unsupported/test -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/unsupported/test -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7 -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/unsupported/test/../../test -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/unsupported/test/../../unsupported -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/unsupported/test/../../Eigen -I/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build/unsupported/test/../../test 
 

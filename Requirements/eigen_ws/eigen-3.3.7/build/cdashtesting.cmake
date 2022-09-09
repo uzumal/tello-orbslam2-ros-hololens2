@@ -1,9 +1,9 @@
 
-set(CTEST_SOURCE_DIRECTORY  "/home/uzu/eigen_ws/eigen-3.3.7")
-set(CTEST_BINARY_DIRECTORY  "/home/uzu/eigen_ws/eigen-3.3.7/build")
+set(CTEST_SOURCE_DIRECTORY  "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7")
+set(CTEST_BINARY_DIRECTORY  "/home/uzu/drone-slam-octomap/Requirements/eigen_ws/eigen-3.3.7/build")
 set(CTEST_CMAKE_GENERATOR   "Unix Makefiles")
-set(CTEST_BUILD_NAME        "linux-5.4.0-121-generic-_-7.5.0-sse2-64bit")
-set(CTEST_SITE              "uzu-VirtualBox")
+set(CTEST_BUILD_NAME        "linux-5.4.0-124-generic-_-7.5.0-sse2-64bit")
+set(CTEST_SITE              "uzu-ROG")
 
 set(MODEL Experimental)
 if(${CTEST_SCRIPT_ARG} MATCHES Nightly)

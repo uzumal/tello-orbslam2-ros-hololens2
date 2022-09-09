@@ -67,14 +67,14 @@ set(octomap_server_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(octomap_server_SOURCE_PREFIX /home/uzu/Training/catkin_ws/src/octomap_mapping/octomap_server)
-  set(octomap_server_DEVEL_PREFIX /home/uzu/Training/catkin_ws/devel/.private/octomap_server)
+  set(octomap_server_SOURCE_PREFIX /home/uzu/drone-slam-octomap/octomap_catkin_ws/src/octomap_mapping/octomap_server)
+  set(octomap_server_DEVEL_PREFIX /home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server)
   set(octomap_server_INSTALL_PREFIX "")
   set(octomap_server_PREFIX ${octomap_server_DEVEL_PREFIX})
 else()
   set(octomap_server_SOURCE_PREFIX "")
   set(octomap_server_DEVEL_PREFIX "")
-  set(octomap_server_INSTALL_PREFIX /home/uzu/Training/catkin_ws/install)
+  set(octomap_server_INSTALL_PREFIX /home/uzu/drone-slam-octomap/octomap_catkin_ws/install)
   set(octomap_server_PREFIX ${octomap_server_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/uzu/Training/catkin_ws/install/lib;/home/uzu/Training/catkin_ws/devel/lib;/home/uzu/Training/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/lib;/home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/lib;/home/uzu/ROS/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/uzu/drone-slam-octomap/octomap_catkin_ws/install/lib;/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/lib;/home/uzu/Train/voxblox_catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

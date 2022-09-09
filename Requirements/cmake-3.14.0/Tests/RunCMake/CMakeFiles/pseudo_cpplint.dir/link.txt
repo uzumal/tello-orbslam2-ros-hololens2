@@ -1,1 +1,0 @@
-/usr/bin/gcc    CMakeFiles/pseudo_cpplint.dir/pseudo_cpplint.c.o  -o pseudo_cpplint 

@@ -23,12 +23,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/eigen_blas_static.dir/f2c/ztbmv.c.o"
   "CMakeFiles/eigen_blas_static.dir/f2c/d_cnjg.c.o"
   "CMakeFiles/eigen_blas_static.dir/f2c/r_cnjg.c.o"
-  "CMakeFiles/eigen_blas_static.dir/fortran/complexdots.f.o"
+  "CMakeFiles/eigen_blas_static.dir/f2c/complexdots.c.o"
   "libeigen_blas_static.pdb"
   "libeigen_blas_static.a"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang C CXX Fortran)
+foreach(lang C CXX)
   include(CMakeFiles/eigen_blas_static.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

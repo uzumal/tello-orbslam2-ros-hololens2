@@ -1,1 +1,1 @@
-/home/uzu/Training/catkin_ws/devel/.private/octomap_server/include/octomap_server/OctomapServerConfig.h
+/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/octomap_server/include/octomap_server/OctomapServerConfig.h

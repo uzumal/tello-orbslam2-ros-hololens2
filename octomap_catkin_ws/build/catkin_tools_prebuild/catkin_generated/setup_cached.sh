@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/uzu/Training/catkin_ws/devel/.private/catkin_tools_prebuild:$CMAKE_PREFIX_PATH"
-export PWD='/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild'
-export ROSLISP_PACKAGE_DIRECTORIES="/home/uzu/Training/catkin_ws/devel/.private/catkin_tools_prebuild/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/uzu/Training/catkin_ws/build/catkin_tools_prebuild:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/catkin_tools_prebuild:$CMAKE_PREFIX_PATH"
+export PWD='/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/catkin_tools_prebuild'
+export ROSLISP_PACKAGE_DIRECTORIES="/home/uzu/drone-slam-octomap/octomap_catkin_ws/devel/.private/catkin_tools_prebuild/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/uzu/drone-slam-octomap/octomap_catkin_ws/build/catkin_tools_prebuild:$ROS_PACKAGE_PATH"
