@@ -27,6 +27,7 @@ public class PointCubeRenderer : MonoBehaviour
         obj = (GameObject)Resources.Load ("Point");
         myPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
         cnt = 0;
+        InvokeRepeating("ResetMesh", 10.0f, 10.0f);
         GeneratePrefab();
     }
 
@@ -34,7 +35,6 @@ public class PointCubeRenderer : MonoBehaviour
     void Update()
     { 
         UpdateMesh();
-        Invoke("ResetMesh", 10);
     }
 
     void GeneratePrefab()
@@ -65,7 +65,6 @@ public class PointCubeRenderer : MonoBehaviour
         // }
     }
 
-
     void UpdateMesh()
     {
         //positions = subscriber.pcl;
@@ -75,7 +74,7 @@ public class PointCubeRenderer : MonoBehaviour
         bool isPrefabEnough = false;
 
         // Cubeの重なり判定
-        Vector3 halfExtents = new Vector3(0.05f, 0.05f, 0.05f);
+        Vector3 halfExtents = new Vector3(0.01f, 0.01f, 0.01f);
 
         if (positions == null)
         {
@@ -95,7 +94,7 @@ public class PointCubeRenderer : MonoBehaviour
                             //prefabが足りているからtrueにする(追加)
                             isPrefabEnough = true;
                             cnt++;
-                            break;
+                            // break;
                         }
                     }else{
                         //もしもprefabが足りずbreakしなかった時の処理(追加)

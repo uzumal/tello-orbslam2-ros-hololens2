@@ -141,8 +141,8 @@ namespace RosSharp.RosBridgeClient
                     // preview pointcloud
                 }
 //                 pcl_color[n] = new Color(r, g, b);
-
             }
+            DownSampling();
 //             positions = GetPCL();
 //             if (positions == null)
 //             {
@@ -162,6 +162,21 @@ namespace RosSharp.RosBridgeClient
 //                 }
 //             }
         }
+
+    void DownSampling()
+    {
+        int cnt = 0;
+        // Cubeの重なり判定
+        Vector3 halfExtents = new Vector3(1.0f, 1.0f, 1.0f);
+        for(int i = 0; i < pcl.Length; i++){
+            if (Physics.CheckBox(pcl[i], halfExtents, Quaternion.identity)){
+                pcl[cnt] = pcl[i];
+                cnt++;
+            }else{
+            // Debug.Log("noise");
+            }
+        }
+    }
 
         public Vector3[] GetPCL()
         {
