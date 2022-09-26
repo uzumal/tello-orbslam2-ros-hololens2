@@ -585,6 +585,8 @@ GameObject:
   - component: {fileID: 830771623}
   - component: {fileID: 830771622}
   - component: {fileID: 830771626}
+  - component: {fileID: 830771628}
+  - component: {fileID: 830771627}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -681,6 +683,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719af7c628bf04268872c83454c20970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &830771627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830771621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2861073820ce447b8dfeb90c201b752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: 
+  TimeStep: 0
+--- !u!114 &830771628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830771621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SecondsTimeout: 10
+  Serializer: 0
+  protocol: 0
+  RosBridgeServerUrl: ws://192.168.0.1:9090
 --- !u!1 &985320342
 GameObject:
   m_ObjectHideFlags: 0
