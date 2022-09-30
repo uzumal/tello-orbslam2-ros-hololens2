@@ -40,7 +40,7 @@ public class PointCubeRenderer : MonoBehaviour
     void GeneratePrefab()
     {
         //最初にInstantiateで全て生成してprefabArrayに格納しておく
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 100; i++)
         {
             GameObject prefab = Instantiate(obj);
             prefab.transform.parent = pointCloud.transform;
@@ -81,14 +81,14 @@ public class PointCubeRenderer : MonoBehaviour
             return;
         }
         for(int i = 0; i < positions.Length; i++){
-            if (!Physics.CheckBox(positions[i], halfExtents, Quaternion.identity)){
+            if (!Physics.CheckBox(pointCloud.transform.InverseTransformPoint(positions[i]), halfExtents, Quaternion.identity)){
                 int isPosition = myPositions.IndexOf(positions[i]);
                 // Check if exists
                 if(isPosition < 0){
                     if(prefabList.Count > cnt){
                         if (prefabList[cnt].activeSelf == false)
                         {
-                            prefabList[cnt].transform.position = positions[i];
+                            prefabList[cnt].transform.localPosition = positions[i];
                             prefabList[cnt].SetActive(true);
                             myPositions.Add (positions[i]);
                             //prefabが足りているからtrueにする(追加)

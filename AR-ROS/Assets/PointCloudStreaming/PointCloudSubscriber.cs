@@ -142,7 +142,7 @@ namespace RosSharp.RosBridgeClient
                 }
 //                 pcl_color[n] = new Color(r, g, b);
             }
-            DownSampling();
+            // DownSampling();
 //             positions = GetPCL();
 //             if (positions == null)
 //             {

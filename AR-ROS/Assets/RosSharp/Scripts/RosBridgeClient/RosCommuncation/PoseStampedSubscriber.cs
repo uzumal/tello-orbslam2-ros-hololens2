@@ -40,6 +40,7 @@ namespace RosSharp.RosBridgeClient
         {
             position = GetPosition(message).Ros2Unity();
             rotation = GetRotation(message).Ros2Unity();
+            Debug.Log(message);
             isMessageReceived = true;
         }
 

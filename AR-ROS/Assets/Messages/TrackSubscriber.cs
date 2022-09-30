@@ -15,15 +15,14 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             trackText = GameObject.Find("trackText");
-            Text trackLost = trackText.GetComponent<Text> ();
+            trackLost = trackText.GetComponent<Text> ();
             base.Start();
         }
         
         private void Update()
         {
-            if (isMessageReceived == false)
+            if (isMessageReceived)
             {
-                return;
             }
         }
 
