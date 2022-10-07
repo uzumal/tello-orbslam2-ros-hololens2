@@ -1,7 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System.Threading.Tasks;
+using System;
+using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Input
 {
@@ -47,13 +48,5 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// True if loading input animation from the file succeeded.
         /// </returns>
         bool LoadInputAnimation(string filepath);
-
-        /// <summary>
-        /// Try to load input animation data from the given file asynchronously.
-        /// </summary>
-        /// <returns>
-        /// True if loading input animation from the file succeeded.
-        /// </returns>
-        Task<bool> LoadInputAnimationAsync(string filepath);
     }
 }

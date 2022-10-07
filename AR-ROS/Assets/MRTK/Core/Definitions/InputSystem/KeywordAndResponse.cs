@@ -26,7 +26,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         [SerializeField]
         [Tooltip("The keyword to listen for.")]
-        [SpeechKeyword]
         private string keyword;
 
         /// <summary>

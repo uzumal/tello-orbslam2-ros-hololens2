@@ -17,13 +17,15 @@ namespace Microsoft.MixedReality.Toolkit.Input
     [AddComponentMenu("Scripts/MRTK/Providers/WindowsMixedRealityHandRecorder")]
     public class WindowsMixedRealityHandRecorder : MonoBehaviour
     {
+        private static readonly int jointCount = Enum.GetNames(typeof(TrackedHandJoint)).Length;
+
         /// <summary>
         /// The joint positioned at the origin at the start of the recording.
         /// </summary>
         /// <remarks>
-        /// <para>If the reference joint moves between start and stop of recording then final position is used as an offset.</para>
-        /// <para>Example: A "poke" gesture can be simulated by moving the index finger forward between start and stop,
-        /// giving an offset that creates a poking motion when interpolated.</para>
+        /// If the reference joint moves between start and stop of recording then final position is used as an offset.
+        /// Example: A "poke" gesture can be simulated by moving the index finger forward between start and stop,
+        /// giving an offset that creates a poking motion when interpolated.
         /// </remarks>
         public TrackedHandJoint ReferenceJoint { get; set; } = TrackedHandJoint.IndexTip;
 
@@ -54,8 +56,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         public void RecordHandStop()
         {
-            MixedRealityPose[] jointPoses = new MixedRealityPose[ArticulatedHandPose.JointCount];
-            for (int i = 0; i < ArticulatedHandPose.JointCount; ++i)
+            MixedRealityPose[] jointPoses = new MixedRealityPose[jointCount];
+            for (int i = 0; i < jointCount; ++i)
             {
                 HandJointUtils.TryGetJointPose((TrackedHandJoint)i, recordingHand, out jointPoses[i]);
             }

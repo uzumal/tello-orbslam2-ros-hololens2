@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema;
 using System.IO;
 using UnityEditor;
@@ -17,22 +16,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Serialization.Editor
 {
     public static class GltfEditorImporter
     {
-#if MRTK_GLTF_IMPORTER_OFF
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Enable MRTK glTF asset importer")]
-#else
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Disable MRTK glTF asset importer")]
-#endif
-        private static void ReconcileGltfImporterDefine()
-        {
-            BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-
-#if MRTK_GLTF_IMPORTER_OFF
-            ScriptUtilities.RemoveScriptingDefinitions(group, "MRTK_GLTF_IMPORTER_OFF");
-#else
-            ScriptUtilities.AppendScriptingDefinitions(group, "MRTK_GLTF_IMPORTER_OFF");
-#endif
-        }
-
         public static async void OnImportGltfAsset(AssetImportContext context)
         {
             var importedObject = await GltfUtility.ImportGltfObjectFromPathAsync(context.assetPath);

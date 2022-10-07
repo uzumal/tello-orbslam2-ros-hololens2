@@ -1,8 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 namespace Microsoft.MixedReality.Toolkit.Editor
 {

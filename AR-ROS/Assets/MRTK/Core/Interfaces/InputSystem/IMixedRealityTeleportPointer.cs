@@ -15,7 +15,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// The currently active teleport hotspot.
         /// </summary>
-        IMixedRealityTeleportHotspot TeleportHotspot { get; set; }
+        IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
 
         /// <summary>
         /// The Y orientation of the pointer - used for touchpad rotation and navigation

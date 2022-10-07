@@ -18,7 +18,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
     /// automatically instantiates new materials. It is the caller's responsibility to destroy the materials when a material is no longer needed or the game object is 
     /// destroyed. The MaterialInstance behavior helps avoid material leaks and keeps material allocation paths consistent during edit and run time.
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/rendering/material-instance")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Rendering/MaterialInstance.html")]
     [ExecuteAlways, RequireComponent(typeof(Renderer))]
     [AddComponentMenu("Scripts/MRTK/Core/MaterialInstance")]
     public class MaterialInstance : MonoBehaviour
@@ -86,7 +86,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
 
             if (autoDestroy && materialOwners.Count == 0)
             {
-                DestroySafe(this);
+                DestorySafe(this);
 
                 // OnDestroy not called on inactive objects
                 if (!gameObject.activeInHierarchy)
@@ -112,33 +112,6 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
             get { return AcquireMaterials(); }
         }
 
-        /// <summary>
-        /// Whether to use a cached copy of cachedRenderer.sharedMaterials or call sharedMaterials on the Renderer directly.
-        /// Enabling the option will lead to better performance but you must turn it off before modifying sharedMaterials of the Renderer.
-        /// </summary>
-        public bool CacheSharedMaterialsFromRenderer
-        {
-            get
-            {
-                return cacheSharedMaterialsFromRenderer;
-            }
-            set
-            {
-                if (cacheSharedMaterialsFromRenderer != value)
-                {
-                    if (value)
-                    {
-                        cachedSharedMaterials = CachedRenderer.sharedMaterials;
-                    }
-                    else
-                    {
-                        cachedSharedMaterials = null;
-                    }
-                    cacheSharedMaterialsFromRenderer = value;
-                }
-            }
-        }
-
         private Renderer CachedRenderer
         {
             get
@@ -146,56 +119,19 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
                 if (cachedRenderer == null)
                 {
                     cachedRenderer = GetComponent<Renderer>();
-                    if (CacheSharedMaterialsFromRenderer)
-                    {
-                        cachedSharedMaterials = cachedRenderer.sharedMaterials;
-                    }
                 }
 
                 return cachedRenderer;
             }
         }
 
-        private Material[] CachedRendererSharedMaterials
-        {
-            get
-            {
-                if (CacheSharedMaterialsFromRenderer)
-                {
-                    if (cachedSharedMaterials == null)
-                    {
-                        cachedSharedMaterials = cachedRenderer.sharedMaterials;
-                    }
-                    return cachedSharedMaterials;
-                }
-                else
-                {
-                    return cachedRenderer.sharedMaterials;
-                }
-            }
-            set
-            {
-                if (CacheSharedMaterialsFromRenderer)
-                {
-                    cachedSharedMaterials = value;
-                }
-                cachedRenderer.sharedMaterials = value;
-            }
-        }
-
-
         private Renderer cachedRenderer = null;
 
         [SerializeField, HideInInspector]
         private Material[] defaultMaterials = null;
         private Material[] instanceMaterials = null;
-        private Material[] cachedSharedMaterials = null;
         private bool initialized = false;
         private bool materialsInstanced = false;
-        [SerializeField]
-        [Tooltip("Whether to use a cached copy of cachedRenderer.sharedMaterials or call sharedMaterials on the Renderer directly. " +
-            "Enabling the option will lead to better performance but you must turn it off before modifying sharedMaterials of the Renderer.")]
-        private bool cacheSharedMaterialsFromRenderer = false;
         private readonly HashSet<Object> materialOwners = new HashSet<Object>();
 
         private const string instancePostfix = " (Instance)";
@@ -210,7 +146,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
         private void Update()
         {
             // If the materials get changed via outside of MaterialInstance.
-            var sharedMaterials = CachedRendererSharedMaterials;
+            var sharedMaterials = CachedRenderer.sharedMaterials;
 
             if (!MaterialsMatch(sharedMaterials, instanceMaterials))
             {
@@ -255,7 +191,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
         {
             if (CachedRenderer != null && defaultMaterials != null)
             {
-                CachedRendererSharedMaterials = defaultMaterials;
+                CachedRenderer.sharedMaterials = defaultMaterials;
             }
 
             DestroyMaterials(instanceMaterials);
@@ -264,7 +200,6 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
 
         #endregion MonoBehaviour Implementation
 
-
         private void Initialize()
         {
             if (!initialized && CachedRenderer != null)
@@ -272,11 +207,11 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
                 // Cache the default materials if ones do not already exist.
                 if (!HasValidMaterial(defaultMaterials))
                 {
-                    defaultMaterials = CachedRendererSharedMaterials;
+                    defaultMaterials = CachedRenderer.sharedMaterials;
                 }
                 else if (!materialsInstanced) // Restore the clone to its initial state.
                 {
-                    CachedRendererSharedMaterials = defaultMaterials;
+                    CachedRenderer.sharedMaterials = defaultMaterials;
                 }
 
                 initialized = true;
@@ -287,7 +222,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
         {
             if (CachedRenderer != null)
             {
-                if (!MaterialsMatch(CachedRendererSharedMaterials, instanceMaterials))
+                if (!MaterialsMatch(CachedRenderer.sharedMaterials, instanceMaterials))
                 {
                     CreateInstances();
                 }
@@ -304,7 +239,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
 
             if (CachedRenderer != null && instanceMaterials != null)
             {
-                CachedRendererSharedMaterials = instanceMaterials;
+                CachedRenderer.sharedMaterials = instanceMaterials;
             }
 
             materialsInstanced = true;
@@ -360,7 +295,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
             {
                 for (var i = 0; i < materials.Length; ++i)
                 {
-                    DestroySafe(materials[i]);
+                    DestorySafe(materials[i]);
                 }
             }
         }
@@ -386,7 +321,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
             return false;
         }
 
-        private static void DestroySafe(Object toDestroy)
+        private static void DestorySafe(UnityEngine.Object toDestroy)
         {
             if (toDestroy != null)
             {
@@ -398,7 +333,7 @@ namespace Microsoft.MixedReality.Toolkit.Rendering
                 {
 #if UNITY_EDITOR
                     // Let Unity handle unload of unused assets if lifecycle is transitioning from editor to play mode
-                    // Deferring the call during this transition would destroy reference only after play mode Awake, leading to possible broken material references on TMPro objects
+                    // Defering the call during this transition would destroy reference only after play mode Awake, leading to possible broken material references on TMPro objects
                     if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
                         EditorApplication.delayCall += () =>

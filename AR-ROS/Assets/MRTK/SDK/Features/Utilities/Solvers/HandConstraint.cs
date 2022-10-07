@@ -182,7 +182,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
         }
 
         [SerializeField]
-        [Tooltip("Additional degree offset to apply from the stated SafeZone. Ignored if Safe Zone is Atop Palm." +
+        [Tooltip("Additional degree offset to apply from the stated SafeZone. Ignored if Safe Zone is Atop Palm." + 
         " Direction is clockwise on the left hand and anti-clockwise on the right hand.")]
         private float safeZoneAngleOffset = 0;
 
@@ -247,11 +247,11 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             get => onLastHandLost;
             set => onLastHandLost = value;
         }
-
+        
         private Handedness previousHandedness = Handedness.None;
-
+        
         public Handedness Handedness => previousHandedness;
-
+        
         protected IMixedRealityController trackedController = null;
         protected HandBounds handBounds = null;
 
@@ -263,7 +263,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             if (SolverHandler.TrackedTargetType != TrackedObjectType.HandJoint &&
                 SolverHandler.TrackedTargetType != TrackedObjectType.ControllerRay)
             {
-                // Requires HandJoint or ControllerRay target type.
+                Debug.LogWarning("Solver HandConstraint requires TrackedObjectType of type HandJoint or ControllerRay");
                 return;
             }
 
@@ -305,7 +305,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             var newHandedness = trackedController == null ? Handedness.None : trackedController.ControllerHandedness;
             if (previousHandedness.IsNone() && !newHandedness.IsNone())
             {
-                // Toggle cursor off for hand that is going to support the hand menu
+                // Toggle cursor off for hand that is going to suppor the hand menu
                 StartCoroutine(ToggleCursors(trackedController, false, true));
 
                 previousHandedness = newHandedness;
@@ -386,7 +386,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
 
                 float distance;
                 Ray ray = CalculateGoalPositionRay(
-                    goalPosition, SolverHandler.TransformTarget,
+                    goalPosition, SolverHandler.TransformTarget, 
                     trackedController, safeZone, OffsetBehavior, safeZoneAngleOffset);
                 trackedHandBounds.Expand(safeZoneBuffer);
 
@@ -426,16 +426,16 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             switch (rotationBehavior)
             {
                 case SolverRotationBehavior.LookAtMainCamera:
-                {
-                    goalRotation = Quaternion.LookRotation(GoalPosition - CameraCache.Main.transform.position);
+                    {
+                        goalRotation = Quaternion.LookRotation(GoalPosition - CameraCache.Main.transform.position);
+                    }
                     break;
-                }
 
                 case SolverRotationBehavior.LookAtTrackedObject:
-                {
-                    goalRotation *= handToWorldRotation;
+                    {
+                        goalRotation *= handToWorldRotation;
+                    }
                     break;
-                }
             }
 
             if (rotationBehavior != SolverRotationBehavior.None)
@@ -516,87 +516,86 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             {
                 default:
                 case SolverSafeZone.UlnarSide:
-                {
-                    if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
                     {
-                        direction = targetTransform.right;
-                    }
-                    else
-                    {
-                        direction = Vector3.Cross(lookAtCamera, Vector3.up);
-                        direction = IsPalmFacingCamera(hand) ? direction : -direction;
-                    }
+                        if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
+                        {
+                            direction = targetTransform.right;
+                        }
+                        else
+                        {
+                            direction = Vector3.Cross(lookAtCamera, Vector3.up);
+                            direction = IsPalmFacingCamera(hand) ? direction : -direction;
+                        }
 
-                    if (hand.ControllerHandedness.IsLeft())
-                    {
-                        direction = -direction;
+                        if (hand.ControllerHandedness.IsLeft())
+                        {
+                            direction = -direction;
+                        }
                     }
                     break;
-                }
 
                 case SolverSafeZone.RadialSide:
-                {
+                    {
 
-                    if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
-                    {
-                        direction = -targetTransform.right;
-                    }
-                    else
-                    {
-                        direction = Vector3.Cross(lookAtCamera, Vector3.up);
-                        direction = IsPalmFacingCamera(hand) ? direction : -direction;
-                    }
+                        if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
+                        {
+                            direction = -targetTransform.right;
+                        }
+                        else
+                        {
+                            direction = Vector3.Cross(lookAtCamera, Vector3.up);
+                            direction = IsPalmFacingCamera(hand) ? direction : -direction;
+                        }
 
-                    if (hand.ControllerHandedness.IsRight())
-                    {
-                        direction = -direction;
+                        if (hand.ControllerHandedness == Handedness.Right)
+                        {
+                            direction = -direction;
+                        }
                     }
                     break;
-                }
 
                 case SolverSafeZone.AboveFingerTips:
-                {
-                    if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
                     {
-                        direction = targetTransform.forward;
-                    }
-                    else
-                    {
-                        direction = CameraCache.Main.transform.up;
+                        if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
+                        {
+                            direction = targetTransform.forward;
+                        }
+                        else
+                        {
+                            direction = CameraCache.Main.transform.up;
+                        }
                     }
                     break;
-                }
 
                 case SolverSafeZone.BelowWrist:
-                {
-                    if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
                     {
-                        direction = -targetTransform.forward;
-                    }
-                    else
-                    {
-                        direction = -CameraCache.Main.transform.up;
+                        if (offsetBehavior == SolverOffsetBehavior.TrackedObjectRotation)
+                        {
+                            direction = -targetTransform.forward;
+                        }
+                        else
+                        {
+                            direction = -CameraCache.Main.transform.up;
+                        }
                     }
                     break;
-                }
-
                 case SolverSafeZone.AtopPalm:
-                {
-                    // This is always palm-pose dependent, as we are extruding
-                    // the up vector away from the palm pose, regardless of the desired
-                    // rotation behavior. If no palm pose is available, we use the
-                    // camera view vector as an approximation.
-                    MixedRealityPose? palmPose = GetPalmPose(hand);
-                    if (palmPose.HasValue)
                     {
-                        direction = Quaternion.AngleAxis(hand.ControllerHandedness.IsLeft() ? angleOffset : -angleOffset, palmPose.Value.Forward) * -palmPose.Value.Up;
-                    }
-                    else
-                    {
-                        direction = -lookAtCamera;
+                        // This is always palm-pose dependent, as we are extruding
+                        // the up vector away from the palm pose, regardless of the desired
+                        // rotation behavior. If no palm pose is available, we use the
+                        // camera view vector as an approximation.
+                        MixedRealityPose? palmPose = GetPalmPose(hand);
+                        if (palmPose.HasValue)
+                        {
+                            direction = Quaternion.AngleAxis(hand.ControllerHandedness.IsLeft() ? angleOffset : -angleOffset, palmPose.Value.Forward) * -palmPose.Value.Up;
+                        }
+                        else
+                        {
+                            direction = -lookAtCamera;
+                        }
                     }
                     break;
-                }
             }
 
             return new Ray(origin + direction, -direction);
@@ -613,7 +612,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
                 return CalculateRayForSafeZone(origin, targetTransform, hand, handSafeZone, offsetBehavior);
             }
 
-            angleOffset %= 360;
+            angleOffset = angleOffset % 360;
             while (angleOffset < 0)
             {
                 angleOffset = (angleOffset + 360) % 360;
@@ -637,8 +636,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             Ray fracPartSafeZoneRay = CalculateRayForSafeZone(origin, targetTransform, hand, fracPartSafeZoneClockwise, offsetBehavior);
 
             Vector3 direction = Vector3.Lerp(-intSafeZoneRay.direction, -fracPartSafeZoneRay.direction, fracOffset).normalized;
-            return new Ray(origin + direction, -direction);
-        }
+            return new Ray(origin + direction, -direction);        }
 
         private static bool IsPalmFacingCamera(IMixedRealityController hand)
         {
@@ -655,8 +653,9 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
         private static MixedRealityPose? GetPalmPose(IMixedRealityController hand)
         {
             MixedRealityPose palmPose;
+            var jointedHand = hand as IMixedRealityHand;
 
-            if (hand is IMixedRealityHand jointedHand && jointedHand.TryGetJoint(TrackedHandJoint.Palm, out palmPose))
+            if ((jointedHand != null) && jointedHand.TryGetJoint(TrackedHandJoint.Palm, out palmPose))
             {
                 return palmPose;
             }
@@ -668,12 +667,12 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
         /// Returns true if the given controller is a valid target for this solver.
         /// </summary>
         /// <remarks>
-        /// <para>Certain types of controllers (i.e. Xbox controllers) do not contain a handedness
-        /// and should not trigger the HandConstraint to show its corresponding UX.</para>
+        /// Certain types of controllers (i.e. Xbox controllers) do not contain a handedness
+        /// and should not trigger the HandConstraint to show its corresponding UX.
         /// </remarks>
         private static bool IsApplicableController(IMixedRealityController controller)
         {
-            return !controller.ControllerHandedness.IsNone();
+            return controller.ControllerHandedness != Handedness.None;
         }
 
         /// <summary>
@@ -706,12 +705,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             trackedController = null;
             OnLastHandLost.Invoke();
             OnHandDeactivate.Invoke();
-
-            if (SolverHandler.TrackedTargetType != TrackedObjectType.HandJoint &&
-                SolverHandler.TrackedTargetType != TrackedObjectType.ControllerRay)
-            {
-                Debug.LogWarning("Solver HandConstraint requires TrackedObjectType of type HandJoint or ControllerRay.");
-            }
         }
 
         #endregion MonoBehaviour Implementation

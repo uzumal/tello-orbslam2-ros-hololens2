@@ -30,23 +30,16 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             uint priority = DefaultPriority,
             BaseMixedRealityProfile profile = null) : base(spatialAwarenessSystem, name, priority, profile)
         {
-            SourceId = (Service != null) ? Service.GenerateNewSourceId() : 0;
+            SpatialAwarenessSystem = spatialAwarenessSystem;
+
+            SourceId = (SpatialAwarenessSystem != null) ? SpatialAwarenessSystem.GenerateNewSourceId() : 0;
             SourceName = name;
         }
 
         /// <summary>
         /// The spatial awareness system that is associated with this observer.
         /// </summary>
-        [System.Obsolete("Call Service instead.")]
-        protected IMixedRealitySpatialAwarenessSystem SpatialAwarenessSystem => Service;
-
-        private GameObject observedObjectParent = null;
-        protected virtual GameObject ObservedObjectParent => observedObjectParent != null ? observedObjectParent : (observedObjectParent = Service?.CreateSpatialAwarenessObservationParent(Name));
-
-        /// <summary>
-        /// The parent GameObject for all observed meshes to be placed under.
-        /// </summary>
-        public GameObject ObservationParent => ObservedObjectParent;
+        protected IMixedRealitySpatialAwarenessSystem SpatialAwarenessSystem { get; private set; }
 
         /// <summary>
         /// Creates the spatial observer and handles the desired startup behavior.
@@ -88,7 +81,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         public override void Initialize()
         {
             CreateObserver();
-            base.Initialize();
         }
 
         /// <summary>
@@ -103,7 +95,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         /// <inheritdoc />
         public override void Enable()
         {
-            base.Enable();
             if (!IsRunning && StartupBehavior == AutoStartBehavior.AutoStart)
             {
                 Resume();
@@ -119,14 +110,12 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
                 // Suspend the observer
                 Suspend();
             }
-            base.Disable();
         }
 
         /// <inheritdoc />
         public override void Destroy()
         {
             CleanupObservationsAndObserver();
-            base.Destroy();
         }
 
         #endregion IMixedRealityDataProvider Implementation
@@ -139,6 +128,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             return x.Equals(y);
         }
 
+        /// <inheritdoc /> 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) { return false; }
@@ -161,6 +151,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             return obj.GetHashCode();
         }
 
+        /// <inheritdoc /> 
         public override int GetHashCode()
         {
             return Mathf.Abs(SourceName.GetHashCode());
@@ -180,7 +171,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         public AutoStartBehavior StartupBehavior { get; set; } = AutoStartBehavior.AutoStart;
 
         /// <inheritdoc />
-        public int DefaultPhysicsLayer { get; protected set; } = DefaultSpatialAwarenessLayer;
+        public int DefaultPhysicsLayer { get; } = DefaultSpatialAwarenessLayer;
 
         /// <inheritdoc />
         public bool IsRunning { get; protected set; } = false;
@@ -191,7 +182,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         /// <inheritdoc />
         public Quaternion ObserverRotation { get; set; } = Quaternion.identity;
 
-        /// <inheritdoc />
         public Vector3 ObserverOrigin { get; set; } = Vector3.zero;
 
         /// <inheritdoc />

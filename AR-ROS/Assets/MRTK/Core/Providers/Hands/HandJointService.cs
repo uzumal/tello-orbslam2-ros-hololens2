@@ -11,7 +11,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         typeof(IMixedRealityInputSystem),
         (SupportedPlatforms)(-1), // All platforms supported by Unity
         "Hand Joint Service")]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/hand-tracking")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/HandTracking.html")]
     public class HandJointService : BaseInputDeviceManager, IMixedRealityHandJointService
     {
         private IMixedRealityHand leftHand;
@@ -64,7 +64,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
             foreach (var detectedController in Service.DetectedControllers)
             {
-                if (detectedController is IMixedRealityHand hand)
+                var hand = detectedController as IMixedRealityHand;
+                if (hand != null)
                 {
                     if (detectedController.ControllerHandedness == Handedness.Left)
                     {
@@ -183,7 +184,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         public bool IsHandTracked(Handedness handedness)
         {
-            return handedness == Handedness.Left ? leftHand != null : handedness == Handedness.Right && rightHand != null;
+            return handedness == Handedness.Left ? leftHand != null : handedness == Handedness.Right ? rightHand != null : false;
         }
 
         #endregion IMixedRealityHandJointService Implementation

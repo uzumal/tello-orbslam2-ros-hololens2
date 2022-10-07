@@ -18,19 +18,17 @@ namespace Microsoft.MixedReality.Toolkit.UI
     /// You may also configure the script on only enable certain manipulations. The script works with 
     /// both HoloLens' gesture input and immersive headset's motion controller input.
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/ux-building-blocks/manipulation-handler")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_ManipulationHandler.html")]
     [AddComponentMenu("Scripts/MRTK/SDK/ManipulationHandler")]
     public class ManipulationHandler : MonoBehaviour, IMixedRealityPointerHandler, IMixedRealityFocusChangedHandler
     {
         #region Public Enums
-
         public enum HandMovementType
         {
             OneHandedOnly = 0,
             TwoHandedOnly,
             OneAndTwoHanded
         }
-
         public enum TwoHandedManipulation
         {
             Scale,
@@ -39,8 +37,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             MoveRotate,
             RotateScale,
             MoveRotateScale
-        }
-
+        };
         public enum RotateInOneHandType
         {
             MaintainRotationToUser,
@@ -50,15 +47,13 @@ namespace Microsoft.MixedReality.Toolkit.UI
             MaintainOriginalRotation,
             RotateAboutObjectCenter,
             RotateAboutGrabPoint
-        }
-
-        [Flags]
+        };
+        [System.Flags]
         public enum ReleaseBehaviorType
         {
             KeepVelocity = 1 << 0,
             KeepAngularVelocity = 1 << 1
         }
-
         #endregion Public Enums
 
         #region Serialized Fields
@@ -689,9 +684,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 // the initial pointer pose; if far manipulation, a more complex
                 // look-rotation-based pointer pose is used.
                 MixedRealityPose pose = IsNearManipulation() ? new MixedRealityPose(GetPointersCentroid()) : GetAveragePointerPose();
-
-                // The manipulation handler is not built to handle near manipulation properly, please use the object manipulator
-                targetTransform.Position = moveLogic.UpdateTransform(pose, targetTransform, true, false);
+                targetTransform.Position = moveLogic.Update(pose, targetTransform.Rotation, targetTransform.Scale, true);
                 if (constraintOnMovement == MovementConstraintType.FixDistanceFromHead && moveConstraint != null)
                 {
                     moveConstraint.ApplyConstraint(ref targetTransform);
@@ -730,18 +723,18 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     targetTransform.Rotation = Quaternion.LookRotation(cameraForwardFlat, Vector3.up) * startObjectRotationFlatCameraSpace;
                     break;
                 case RotateInOneHandType.FaceUser:
-                {
-                    Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
-                    // Vector3 directionToTarget = hostTransform.position - CameraCache.Main.transform.position;
-                    targetTransform.Rotation = Quaternion.LookRotation(-directionToTarget);
-                    break;
-                }
+                    {
+                        Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
+                        // Vector3 directionToTarget = hostTransform.position - CameraCache.Main.transform.position;
+                        targetTransform.Rotation = Quaternion.LookRotation(-directionToTarget);
+                        break;
+                    }
                 case RotateInOneHandType.FaceAwayFromUser:
-                {
-                    Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
-                    targetTransform.Rotation = Quaternion.LookRotation(directionToTarget);
-                    break;
-                }
+                    {
+                        Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
+                        targetTransform.Rotation = Quaternion.LookRotation(directionToTarget);
+                        break;
+                    }
                 case RotateInOneHandType.RotateAboutObjectCenter:
                 case RotateInOneHandType.RotateAboutGrabPoint:
                     Quaternion gripRotation;
@@ -755,9 +748,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             }
 
             MixedRealityPose pointerPose = new MixedRealityPose(pointer.Position, pointer.Rotation);
-
-            // The manipulation handler is not built to handle near manipulation properly, please use the object manipulator
-            targetTransform.Position = moveLogic.UpdateTransform(pointerPose, targetTransform, rotateInOneHandType != RotateInOneHandType.RotateAboutObjectCenter, false);
+            targetTransform.Position = moveLogic.Update(pointerPose, targetTransform.Rotation, targetTransform.Scale, rotateInOneHandType != RotateInOneHandType.RotateAboutObjectCenter);
             if (constraintOnMovement == MovementConstraintType.FixDistanceFromHead && moveConstraint != null)
             {
                 moveConstraint.ApplyConstraint(ref targetTransform);
@@ -959,12 +950,12 @@ namespace Microsoft.MixedReality.Toolkit.UI
             {
                 rigidBody.isKinematic = wasKinematic;
 
-                if (releaseBehavior.IsMaskSet(ReleaseBehaviorType.KeepVelocity))
+                if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepVelocity))
                 {
                     rigidBody.velocity = GetPointersVelocity();
                 }
 
-                if (releaseBehavior.IsMaskSet(ReleaseBehaviorType.KeepAngularVelocity))
+                if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepAngularVelocity))
                 {
                     rigidBody.angularVelocity = GetPointersAngularVelocity();
                 }
@@ -982,7 +973,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private bool TryGetGripRotation(IMixedRealityPointer pointer, out Quaternion rotation)
         {
-            for (int i = 0; i < (pointer.Controller?.Interactions?.Length ?? 0); i++)
+
+            for (int i = 0; i < pointer.Controller.Interactions.Length; i++)
             {
                 if (pointer.Controller.Interactions[i].InputType == DeviceInputType.SpatialGrip)
                 {

@@ -132,8 +132,6 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
             // Call the post-build action, if any
             buildInfo.PostBuildAction?.Invoke(buildInfo, buildReport);
 
-            EditorUtility.ClearProgressBar();
-
             return buildReport;
         }
 
@@ -218,10 +216,6 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         {
             string[] arguments = Environment.GetCommandLineArgs();
 
-            // Boolean used to track whether builfInfo contains scenes that are not specified by command line arguments.
-            // These non command line arugment scenes should be overwritten by those specified in the command line.
-            bool buildInfoContainsNonCommandLineScene = buildInfo.Scenes.Count() > 0;
-
             for (int i = 0; i < arguments.Length; ++i)
             {
                 switch (arguments[i])
@@ -230,29 +224,13 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
                         buildInfo.AutoIncrement = true;
                         break;
                     case "-sceneList":
-                        if (buildInfoContainsNonCommandLineScene)
-                        {
-                            buildInfo.Scenes = SplitSceneList(arguments[++i]);
-                            buildInfoContainsNonCommandLineScene = false;
-                        }
-                        else
-                        {
-                            buildInfo.Scenes = buildInfo.Scenes.Union(SplitSceneList(arguments[++i]));
-                        }
+                        buildInfo.Scenes = buildInfo.Scenes.Union(SplitSceneList(arguments[++i]));
                         break;
                     case "-sceneListFile":
                         string path = arguments[++i];
                         if (File.Exists(path))
                         {
-                            if (buildInfoContainsNonCommandLineScene)
-                            {
-                                buildInfo.Scenes = SplitSceneList(File.ReadAllText(path));
-                                buildInfoContainsNonCommandLineScene = false;
-                            }
-                            else
-                            {
-                                buildInfo.Scenes = buildInfo.Scenes.Union(SplitSceneList(File.ReadAllText(path)));
-                            }
+                            buildInfo.Scenes = buildInfo.Scenes.Union(SplitSceneList(File.ReadAllText(path)));
                         }
                         else
                         {

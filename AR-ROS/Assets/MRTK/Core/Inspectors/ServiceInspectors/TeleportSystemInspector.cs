@@ -2,8 +2,8 @@
 // Licensed under the MIT License.﻿
 
 using Microsoft.MixedReality.Toolkit.Teleport;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 namespace Microsoft.MixedReality.Toolkit.Editor
 {

@@ -11,7 +11,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
     /// Manages constraints for a given object and ensures that Scale/Rotation/Translation 
     /// constraints are executed separately.
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/ux-building-blocks/constraint-manager")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_ConstraintManager.html")]
     public class ConstraintManager : MonoBehaviour
     {
         [SerializeField]
@@ -42,7 +42,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             get => selectedConstraints;
         }
 
-        private List<TransformConstraint> constraints = new List<TransformConstraint>();
+        private HashSet<TransformConstraint> constraints = new HashSet<TransformConstraint>();
         private MixedRealityTransform initialWorldPose;
 
         /// <summary>	
@@ -50,13 +50,13 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// Note that only unique components will be added to the list.
         /// </summary>	
         /// <param name="constraint">Constraint to add to the managers manual constraint list.</param>
-        /// <returns>Returns true if insertion was successful. If the component was already in the list the insertion will fail.</returns>	
+        /// <returns>Returns true if insertion was successful. If the comopnent was already in the list the insertion will fail.</returns>	
         public bool AddConstraintToManualSelection(TransformConstraint constraint)
         {
             var existingConstraint = selectedConstraints.Find(t => t == constraint);
             if (existingConstraint == null)
             {
-                ConstraintUtils.AddWithPriority(ref selectedConstraints, constraint, new ConstraintExecOrderComparer());
+                selectedConstraints.Add(constraint);
             }
 
             return existingConstraint == null;
@@ -96,15 +96,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
         }
 
         /// <summary>
-        /// Re-sort list of constraints. Triggered by constraints
-        /// when their execution order is modified at runtime.
-        /// </summary>
-        internal void RefreshPriorities()
-        {
-            constraints.Sort(new ConstraintExecOrderComparer());
-        }
-
-        /// <summary>
         /// Registering of a constraint during runtime. This method gets called by the constraint
         /// components to auto register in their OnEnable method.
         /// </summary>
@@ -114,7 +105,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             // add to auto component list
             if (constraint.isActiveAndEnabled)
             {
-                ConstraintUtils.AddWithPriority(ref constraints, constraint, new ConstraintExecOrderComparer());
+                constraints.Add(constraint);
                 constraint.Initialize(initialWorldPose);
             }
         }
@@ -136,7 +127,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             {
                 if (constraint.isActiveAndEnabled)
                 {
-                    ConstraintUtils.AddWithPriority(ref constraints, constraint, new ConstraintExecOrderComparer());
+                    constraints.Add(constraint);
                 }
             }
         }
@@ -146,20 +137,30 @@ namespace Microsoft.MixedReality.Toolkit.UI
             ManipulationHandFlags handMode = isOneHanded ? ManipulationHandFlags.OneHanded : ManipulationHandFlags.TwoHanded;
             ManipulationProximityFlags proximityMode = isNear ? ManipulationProximityFlags.Near : ManipulationProximityFlags.Far;
 
-            foreach (var constraint in constraints)
+            if (autoConstraintSelection)
             {
-                // If on manual mode, filter executed constraints by which have been manually selected
-                if (!autoConstraintSelection && !selectedConstraints.Contains(constraint))
+                foreach (var constraint in constraints)
                 {
-                    continue;
+                    if (constraint.isActiveAndEnabled &&
+                        constraint.ConstraintType == transformType &&
+                        constraint.HandType.HasFlag(handMode) &&
+                        constraint.ProximityType.HasFlag(proximityMode))
+                    {
+                        constraint.ApplyConstraint(ref transform);
+                    }
                 }
-
-                if (constraint.isActiveAndEnabled &&
-                    constraint.ConstraintType == transformType &&
-                    constraint.HandType.IsMaskSet(handMode) &&
-                    constraint.ProximityType.IsMaskSet(proximityMode))
+            }
+            else
+            {
+                foreach (var constraint in selectedConstraints)
                 {
-                    constraint.ApplyConstraint(ref transform);
+                    if (constraint.isActiveAndEnabled &&
+                        constraint.ConstraintType == transformType &&
+                        constraint.HandType.HasFlag(handMode) &&
+                        constraint.ProximityType.HasFlag(proximityMode))
+                    {
+                        constraint.ApplyConstraint(ref transform);
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
     /// <summary>
     /// The Camera system controls the settings of the main camera.
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/configuration/mixed-reality-configuration-guide#camera")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/MixedRealityConfigurationGuide.html#camera")]
     public class MixedRealityCameraSystem : BaseDataProviderAccessCoreSystem, IMixedRealityCameraSystem
     {
         /// <summary>
@@ -100,12 +100,9 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
         /// <inheritdoc />
         public override void Initialize()
         {
-            base.Initialize();
-
             MixedRealityCameraProfile profile = ConfigurationProfile as MixedRealityCameraProfile;
-            var cameraSettingProviders = GetDataProviders<IMixedRealityCameraSettingsProvider>();
 
-            if ((cameraSettingProviders.Count == 0) && (profile != null))
+            if ((GetDataProviders<IMixedRealityCameraSettingsProvider>().Count == 0) && (profile != null))
             {
                 // Register the settings providers.
                 for (int i = 0; i < profile.SettingsConfigurations.Length; i++)
@@ -129,12 +126,12 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
                         // Apply the display settings
                         IMixedRealityCameraSettingsProvider provider = GetDataProvider<IMixedRealityCameraSettingsProvider>(configuration.ComponentName);
                         provider?.ApplyConfiguration();
-
-                        // if a camera settings provider was applied, then we will not use the fallback behavior
-                        useFallbackBehavior = false;
                     }
                 }
             }
+
+            // Check to see if any providers were loaded.
+            useFallbackBehavior = (GetDataProviders<IMixedRealityCameraSettingsProvider>().Count == 0);
 
             if (useFallbackBehavior)
             {
@@ -156,7 +153,6 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
                 {
                     Debug.LogWarning($"The main camera is not positioned at the origin ({Vector3.zero}), experiences may not behave as expected.");
                 }
-
                 if (CameraCache.Main.transform.rotation != Quaternion.identity)
                 {
                     Debug.LogWarning($"The main camera is configured with a non-zero rotation, experiences may not behave as expected.");
@@ -210,8 +206,6 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
 
             using (UpdatePerfMarker.Auto())
             {
-                base.Update();
-
                 if (IsOpaque != cameraOpaqueLastFrame)
                 {
                     cameraOpaqueLastFrame = IsOpaque;

@@ -5,16 +5,9 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.XRSDK.Input;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
-
-#if OCULUS_ENABLED
-using Unity.XR.Oculus;
-#endif // OCULUS_ENABLED
-
-#if OCULUSINTEGRATION_PRESENT
-using System.Collections.Generic;
-#endif // OCULUSINTEGRATION_PRESENT
 
 namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Input
 {
@@ -24,11 +17,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Input
     [MixedRealityDataProvider(
         typeof(IMixedRealityInputSystem),
         SupportedPlatforms.WindowsStandalone | SupportedPlatforms.Android,
-        "XR SDK Oculus Device Manager",
-        "Oculus/XRSDK/Profiles/DefaultOculusXRSDKDeviceManagerProfile.asset",
-        "MixedRealityToolkit.Providers",
-        true,
-        SupportedUnityXRPipelines.XRSDK)]
+        "XRSDK Oculus Device Manager")]
     public class OculusXRSDKDeviceManager : XRSDKDeviceManager
     {
         /// <summary>
@@ -48,25 +37,24 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Input
         public override void Initialize()
         {
             base.Initialize();
-#if !UNITY_2020_1_OR_NEWER
-            UnityEngine.Debug.Log(@"Detected a potential deployment issue for the Oculus Quest. In order to use hand tracking with the Oculus Quest, download the Oculus Integration Package from the Unity Asset Store and run the Integration tool before deploying.
-The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > Integrate Oculus Integration Unity Modules</i>");
-#endif
+            Debug.Log(@"Detected a potential deployment issue for the Oculus Quest. In order to use handtracking with the Oculus Quest, download the Oculus Integration Package from the Unity Asset Store and run the Integration tool before deploying.
+The tool can be found under <i>Mixed Reality Toolkit > Utilities > Oculus > Integrate Oculus Integration Unity Modules</i>");
         }
 #endif
 
-#if OCULUSINTEGRATION_PRESENT
-        private readonly Dictionary<Handedness, OculusHand> trackedHands = new Dictionary<Handedness, OculusHand>();
+        private Dictionary<Handedness, OculusHand> trackedHands = new Dictionary<Handedness, OculusHand>();
 
+#if OCULUSINTEGRATION_PRESENT
         private OVRCameraRig cameraRig;
-        internal OVRControllerHelper leftControllerHelper;
-        internal OVRControllerHelper rightControllerHelper;
 
         private OVRHand rightHand;
+        private OVRMeshRenderer righMeshRenderer;
         private OVRSkeleton rightSkeleton;
 
         private OVRHand leftHand;
+        private OVRMeshRenderer leftMeshRenderer;
         private OVRSkeleton leftSkeleton;
+
 
         /// <summary>
         /// The profile that contains settings for the Oculus XRSDK Device Manager input data provider.  This profile is nested under 
@@ -90,9 +78,8 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
         }
 
         #endregion IMixedRealityCapabilityCheck Implementation
-
+        
         #region Controller Utilities
-
         /// <inheritdoc />
         protected override Type GetControllerType(SupportedControllerType supportedControllerType)
         {
@@ -124,17 +111,17 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
         /// <inheritdoc />
         protected override SupportedControllerType GetCurrentControllerType(InputDevice inputDevice)
         {
-            if (inputDevice.characteristics.IsMaskSet(InputDeviceCharacteristics.HandTracking))
+            if (inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.HandTracking))
             {
-                if (inputDevice.characteristics.IsMaskSet(InputDeviceCharacteristics.Left) ||
-                    inputDevice.characteristics.IsMaskSet(InputDeviceCharacteristics.Right))
+                if (inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.Left) ||
+                    inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.Right))
                 {
                     // If it's a hand with a reported handedness, assume articulated hand
                     return SupportedControllerType.ArticulatedHand;
                 }
             }
 
-            if (inputDevice.characteristics.IsMaskSet(InputDeviceCharacteristics.Controller))
+            if (inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.Controller))
             {
                 return SupportedControllerType.OculusTouch;
             }
@@ -144,56 +131,22 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
 
         #endregion Controller Utilities
 
-        private bool? IsActiveLoader =>
-#if OCULUS_ENABLED
-            LoaderHelpers.IsLoaderActive<OculusLoader>();
-#else
-            false;
-#endif // OCULUS_ENABLED
 
+#if OCULUSINTEGRATION_PRESENT
         /// <inheritdoc/>
         public override void Enable()
         {
-            if (!IsActiveLoader.HasValue)
-            {
-                IsEnabled = false;
-                EnableIfLoaderBecomesActive();
-                return;
-            }
-            else if (!IsActiveLoader.Value)
-            {
-                IsEnabled = false;
-                return;
-            }
-
-#if OCULUSINTEGRATION_PRESENT
+            base.Enable();
             SetupInput();
             ConfigurePerformancePreferences();
-#endif // OCULUSINTEGRATION_PRESENT
-
-            base.Enable();
+            SettingsProfile.OnCustomHandMaterialUpdate += UpdateHandMaterial;
         }
 
-        private async void EnableIfLoaderBecomesActive()
-        {
-            await new WaitUntil(() => IsActiveLoader.HasValue);
-            if (IsActiveLoader.Value)
-            {
-                Enable();
-            }
-        }
 
-#if OCULUSINTEGRATION_PRESENT
         /// <inheritdoc/>
         public override void Update()
         {
-            if (!IsEnabled)
-            {
-                return;
-            }
-
             base.Update();
-
             if (OVRPlugin.GetHandTrackingEnabled())
             {
                 UpdateHands();
@@ -237,36 +190,27 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
                 cameraRig.EnsureGameObjectIntegrity();
             }
 
-            bool useAvatarHands = SettingsProfile.RenderAvatarHandsWithControllers;
-            // If using Avatar hands, initialize the local avatar controller
+            bool useAvatarHands = SettingsProfile.RenderAvatarHandsInsteadOfController;
+            // If using Avatar hands, de-activate ovr controller rendering
+            foreach (var controllerHelper in cameraRig.gameObject.GetComponentsInChildren<OVRControllerHelper>())
+            {
+                controllerHelper.gameObject.SetActive(!useAvatarHands);
+            }
+
             if (useAvatarHands)
             {
+                // Initialize the local avatar controller
                 GameObject.Instantiate(SettingsProfile.LocalAvatarPrefab, cameraRig.trackingSpace);
             }
 
-
-            var ovrControllerHelpers = cameraRig.GetComponentsInChildren<OVRControllerHelper>();
-            foreach (var ovrControllerHelper in ovrControllerHelpers)
-            {
-                switch (ovrControllerHelper.m_controller)
-                {
-                    case OVRInput.Controller.LTouch:
-                        leftControllerHelper = ovrControllerHelper;
-                        break;
-                    case OVRInput.Controller.RTouch:
-                        rightControllerHelper = ovrControllerHelper;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             var ovrHands = cameraRig.GetComponentsInChildren<OVRHand>();
+
             foreach (var ovrHand in ovrHands)
             {
                 // Manage Hand skeleton data
                 var skeletonDataProvider = ovrHand as OVRSkeleton.IOVRSkeletonDataProvider;
                 var skeletonType = skeletonDataProvider.GetSkeletonType();
+                var meshRenderer = ovrHand.GetComponent<OVRMeshRenderer>();
 
                 var ovrSkeleton = ovrHand.GetComponent<OVRSkeleton>();
                 if (ovrSkeleton == null)
@@ -279,10 +223,12 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
                     case OVRSkeleton.SkeletonType.HandLeft:
                         leftHand = ovrHand;
                         leftSkeleton = ovrSkeleton;
+                        leftMeshRenderer = meshRenderer;
                         break;
                     case OVRSkeleton.SkeletonType.HandRight:
                         rightHand = ovrHand;
                         rightSkeleton = ovrSkeleton;
+                        righMeshRenderer = meshRenderer;
                         break;
                 }
             }
@@ -293,16 +239,26 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
             SettingsProfile.ApplyConfiguredPerformanceSettings();
         }
 
-        #region Hand Utilities
-
-        protected void UpdateHands()
+        public override void Disable()
         {
-            UpdateHand(rightHand, rightSkeleton, Handedness.Right);
-            UpdateHand(leftHand, leftSkeleton, Handedness.Left);
+            base.Disable();
+
+            SettingsProfile.OnCustomHandMaterialUpdate -= UpdateHandMaterial;
         }
 
-        protected void UpdateHand(OVRHand ovrHand, OVRSkeleton ovrSkeleton, Handedness handedness)
+        #region Hand Utilities
+        protected void UpdateHands()
         {
+            UpdateHand(rightHand, rightSkeleton, righMeshRenderer, Handedness.Right);
+            UpdateHand(leftHand, leftSkeleton, righMeshRenderer, Handedness.Left);
+        }
+
+        protected void UpdateHand(OVRHand ovrHand, OVRSkeleton ovrSkeleton, OVRMeshRenderer ovrMeshRenderer, Handedness handedness)
+        {
+            // Until the ovrMeshRenderer is initialized we do nothing with the hand
+            // This is a bit of a hack because the Oculus Integration fails if we touch the renderer before it has initialized itself
+            if (ovrMeshRenderer == null || !ovrMeshRenderer.IsInitialized) return;
+
             if (ovrHand.IsTracked)
             {
                 var hand = GetOrAddHand(handedness, ovrHand);
@@ -311,6 +267,14 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
             else
             {
                 RemoveHandDevice(handedness);
+            }
+        }
+
+        private void UpdateHandMaterial()
+        {
+            foreach (var hand in trackedHands.Values)
+            {
+                hand.UpdateHandMaterial(SettingsProfile.CustomHandMaterial);
             }
         }
 
@@ -325,7 +289,8 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
             var pointers = RequestPointers(SupportedControllerType.ArticulatedHand, handedness);
             var inputSourceType = InputSourceType.Hand;
 
-            var inputSource = Service?.RequestNewGenericInputSource($"Oculus Quest {handedness} Hand", pointers, inputSourceType);
+            IMixedRealityInputSystem inputSystem = Service as IMixedRealityInputSystem;
+            var inputSource = inputSystem?.RequestNewGenericInputSource($"Oculus Quest {handedness} Hand", pointers, inputSourceType);
 
 
             OculusHand handDevice = new OculusHand(TrackingState.Tracked, handedness, inputSource);
@@ -334,9 +299,10 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
             for (int i = 0; i < handDevice.InputSource?.Pointers?.Length; i++)
             {
                 handDevice.InputSource.Pointers[i].Controller = handDevice;
+                handDevice.UpdateHandMaterial(SettingsProfile.CustomHandMaterial);
             }
 
-            Service?.RaiseSourceDetected(handDevice.InputSource, handDevice);
+            inputSystem?.RaiseSourceDetected(handDevice.InputSource, handDevice);
 
             trackedHands.Add(handedness, handDevice);
 
@@ -367,13 +333,16 @@ The tool can be found under <i>Mixed Reality > Toolkit > Utilities > Oculus > In
         {
             if (handDevice == null) return;
 
+            handDevice.CleanupHand();
+
             CoreServices.InputSystem?.RaiseSourceLost(handDevice.InputSource, handDevice);
             trackedHands.Remove(handDevice.ControllerHandedness);
 
             RecyclePointers(handDevice.InputSource);
         }
-
         #endregion
-#endif // OCULUSINTEGRATION_PRESENT
+        
+#endif
     }
 }
+

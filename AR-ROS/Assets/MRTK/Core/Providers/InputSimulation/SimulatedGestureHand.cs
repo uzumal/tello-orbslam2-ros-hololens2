@@ -45,8 +45,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
             Handedness controllerHandedness,
             IMixedRealityInputSource inputSource = null,
             MixedRealityInteractionMapping[] interactions = null)
-            : base(trackingState, controllerHandedness, inputSource, interactions, new SimpleHandDefinition(controllerHandedness))
-        { }
+                : base(trackingState, controllerHandedness, inputSource, interactions)
+        {
+        }
 
         /// Lazy-init settings based on profile.
         /// This cannot happen in the constructor because the profile may not exist yet.
@@ -97,25 +98,16 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
-        /// <inheritdoc />
-        protected override void UpdateHandJoints(SimulatedHandData handData)
+
+        /// <summary>
+        /// The GGV default interactions.
+        /// </summary>
+        /// <remarks>A single interaction mapping works for both left and right controllers.</remarks>
+        public override MixedRealityInteractionMapping[] DefaultInteractions => new[]
         {
-            for (int i = 0; i < ArticulatedHandPose.JointCount; i++)
-            {
-                TrackedHandJoint handJoint = (TrackedHandJoint)i;
-
-                if (!jointPoses.ContainsKey(handJoint))
-                {
-                    jointPoses.Add(handJoint, handData.Joints[i]);
-                }
-                else
-                {
-                    jointPoses[handJoint] = handData.Joints[i];
-                }
-            }
-
-            CoreServices.InputSystem?.RaiseHandJointsUpdated(InputSource, ControllerHandedness, jointPoses);
-        }
+            new MixedRealityInteractionMapping(0, "Select", AxisType.Digital, DeviceInputType.Select),
+            new MixedRealityInteractionMapping(1, "Grip Pose", AxisType.SixDof, DeviceInputType.SpatialGrip),
+        };
 
         /// <inheritdoc />
         protected override void UpdateInteractions(SimulatedHandData handData)

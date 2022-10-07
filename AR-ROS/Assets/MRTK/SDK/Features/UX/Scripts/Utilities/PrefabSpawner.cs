@@ -2,11 +2,10 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.Utilities;
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
 namespace Microsoft.MixedReality.Toolkit.UI
 {
@@ -21,17 +20,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
     {
         private enum VanishType
         {
-            /// <summary>
-            /// Causes the tooltip to vanish immediately after disappearing. Ignores vanishDelay.
-            /// </summary>
             VanishOnFocusExit = 0,
             VanishOnTap,
-
-            /// <summary>
-            /// Equivalent to VanishOnFocusExit. but honors vanishDelay and will only disappear
-            /// after that many seconds elapses after focus loss.
-            /// </summary>
-            VanishOnFocusExitWithDelay,
         }
 
         private enum AppearType
@@ -67,7 +57,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private float appearDelay = 0.0f;
         [SerializeField]
         [Range(0f, 5f)]
-        [Tooltip("The number of seconds that must elapse before the tooltip will disappear. Only used when vanishType is VanishOnFocusExitWithDelay.")]
         private float vanishDelay = 2.0f;
         [SerializeField]
         [Range(0.5f, 10.0f)]
@@ -98,7 +87,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 {
                     spawnable.transform.localRotation = Quaternion.identity;
                 }
-                spawnable.SetActive(false);
+                spawnable.gameObject.SetActive(false);
             }
             if (appearType == AppearType.AppearOnFocusEnter)
             {
@@ -112,11 +101,11 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 }
             }
 
-            spawnable.SetActive(true);
+            spawnable.gameObject.SetActive(true);
 
             SpawnableActivated(spawnable);
 
-            while (spawnable.activeSelf)
+            while (spawnable.gameObject.activeSelf)
             {
                 if (remainType == RemainType.Timeout)
                 {
@@ -125,7 +114,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                         case AppearType.AppearOnTap:
                             if (Time.unscaledTime - tappedTime >= lifetime)
                             {
-                                spawnable.SetActive(false);
+                                spawnable.gameObject.SetActive(false);
                                 return;
                             }
 
@@ -133,7 +122,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                         case AppearType.AppearOnFocusEnter:
                             if (Time.unscaledTime - focusEnterTime >= lifetime)
                             {
-                                spawnable.SetActive(false);
+                                spawnable.gameObject.SetActive(false);
                                 return;
                             }
 
@@ -147,7 +136,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     case VanishType.VanishOnFocusExit:
                         if (!HasFocus)
                         {
-                            spawnable.SetActive(false);
+                            spawnable.gameObject.SetActive(false);
                         }
 
                         break;
@@ -155,16 +144,18 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     case VanishType.VanishOnTap:
                         if (!tappedTime.Equals(tappedTimeOnStart))
                         {
-                            spawnable.SetActive(false);
+                            spawnable.gameObject.SetActive(false);
                         }
 
                         break;
 
-                    case VanishType.VanishOnFocusExitWithDelay:
                     default:
-                        if (!HasFocus && HasVanishDelayElapsed())
+                        if (!HasFocus)
                         {
-                            spawnable.SetActive(false);
+                            if (Time.time - focusExitTime > vanishDelay)
+                            {
+                                spawnable.gameObject.SetActive(false);
+                            }
                         }
                         break;
                 }
@@ -216,7 +207,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             tappedTime = Time.unscaledTime;
 
-            if (spawnable == null || !spawnable.activeSelf)
+            if (spawnable == null || !spawnable.gameObject.activeSelf)
             {
                 switch (appearType)
                 {
@@ -230,7 +221,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 switch (vanishType)
                 {
                     case VanishType.VanishOnTap:
-                        spawnable.SetActive(false);
+                        spawnable.gameObject.SetActive(false);
                         break;
                 }
             }
@@ -240,7 +231,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             focusEnterTime = Time.unscaledTime;
 
-            if (spawnable == null || !spawnable.activeSelf)
+            if (spawnable == null || !spawnable.gameObject.activeSelf)
             {
                 switch (appearType)
                 {
@@ -254,11 +245,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private void HandleFocusExit()
         {
             focusExitTime = Time.unscaledTime;
-        }
-
-        private Boolean HasVanishDelayElapsed()
-        {
-            return Time.unscaledTime - focusExitTime > vanishDelay;
         }
     }
 }

@@ -20,14 +20,16 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseWindowsMixedRealitySource(
-            TrackingState trackingState,
-            Handedness sourceHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null,
-            IMixedRealityInputSourceDefinition definition = null)
-            : base(trackingState, sourceHandedness, inputSource, interactions, definition)
-        { }
+        protected BaseWindowsMixedRealitySource(TrackingState trackingState, Handedness sourceHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+                : base(trackingState, sourceHandedness, inputSource, interactions)
+        {
+        }
+
+        /// <inheritdoc />
+        public override MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => DefaultInteractions;
+
+        /// <inheritdoc />
+        public override MixedRealityInteractionMapping[] DefaultRightHandedInteractions => DefaultInteractions;
 
 #if UNITY_WSA
         /// <summary>
@@ -60,7 +62,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
             {
                 if (!Enabled) { return; }
 
-                UpdateSixDofData(interactionSourceState);
+                UpdateSourceData(interactionSourceState);
+                UpdateVelocity(interactionSourceState);
 
                 if (Interactions == null)
                 {
@@ -74,38 +77,22 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
                     {
                         case DeviceInputType.None:
                             break;
+                        case DeviceInputType.SpatialPointer:
+                            UpdatePointerData(interactionSourceState, Interactions[i]);
+                            break;
                         case DeviceInputType.Select:
                         case DeviceInputType.Trigger:
                         case DeviceInputType.TriggerTouch:
                         case DeviceInputType.TriggerPress:
-                        case DeviceInputType.GripPress:
                             UpdateTriggerData(interactionSourceState, Interactions[i]);
+                            break;
+                        case DeviceInputType.SpatialGrip:
+                            UpdateGripData(interactionSourceState, Interactions[i]);
                             break;
                     }
                 }
 
                 LastSourceStateReading = interactionSourceState;
-            }
-        }
-
-        protected void UpdateSixDofData(InteractionSourceState interactionSourceState)
-        {
-            UpdateSourceData(interactionSourceState);
-            UpdateVelocity(interactionSourceState);
-
-            for (int i = 0; i < Interactions?.Length; i++)
-            {
-                switch (Interactions[i].InputType)
-                {
-                    case DeviceInputType.None:
-                        break;
-                    case DeviceInputType.SpatialPointer:
-                        UpdatePointerData(interactionSourceState, Interactions[i]);
-                        break;
-                    case DeviceInputType.SpatialGrip:
-                        UpdateGripData(interactionSourceState, Interactions[i]);
-                        break;
-                }
             }
         }
 
@@ -282,7 +269,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
                 switch (interactionMapping.InputType)
                 {
                     case DeviceInputType.TriggerPress:
-                    case DeviceInputType.GripPress:
                         {
                             // Update the interaction data source
                             interactionMapping.BoolData = interactionSourceState.grasped;
@@ -365,10 +351,10 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         /// Gets whether or not 'select' has been pressed.
         /// </summary>
         /// <remarks>
-        /// <para>This includes a workaround to fix air-tap gestures in HoloLens 1 remoting, to work around the following Unity issue:
-        /// https://issuetracker.unity3d.com/issues/hololens-interactionsourcestate-dot-selectpressed-is-false-when-air-tap-and-hold </para>
-        /// <para>Bug was discovered May 2018 and still exists as of May 2019 in version 2018.3.11f1. This workaround is scoped to only
-        /// cases where remoting is active.</para>
+        /// This includes a workaround to fix air-tap gestures in HoloLens 1 remoting, to work around the following Unity issue:
+        /// https://issuetracker.unity3d.com/issues/hololens-interactionsourcestate-dot-selectpressed-is-false-when-air-tap-and-hold
+        /// Bug was discovered May 2018 and still exists as of May 2019 in version 2018.3.11f1. This workaround is scoped to only
+        /// cases where remoting is active.
         /// </remarks>
         private bool GetSelectPressedWorkaround(InteractionSourceState interactionSourceState)
         {

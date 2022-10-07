@@ -3,6 +3,7 @@
 
 using Microsoft.MixedReality.Toolkit.CameraSystem;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using UnityEngine;
 
 #if SPATIALTRACKING_ENABLED
 using UnityEngine.SpatialTracking;
@@ -16,8 +17,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
     [MixedRealityDataProvider(
         typeof(IMixedRealityCameraSystem),
         (SupportedPlatforms)(-1),
-        "XR SDK Camera Settings",
-        supportedUnityXRPipelines: SupportedUnityXRPipelines.XRSDK)]
+        "XR SDK Camera Settings")]
     public class GenericXRSDKCameraSettings : BaseCameraSettingsProvider
     {
         /// <summary>
@@ -62,7 +62,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         {
             if (trackedPoseDriver != null)
             {
-                UnityObjectExtensions.DestroyObject(trackedPoseDriver);
+                Object.Destroy(trackedPoseDriver);
                 trackedPoseDriver = null;
             }
 

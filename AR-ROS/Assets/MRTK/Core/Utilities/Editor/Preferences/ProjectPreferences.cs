@@ -195,7 +195,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             }
             else
             {
-                Set(key, defaultVal, target);
+                Set<T>(key, defaultVal, target);
                 return defaultVal;
             }
         }

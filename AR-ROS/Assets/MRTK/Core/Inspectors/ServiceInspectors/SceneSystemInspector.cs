@@ -32,9 +32,10 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         {
             // Get the scene system itself
             IMixedRealitySceneSystem sceneSystem = target as IMixedRealitySceneSystem;
-
             // Get the scene system's editor interface
-            if (!(target is IMixedRealitySceneSystemEditor sceneSystemEditor))
+            IMixedRealitySceneSystemEditor sceneSystemEditor = target as IMixedRealitySceneSystemEditor;
+
+            if (sceneSystemEditor == null)
             {
                 EditorGUILayout.HelpBox("This scene service implementation does not implement IMixedRealitySceneSystemEditor. Inspector will not be rendered.", MessageType.Info);
                 return;

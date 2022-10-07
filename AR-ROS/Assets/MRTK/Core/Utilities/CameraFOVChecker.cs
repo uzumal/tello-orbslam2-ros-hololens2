@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Microsoft.MixedReality.Toolkit
 {
@@ -13,21 +15,18 @@ namespace Microsoft.MixedReality.Toolkit
     /// </summary>
     public static class CameraFOVChecker
     {
+
         // Help to clear caches when new frame runs
-        private static int inFOVLastCalculatedFrame = -1;
-#if !NETFX_CORE
+        static private int inFOVLastCalculatedFrame = -1;
         // Map from grabbable => is the grabbable in FOV for this frame. Cleared every frame
-        private static Dictionary<ValueTuple<Collider, Camera>, bool> inFOVColliderCache = new Dictionary<ValueTuple<Collider, Camera>, bool>();
-#else
         private static Dictionary<Tuple<Collider, Camera>, bool> inFOVColliderCache = new Dictionary<Tuple<Collider, Camera>, bool>();
-#endif
         // List of corners shared across all sphere pointer query instances --
         // used to store list of corners for a bounds. Shared and static
         // to avoid allocating memory each frame
         private static List<Vector3> inFOVBoundsCornerPoints = new List<Vector3>();
 
         /// <summary>
-        /// Returns true if a collider's bounds is within the camera FOV.
+        /// Returns true if a collider's bounds is within the camera FOV. 
         /// Utilizes a cache to test if this collider has been seen before and returns current frame's calculated result.
         /// NOTE: This is a 'loose' FOV check -- it can return true in cases when the collider is actually not in the FOV
         /// because it does an axis-aligned check when testing for large colliders. So, if the axis aligned bounds are in the bounds of the camera, it will return true.
@@ -41,13 +40,8 @@ namespace Microsoft.MixedReality.Toolkit
                 return false;
             }
 
-#if !NETFX_CORE
-            ValueTuple<Collider, Camera> cameraColliderPair = ValueTuple.Create(myCollider, cam);
-#else
-            Tuple<Collider, Camera> cameraColliderPair = Tuple.Create(myCollider, cam);
-#endif
-
-            bool result;
+            Tuple<Collider, Camera> cameraColliderPair = new Tuple<Collider, Camera>(myCollider, cam);
+            bool result = false;
             if (inFOVLastCalculatedFrame != Time.frameCount)
             {
                 inFOVColliderCache.Clear();
@@ -60,6 +54,7 @@ namespace Microsoft.MixedReality.Toolkit
 
             inFOVBoundsCornerPoints.Clear();
             BoundsExtensions.GetColliderBoundsPoints(myCollider, inFOVBoundsCornerPoints, 0);
+
 
             float xMin = float.MaxValue, yMin = float.MaxValue, zMin = float.MaxValue;
             float xMax = float.MinValue, yMax = float.MinValue, zMax = float.MinValue;
@@ -104,5 +99,6 @@ namespace Microsoft.MixedReality.Toolkit
 
             return result;
         }
+
     }
 }

@@ -26,9 +26,6 @@ namespace Microsoft.MixedReality.Toolkit.Physics
         private Vector3 objectLocalGrabPoint;
         private Vector3 grabToObject;
 
-        private Vector3 objectLocalAttachPoint;
-        private Vector3 attachToObject;
-
         /// <summary>
         /// Setup function
         /// </summary>
@@ -41,57 +38,17 @@ namespace Microsoft.MixedReality.Toolkit.Physics
             Quaternion worldToPointerRotation = Quaternion.Inverse(pointerCentroidPose.Rotation);
             pointerLocalGrabPoint = worldToPointerRotation * (grabCentroid - pointerCentroidPose.Position);
 
-            attachToObject = objectPose.Position - pointerCentroidPose.Position;
-            objectLocalAttachPoint = Quaternion.Inverse(objectPose.Rotation) * (pointerCentroidPose.Position - objectPose.Position);
-            objectLocalAttachPoint = objectLocalAttachPoint.Div(objectScale);
-
-            grabToObject = objectPose.Position - grabCentroid;
             objectLocalGrabPoint = Quaternion.Inverse(objectPose.Rotation) * (grabCentroid - objectPose.Position);
             objectLocalGrabPoint = objectLocalGrabPoint.Div(objectScale);
+
+            grabToObject = objectPose.Position - grabCentroid;
         }
 
         /// <summary>
         /// Update the position based on input.
         /// </summary>
         /// <returns>A Vector3 describing the desired position</returns>
-        [Obsolete("This update function is out of date and does not properly support Near Manipulation. Use UpdateTransform instead")]
         public Vector3 Update(MixedRealityPose pointerCentroidPose, Quaternion objectRotation, Vector3 objectScale, bool usePointerRotation)
-        {
-            return FarManipulationUpdate(pointerCentroidPose, objectRotation, objectScale, usePointerRotation);
-        }
-
-        /// <summary>
-        /// Update the position based on input.
-        /// </summary>
-        /// <returns>A Vector3 describing the desired position</returns>
-        public Vector3 UpdateTransform(MixedRealityPose pointerCentroidPose, MixedRealityTransform currentTarget, bool isPointerAnchor, bool isNearManipulation)
-        {
-            if (isNearManipulation)
-            {
-                return NearManipulationUpdate(pointerCentroidPose, currentTarget);
-            }
-            else
-            {
-                return FarManipulationUpdate(pointerCentroidPose, currentTarget.Rotation, currentTarget.Scale, isPointerAnchor);
-            }
-        }
-
-        /// <summary>
-        /// Updates the position during near manipulation
-        /// </summary>
-        /// <returns>A Vector3 describing the desired position during near manipulation</returns>
-        private Vector3 NearManipulationUpdate(MixedRealityPose pointerCentroidPose, MixedRealityTransform currentTarget)
-        {
-            Vector3 scaledLocalAttach = Vector3.Scale(objectLocalAttachPoint, currentTarget.Scale);
-            Vector3 worldAttachPoint = currentTarget.Rotation * scaledLocalAttach + currentTarget.Position;
-            return currentTarget.Position + (pointerCentroidPose.Position - worldAttachPoint);
-        }
-
-        /// <summary>
-        /// Updates the position during far manipulation
-        /// </summary>
-        /// <returns>A Vector3 describing the desired position during far manipulation</returns>
-        private Vector3 FarManipulationUpdate(MixedRealityPose pointerCentroidPose, Quaternion objectRotation, Vector3 objectScale, bool isPointerAnchor)
         {
             float distanceRatio = 1.0f;
 
@@ -102,7 +59,7 @@ namespace Microsoft.MixedReality.Toolkit.Physics
                 distanceRatio = currentHandDistance / pointerRefDistance;
             }
 
-            if (isPointerAnchor)
+            if (usePointerRotation)
             {
                 Vector3 scaledGrabToObject = Vector3.Scale(objectLocalGrabPoint, objectScale);
                 Vector3 adjustedPointerToGrab = (pointerLocalGrabPoint * distanceRatio);
@@ -112,7 +69,7 @@ namespace Microsoft.MixedReality.Toolkit.Physics
             }
             else
             {
-                return pointerCentroidPose.Position + grabToObject + (pointerCentroidPose.Rotation * pointerLocalGrabPoint) * distanceRatio;
+                return pointerCentroidPose.Position + (pointerCentroidPose.Rotation * pointerLocalGrabPoint + grabToObject) * distanceRatio;
             }
         }
 

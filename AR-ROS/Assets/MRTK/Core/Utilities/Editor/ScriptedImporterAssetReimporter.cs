@@ -43,6 +43,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
 
                         if (numAttempts <= 3)
                         {
+                            Debug.LogWarning($"Asset '{asset}' appears to have failed importing, will attempt to re-import. Attempt: {numAttempts}");
                             AssetDatabase.ImportAsset(asset);
                         }
                         else

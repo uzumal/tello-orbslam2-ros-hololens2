@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities
@@ -8,8 +9,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// <summary>
     /// Provides several utility functions for smoothing and lerping.
     /// </summary>
-    internal class Smoothing
-    {
+    internal class Smoothing {
 
         /// <summary>
         /// Smooths from source to goal, provided lerptime and a deltaTime.

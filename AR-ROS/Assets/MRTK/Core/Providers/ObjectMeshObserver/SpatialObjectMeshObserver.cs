@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Licensed under the MIT License.license information.
 
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -17,7 +17,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialObjectMeshObserver
         "Spatial Object Mesh Observer",
         "Providers/ObjectMeshObserver/Profiles/DefaultObjectMeshObserverProfile.asset",
         "MixedRealityToolkit.Core")]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/spatial-awareness/spatial-awareness-getting-started")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/SpatialAwareness/SpatialAwarenessGettingStarted.html")]
     public class SpatialObjectMeshObserver :
         BaseSpatialMeshObserver,
         IMixedRealityCapabilityCheck
@@ -198,7 +198,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialObjectMeshObserver
                         meshes.Add(currentMeshId, meshObject);
 
                         meshEventData.Initialize(this, currentMeshId, meshObject);
-                        Service?.HandleEvent(meshEventData, OnMeshAdded);
+                        SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshAdded);
 
                         currentMeshId++;
                     }
@@ -228,7 +228,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialObjectMeshObserver
 
                     // Send the mesh removed event
                     meshEventData.Initialize(this, meshId, null);
-                    Service?.HandleEvent(meshEventData, OnMeshRemoved);
+                    SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshRemoved);
                 }
             }
         }

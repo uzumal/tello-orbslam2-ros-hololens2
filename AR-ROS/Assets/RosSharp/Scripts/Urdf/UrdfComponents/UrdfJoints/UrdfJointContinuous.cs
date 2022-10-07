@@ -25,7 +25,6 @@ namespace RosSharp.Urdf
             urdfJoint._jointType = JointTypes.Continuous;
             urdfJoint.UnityJoint = linkObject.AddComponent<HingeJoint>();
             urdfJoint.UnityJoint.autoConfigureConnectedAnchor = true;
-            linkObject.AddComponent<HingeJointAngleCalculator>();
 
             return urdfJoint;
         }
@@ -34,7 +33,7 @@ namespace RosSharp.Urdf
 
         public override float GetPosition()
         {
-            return -GetComponent<HingeJointAngleCalculator>().Angle * Mathf.Deg2Rad;
+            return -((HingeJoint)UnityJoint).angle * Mathf.Deg2Rad;
         }
         public override float GetVelocity()
         {

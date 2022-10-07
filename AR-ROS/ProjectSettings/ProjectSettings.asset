@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 20
-  productGUID: 05728f858b3552245a805560e7815ceb
+  productGUID: d932986adeb56f54c80ec1bcacad40fa
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: AR-ROS
+  productName: ar-ros
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -149,7 +149,7 @@ PlayerSettings:
       minimumSupportedHeadTracking: 0
       maximumSupportedHeadTracking: 1
     hololens:
-      depthFormat: 1
+      depthFormat: 0
       depthBufferSharingEnabled: 1
     lumin:
       depthFormat: 0
@@ -188,7 +188,7 @@ PlayerSettings:
   CreateWallpaper: 0
   APKExpansionFiles: 0
   keepLoadedShadersAlive: 0
-  StripUnusedMeshComponents: 1
+  StripUnusedMeshComponents: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
   iOSTargetOSVersionString: 10.0
@@ -334,12 +334,6 @@ PlayerSettings:
   - m_BuildTarget: WebGLSupport
     m_APIs: 0b000000
     m_Automatic: 1
-  - m_BuildTarget: WindowsStandaloneSupport
-    m_APIs: 11000000
-    m_Automatic: 0
-  - m_BuildTarget: LinuxStandaloneSupport
-    m_APIs: 11000000
-    m_Automatic: 0
   m_BuildTargetVRSettings:
   - m_BuildTarget: Standalone
     m_Enabled: 0
@@ -347,8 +341,9 @@ PlayerSettings:
     - Oculus
     - OpenVR
   - m_BuildTarget: Windows Store Apps
-    m_Enabled: 0
-    m_Devices: []
+    m_Enabled: 1
+    m_Devices:
+    - WindowsMR
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
@@ -642,14 +637,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: AR-Drone
+  metroPackageName: ar-ros
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany
-  metroCertificateNotAfter: 80ecd9bc62f0d901
-  metroApplicationDescription: AR-Drone
+  metroCertificateNotAfter: 80a1e3446ef8d901
+  metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -679,7 +674,7 @@ PlayerSettings:
       HumanInterfaceDevice: False
       InputInjectionBrokered: False
       InternetClient: True
-      InternetClientServer: False
+      InternetClientServer: True
       Location: False
       LowLevelDevices: False
       Microphone: True
@@ -690,7 +685,7 @@ PlayerSettings:
       PhoneCallHistoryPublic: False
       PicturesLibrary: False
       PointOfService: False
-      PrivateNetworkClientServer: False
+      PrivateNetworkClientServer: True
       Proximity: False
       RecordedCallsFolder: False
       RemoteSystem: False

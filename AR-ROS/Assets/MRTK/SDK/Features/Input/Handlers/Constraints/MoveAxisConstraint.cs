@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright,orld (c.Right) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -55,7 +55,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             Quaternion inverseRotation = Quaternion.Inverse(worldPoseOnManipulationStart.Rotation);
             Vector3 position = transform.Position;
-            if (constraintOnMovement.IsMaskSet(AxisFlags.XAxis))
+            if (constraintOnMovement.HasFlag(AxisFlags.XAxis))
             {
                 if (useLocalSpaceForConstraint)
                 {
@@ -68,7 +68,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     position.x = worldPoseOnManipulationStart.Position.x;
                 }
             }
-            if (constraintOnMovement.IsMaskSet(AxisFlags.YAxis))
+            if (constraintOnMovement.HasFlag(AxisFlags.YAxis))
             {
                 if (useLocalSpaceForConstraint)
                 {
@@ -81,7 +81,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     position.y = worldPoseOnManipulationStart.Position.y;
                 }
             }
-            if (constraintOnMovement.IsMaskSet(AxisFlags.ZAxis))
+            if (constraintOnMovement.HasFlag(AxisFlags.ZAxis))
             {
                 if (useLocalSpaceForConstraint)
                 {

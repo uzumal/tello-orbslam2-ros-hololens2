@@ -54,7 +54,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         }
 
         /// <summary>
-        /// The default value for a Six DoF Transform.
+        /// The default value for a Six Dof Transform.
         /// </summary>
         public static MixedRealityTransform Identity { get; } = new MixedRealityTransform(Vector3.zero, Quaternion.identity, Vector3.one);
 
@@ -98,7 +98,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         public override string ToString()
         {
-            return $"{pose.Position} | {pose.Rotation} | {scale}";
+            return $"{pose.Position} | {pose.Rotation}";
         }
 
         /// <summary>
@@ -118,7 +118,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         #region IEqualityComparer Implementation
 
-        /// <inheritdoc />
         bool IEqualityComparer.Equals(object left, object right)
         {
             if (ReferenceEquals(null, left) || ReferenceEquals(null, right)) { return false; }
@@ -135,15 +134,15 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) { return false; }
-            return obj is MixedRealityTransform transform && Equals(transform);
+            return obj is MixedRealityTransform && Equals((MixedRealityTransform)obj);
+        }
+
+        int IEqualityComparer.GetHashCode(object obj)
+        {
+            return obj is MixedRealityTransform ? ((MixedRealityTransform)obj).GetHashCode() : 0;
         }
 
         /// <inheritdoc />
-        int IEqualityComparer.GetHashCode(object obj)
-        {
-            return obj is MixedRealityTransform transform ? transform.GetHashCode() : 0;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode();

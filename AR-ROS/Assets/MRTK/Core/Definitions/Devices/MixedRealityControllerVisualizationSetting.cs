@@ -4,7 +4,6 @@
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Microsoft.MixedReality.Toolkit.Input
 {
@@ -21,15 +20,14 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <param name="controllerType">Controller Type to instantiate at runtime.</param>
         /// <param name="handedness">The designated hand that the device is managing.</param>
         /// <param name="overrideModel">The controller model prefab to be rendered.</param>
-        [Obsolete("This constructor doesn't need to be called directly.")]
         public MixedRealityControllerVisualizationSetting(string description, Type controllerType, Handedness handedness = Handedness.None, GameObject overrideModel = null) : this()
         {
             this.description = description;
             this.controllerType = new SystemType(controllerType);
             this.handedness = handedness;
             this.overrideModel = overrideModel;
-            usePlatformModels = false;
-            platformModelMaterial = null;
+            useDefaultModel = false;
+            defaultModelMaterial = null;
         }
 
         [SerializeField]
@@ -61,23 +59,21 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         [SerializeField]
         [Tooltip("Check to obtain controller models from the platform SDK. If left unchecked, the global models will be used.")]
-        [FormerlySerializedAs("useDefaultModel")]
-        private bool usePlatformModels;
+        private bool useDefaultModel;
 
         /// <summary>
         /// Check to obtain controller models from the platform SDK. If left unchecked, the global models will be used.
         /// </summary>
-        public bool UsePlatformModels => usePlatformModels;
+        public bool UseDefaultModel => useDefaultModel;
 
         [SerializeField]
         [Tooltip("The default controller model material when loading platform SDK controller models.")]
-        [FormerlySerializedAs("defaultModelMaterial")]
-        private Material platformModelMaterial;
+        private Material defaultModelMaterial;
 
         /// <summary>
         /// The default controller model material when loading platform SDK controller models. This value is used as a fallback if no controller definition exists with a custom material type.
         /// </summary>
-        public Material PlatformModelMaterial => platformModelMaterial;
+        public Material DefaultModelMaterial => defaultModelMaterial;
 
         [SerializeField]
         [Tooltip("An override model to display for this specific controller.")]

@@ -170,7 +170,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         private static readonly ProfilerMarker RaiseTeleportRequestPerfMarker = new ProfilerMarker("[MRTK] MixedRealityTeleportSystem.RaiseTeleportRequest");
 
         /// <inheritdoc />
-        public void RaiseTeleportRequest(IMixedRealityPointer pointer, IMixedRealityTeleportHotspot hotSpot)
+        public void RaiseTeleportRequest(IMixedRealityPointer pointer, IMixedRealityTeleportHotSpot hotSpot)
         {
             using (RaiseTeleportRequestPerfMarker.Auto())
             {
@@ -192,7 +192,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         private static readonly ProfilerMarker RaiseTeleportStartedPerfMarker = new ProfilerMarker("[MRTK] MixedRealityTeleportSystem.RaiseTeleportStarted");
 
         /// <inheritdoc />
-        public void RaiseTeleportStarted(IMixedRealityPointer pointer, IMixedRealityTeleportHotspot hotSpot)
+        public void RaiseTeleportStarted(IMixedRealityPointer pointer, IMixedRealityTeleportHotSpot hotSpot)
         {
             if (isTeleporting)
             {
@@ -228,7 +228,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         /// </summary>
         /// <param name="pointer">The pointer that raised the event.</param>
         /// <param name="hotSpot">The teleport target</param>
-        private void RaiseTeleportComplete(IMixedRealityPointer pointer, IMixedRealityTeleportHotspot hotSpot)
+        private void RaiseTeleportComplete(IMixedRealityPointer pointer, IMixedRealityTeleportHotSpot hotSpot)
         {
             if (!isTeleporting)
             {
@@ -258,7 +258,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         private static readonly ProfilerMarker RaiseTeleportCanceledPerfMarker = new ProfilerMarker("[MRTK] MixedRealityTeleportSystem.RaiseTeleportHandled");
 
         /// <inheritdoc />
-        public void RaiseTeleportCanceled(IMixedRealityPointer pointer, IMixedRealityTeleportHotspot hotSpot)
+        public void RaiseTeleportCanceled(IMixedRealityPointer pointer, IMixedRealityTeleportHotSpot hotSpot)
         {
             using (RaiseTeleportCanceledPerfMarker.Auto())
             {
@@ -281,19 +281,20 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                 isProcessingTeleportRequest = true;
 
                 targetRotation = Vector3.zero;
-                if (eventData.Pointer is IMixedRealityTeleportPointer teleportPointer && !teleportPointer.IsNull())
+                var teleportPointer = eventData.Pointer as IMixedRealityTeleportPointer;
+                if (teleportPointer != null)
                 {
                     targetRotation.y = teleportPointer.PointerOrientation;
                 }
                 targetPosition = eventData.Pointer.Result.Details.Point;
 
-                if (eventData.Hotspot != null)
+                if (eventData.HotSpot != null)
                 {
-                    targetPosition = eventData.Hotspot.Position;
+                    targetPosition = eventData.HotSpot.Position;
 
-                    if (eventData.Hotspot.OverrideOrientation)
+                    if (eventData.HotSpot.OverrideTargetOrientation)
                     {
-                        targetRotation.y = eventData.Hotspot.TargetRotation;
+                        targetRotation.y = eventData.HotSpot.TargetOrientation;
                     }
                 }
 
@@ -310,7 +311,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                 isProcessingTeleportRequest = false;
 
                 // Raise complete event using the pointer and hot spot provided.
-                RaiseTeleportComplete(eventData.Pointer, eventData.Hotspot);
+                RaiseTeleportComplete(eventData.Pointer, eventData.HotSpot);
             }
         }
     }

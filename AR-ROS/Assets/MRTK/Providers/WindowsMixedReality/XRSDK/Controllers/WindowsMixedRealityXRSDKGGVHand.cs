@@ -11,53 +11,20 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
     /// </summary>
     [MixedRealityController(
         SupportedControllerType.GGVHand,
-        new[] { Handedness.Left, Handedness.Right, Handedness.None },
-        supportedUnityXRPipelines: SupportedUnityXRPipelines.XRSDK)]
+        new[] { Handedness.Left, Handedness.Right, Handedness.None })]
     public class WindowsMixedRealityXRSDKGGVHand : BaseWindowsMixedRealityXRSDKSource
     {
-        public WindowsMixedRealityXRSDKGGVHand(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null)
-            : base(trackingState, controllerHandedness, inputSource, interactions, new SimpleHandDefinition(controllerHandedness))
-        { }
+        public WindowsMixedRealityXRSDKGGVHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+        : base(trackingState, controllerHandedness, inputSource, interactions) { }
 
-        internal void UpdateVoiceState(bool isPressed)
+        /// <summary>
+        /// The GGV hand default interactions.
+        /// </summary>
+        /// <remarks>A single interaction mapping works for both left and right controllers.</remarks>
+        public override MixedRealityInteractionMapping[] DefaultInteractions { get; } = new[]
         {
-            MixedRealityInteractionMapping interactionMapping = null;
-
-            for (int i = 0; i < Interactions?.Length; i++)
-            {
-                MixedRealityInteractionMapping currentInteractionMapping = Interactions[i];
-
-                if (currentInteractionMapping.AxisType == AxisType.Digital && currentInteractionMapping.InputType == DeviceInputType.Select)
-                {
-                    interactionMapping = currentInteractionMapping;
-                    break;
-                }
-            }
-
-            if (interactionMapping == null)
-            {
-                return;
-            }
-
-            interactionMapping.BoolData = isPressed;
-
-            // If our value changed raise it.
-            if (interactionMapping.Changed)
-            {
-                // Raise input system event if it's enabled
-                if (interactionMapping.BoolData)
-                {
-                    CoreServices.InputSystem?.RaiseOnInputDown(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
-                }
-                else
-                {
-                    CoreServices.InputSystem?.RaiseOnInputUp(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
-                }
-            }
-        }
+            new MixedRealityInteractionMapping(0, "Select", AxisType.Digital, DeviceInputType.Select),
+            new MixedRealityInteractionMapping(1, "Grip Pose", AxisType.SixDof, DeviceInputType.SpatialGrip),
+        };
     }
 }

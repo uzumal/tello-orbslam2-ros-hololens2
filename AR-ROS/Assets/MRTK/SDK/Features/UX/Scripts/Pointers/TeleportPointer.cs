@@ -5,13 +5,10 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Physics;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
-using System.Runtime.CompilerServices;
 using Unity.Profiling;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityPhysics = UnityEngine.Physics;
 
-[assembly: InternalsVisibleTo("Microsoft.MixedReality.Toolkit.Tests.PlayModeTests")]
 namespace Microsoft.MixedReality.Toolkit.Teleport
 {
     /// <summary>
@@ -32,29 +29,16 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         public TeleportSurfaceResult TeleportSurfaceResult { get; private set; } = TeleportSurfaceResult.None;
 
         /// <inheritdoc />
-        public IMixedRealityTeleportHotspot TeleportHotspot { get; set; }
+        public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
 
         [SerializeField]
         [Tooltip("Teleport Pointer will only respond to input events for teleportation that match this MixedRealityInputAction")]
         private MixedRealityInputAction teleportAction = MixedRealityInputAction.None;
 
         /// <summary>
-        /// Teleport Pointer will only respond to input events for teleportation that match this MixedRealityInputAction
+        /// Teleport pointer will only respond to input events for teleportation that match this MixedRealityInputAction.
         /// </summary>
         public MixedRealityInputAction TeleportInputAction => teleportAction;
-
-        [SerializeField]
-        [Tooltip("Teleport Pointer Cursor visibility when a hotspot is in focus")]
-        private bool hotSpotCursorVisibility = true;
-
-        /// <summary>
-        /// Teleport pointer cursor visibility if pointer is focused on hotspot
-        /// </summary>
-        public bool TeleportHotSpotCursorVisibility
-        {
-            get => hotSpotCursorVisibility;
-            set => hotSpotCursorVisibility = value;
-        }
 
         [SerializeField]
         [Range(0f, 1f)]
@@ -88,20 +72,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
 
         [SerializeField]
         [Tooltip("The distance to move the camera when the strafe is activated")]
-        internal float strafeAmount = 0.25f;
-
-        [SerializeField]
-        [Tooltip("Whether or not a strafe checks that there is a floor beneath the user's origin on strafe")]
-        internal bool checkForFloorOnStrafe = false;
-
-        [SerializeField]
-        [Tooltip("Whether or not the user's y-position can move during a strafe")]
-        internal bool adjustHeightOnStrafe = false;
-
-
-        [SerializeField]
-        [Tooltip("The detection range for a floor on strafe, as well as the max amount that a user's y-position can change on strafe")]
-        internal float maxHeightChangeOnStrafe = 0.5f;
+        private float strafeAmount = 0.25f;
 
         [SerializeField]
         [Range(0f, 1f)]
@@ -112,35 +83,12 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         protected Gradient LineColorHotSpot = new Gradient();
 
         [SerializeField]
-        [FormerlySerializedAs("teleportLayerMasks")]
-        [Tooltip("The LayerMasks, in prioritized order, that are used to determine the the objects the teleport pointer is allowed to hit")]
-        private LayerMask[] teleportRaycastLayerMasks = { UnityPhysics.DefaultRaycastLayers };
-
-        /// <inheritdoc />
-        public override LayerMask[] PrioritizedLayerMasksOverride
-        {
-            get { return teleportRaycastLayerMasks; }
-            set { teleportRaycastLayerMasks = value; }
-        }
+        [Tooltip("Layers that are considered 'valid' for navigation")]
+        protected LayerMask ValidLayers = UnityPhysics.DefaultRaycastLayers;
 
         [SerializeField]
-        [Tooltip("Layers that are considered 'valid' for navigation. Layers which are not here are considered 'invalid' for navigation. This is separate from " +
-            "layers which the teleport pointer is allowed to hit")]
-        [FormerlySerializedAs("ValidLayers")]
-        protected LayerMask ValidTeleportationLayers = UnityPhysics.DefaultRaycastLayers;
-
-        protected LayerMask InvalidTeleportationLayers
-        {
-            get 
-            {
-                LayerMask raycastedLayerMasks = new LayerMask();
-                for (int i = 0; i < PrioritizedLayerMasksOverride.Length; i++)
-                {
-                    raycastedLayerMasks |= PrioritizedLayerMasksOverride[i];
-                }
-                return ~ValidTeleportationLayers & raycastedLayerMasks;
-            }
-        }            
+        [Tooltip("Layers that are considered 'invalid' for navigation")]
+        protected LayerMask InvalidLayers = UnityPhysics.IgnoreRaycastLayer;
 
         [SerializeField]
         private DistorterGravity gravityDistorter = null;
@@ -219,7 +167,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                     await new WaitUntil(() => CoreServices.TeleportSystem != null);
 
                     // We've been destroyed during the await.
-                    if (this.IsNull())
+                    if (this == null)
                     {
                         return;
                     }
@@ -270,58 +218,6 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
             }
         }
 
-        /// <summary>
-        /// check if a backstrafe is possible on a valid platform regarding the possible strafe height given
-        /// </summary>
-        /// <param name="newPosition">the new position relative to backstrafe position</param>
-        /// <param name="hitStrafePosition">actual position the strafe raycast hits</param>
-        /// <returns>if there is a valid layer one can backstrafe on</returns>
-        internal bool CheckPossibleBackStep(Vector3 newPosition, out Vector3 hitStrafePosition)
-        {
-            var raycastProvider = CoreServices.InputSystem.RaycastProvider;
-            Vector3 strafeOrigin = new Vector3(newPosition.x, MixedRealityPlayspace.Position.y + maxHeightChangeOnStrafe, newPosition.z);
-            Vector3 strafeTerminus = strafeOrigin + (Vector3.down * maxHeightChangeOnStrafe * 2f);
-
-            RayStep rayStep = new RayStep(strafeOrigin, strafeTerminus);
-            LayerMask[] layerMasks = new LayerMask[] { ValidTeleportationLayers };
-
-            // check are we hiting a floor plane or step above the current MixedRealityPlayspace.Position
-            if (!raycastProvider.IsNull() && raycastProvider.Raycast(rayStep, layerMasks, false, out var hitInfo))
-            {
-                hitStrafePosition = hitInfo.point;
-                return true;
-            }
-
-            hitStrafePosition = Vector3.zero;
-            return false;
-        }
-
-        /// <summary>
-        /// Performs a strafe in the opposite direction of the camera's forward direction
-        /// </summary>
-        internal void PerformStrafe()
-        {
-            canMove = false;
-            var height = MixedRealityPlayspace.Position.y;
-            var newPosition = -CameraCache.Main.transform.forward * strafeAmount + MixedRealityPlayspace.Position;
-
-            newPosition.y = height;
-            bool isValidStrafe = true;
-            if (checkForFloorOnStrafe)
-            {
-                isValidStrafe = CheckPossibleBackStep(newPosition, out var strafeHitPosition);
-                if (adjustHeightOnStrafe)
-                {
-                    newPosition = strafeHitPosition;
-                }
-            }
-
-            if (isValidStrafe)
-            {
-                MixedRealityPlayspace.Position = newPosition;
-            }
-        }
-
         #region IMixedRealityPointer Implementation
 
         /// <inheritdoc />
@@ -337,11 +233,11 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         {
             get
             {
-                if (TeleportHotspot != null &&
-                    TeleportHotspot.OverrideOrientation &&
+                if (TeleportHotSpot != null &&
+                    TeleportHotSpot.OverrideTargetOrientation &&
                     TeleportSurfaceResult == TeleportSurfaceResult.HotSpot)
                 {
-                    return TeleportHotspot.TargetRotation;
+                    return TeleportHotSpot.TargetOrientation;
                 }
 
                 return pointerOrientation + (raycastOrigin != null ? raycastOrigin.eulerAngles.y : transform.eulerAngles.y);
@@ -402,14 +298,14 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                     if (Result.CurrentPointerTarget != null)
                     {
                         // Check if it's in our valid layers
-                        if (((1 << Result.CurrentPointerTarget.layer) & ValidTeleportationLayers.value) != 0)
+                        if (((1 << Result.CurrentPointerTarget.layer) & ValidLayers.value) != 0)
                         {
                             // See if it's a hot spot
-                            if (TeleportHotspot != null && TeleportHotspot.IsActive)
+                            if (TeleportHotSpot != null && TeleportHotSpot.IsActive)
                             {
                                 TeleportSurfaceResult = TeleportSurfaceResult.HotSpot;
                                 // Turn on gravity, point it at hotspot
-                                GravityDistorter.WorldCenterOfGravity = TeleportHotspot.Position;
+                                GravityDistorter.WorldCenterOfGravity = TeleportHotSpot.Position;
                                 GravityDistorter.enabled = true;
                             }
                             else
@@ -421,23 +317,20 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                                     : TeleportSurfaceResult.Invalid;
                             }
                         }
-                        else
+                        else if (((1 << Result.CurrentPointerTarget.layer) & InvalidLayers) != 0)
                         {
                             TeleportSurfaceResult = TeleportSurfaceResult.Invalid;
+                        }
+                        else
+                        {
+                            TeleportSurfaceResult = TeleportSurfaceResult.None;
                         }
 
                         clearWorldLength = Result.Details.RayDistance;
 
                         // Clamp the end of the parabola to the result hit's point
                         LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
-                        if (hotSpotCursorVisibility)
-                        {
-                            BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid || TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
-                        }
-                        else
-                        {
-                            BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid);
-                        }
+                        BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid || TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
                     }
                     else
                     {
@@ -463,10 +356,10 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
             base.Reset();
             if (gameObject == null) return;
 
-            if (TeleportHotspot != null)
+            if (TeleportHotSpot != null)
             {
-                CoreServices.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotspot);
-                TeleportHotspot = null;
+                CoreServices.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                TeleportHotSpot = null;
             }
         }
 
@@ -511,7 +404,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                         {
                             TeleportRequestRaised = true;
 
-                            CoreServices.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotspot);
+                            CoreServices.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
                             if (pointerAudioSource != null && teleportRequestedClip != null)
                             {
                                 pointerAudioSource.PlayOneShot(teleportRequestedClip);
@@ -553,7 +446,11 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                                     // Check to make sure we're still under our activation threshold.
                                     if (offsetStrafeAngle > 0 && offsetStrafeAngle <= backStrafeActivationAngle)
                                     {
-                                        PerformStrafe();
+                                        canMove = false;
+                                        var height = MixedRealityPlayspace.Position.y;
+                                        var newPosition = -CameraCache.Main.transform.forward * strafeAmount + MixedRealityPlayspace.Position;
+                                        newPosition.y = height;
+                                        MixedRealityPlayspace.Position = newPosition;
                                     }
                                 }
                             }
@@ -577,7 +474,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                         if (TeleportSurfaceResult == TeleportSurfaceResult.Valid ||
                             TeleportSurfaceResult == TeleportSurfaceResult.HotSpot)
                         {
-                            CoreServices.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotspot);
+                            CoreServices.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
                             if (pointerAudioSource != null && teleportCompletedClip != null)
                             {
                                 pointerAudioSource.PlayOneShot(teleportCompletedClip);
@@ -588,7 +485,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                     if (TeleportRequestRaised)
                     {
                         TeleportRequestRaised = false;
-                        CoreServices.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotspot);
+                        CoreServices.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
                     }
                 }
             }

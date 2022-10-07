@@ -27,9 +27,9 @@ namespace RosSharp.RosBridgeClient
 
         protected override void Start()
         {
-			base.Start();
-		}
-		
+            base.Start();
+        }
+
         private void Update()
         {
             if (isMessageReceived)
@@ -40,22 +40,21 @@ namespace RosSharp.RosBridgeClient
         {
             position = GetPosition(message).Ros2Unity();
             rotation = GetRotation(message).Ros2Unity();
-            Debug.Log(message);
             isMessageReceived = true;
         }
 
         private void ProcessMessage()
         {
-            PublishedTransform.position = position;
-            PublishedTransform.rotation = rotation;
+            PublishedTransform.localPosition = position;
+            PublishedTransform.localRotation = rotation;
         }
 
         private Vector3 GetPosition(MessageTypes.Geometry.PoseStamped message)
         {
             return new Vector3(
-                (float)message.pose.position.x * 10,
-                (float)message.pose.position.y * 10,
-                (float)message.pose.position.z * 10);
+                (float)message.pose.position.x,
+                (float)message.pose.position.y,
+                (float)message.pose.position.z);
         }
 
         private Quaternion GetRotation(MessageTypes.Geometry.PoseStamped message)

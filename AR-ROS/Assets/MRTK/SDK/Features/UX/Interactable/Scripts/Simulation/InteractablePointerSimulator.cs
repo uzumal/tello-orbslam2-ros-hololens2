@@ -50,7 +50,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             if (isClicked != Clicked)
             {
-                Button.TriggerOnClick(true);
+                Button.TriggerOnClick();
                 Clicked = isClicked;
             }
         }

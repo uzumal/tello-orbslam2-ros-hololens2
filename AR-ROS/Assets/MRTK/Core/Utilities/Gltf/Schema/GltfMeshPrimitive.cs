@@ -12,8 +12,10 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
     /// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/mesh.primitive.schema.json
     /// </summary>
     [Serializable]
-    public class GltfMeshPrimitive : GltfProperty, ISerializationCallbackReceiver
+    public class GltfMeshPrimitive : GltfProperty
     {
+        #region Serialized Fields
+
         /// <summary>
         /// The index of the accessor that contains mesh indices.
         /// When this is not defined, the primitives should be rendered without indices
@@ -35,10 +37,9 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// <summary>
         /// The type of primitives to render. All valid values correspond to WebGL enums.
         /// </summary>
-        public GltfDrawMode Mode { get; set; }
+        public GltfDrawMode mode = GltfDrawMode.Triangles;
 
-        [SerializeField]
-        private string mode = null;
+        #endregion Serialized Fields
 
         /// <summary>
         /// An array of Morph Targets, each  Morph Target is a dictionary mapping
@@ -58,22 +59,5 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// Unity Mesh wrapper for the GltfMeshPrimitive SubMesh
         /// </summary>
         public Mesh SubMesh { get; internal set; }
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            if (Enum.TryParse(mode, out GltfDrawMode result))
-            {
-                Mode = result;
-            }
-            else
-            {
-                Mode = GltfDrawMode.Triangles;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
-            mode = Mode.ToString();
-        }
     }
 }

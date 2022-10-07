@@ -34,18 +34,20 @@ using Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Input;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
+[assembly: InternalsVisibleTo("Microsoft.MixedReality.Toolkit.Tests.EditModeTests")]
 namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
 {
     /// <summary>
     /// Class that checks if the Oculus Integration Assets are present and configures the project if they are.
     /// </summary>
     /// <remarks>
-    /// <para>Note that the checks that this class runs are fairly expensive and are only done manually by the user
+    /// Note that the checks that this class runs are fairly expensive and are only done manually by the user
     /// as part of their setup steps described here:
-    /// https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/supported-devices/oculus-quest-mrtk </para>
+    /// https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html
     /// </remarks>
     public static class OculusXRSDKHandtrackingConfigurationChecker
     {
@@ -56,11 +58,11 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
         /// <summary>
         /// Integrate MRTK and the Oculus Integration Unity Modules if the Oculus Integration Unity Modules is in the project. If it is not in the project, display a pop up window.
         /// </summary>
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Oculus/Integrate Oculus Integration Unity Modules")]
+        [MenuItem("Mixed Reality Toolkit/Utilities/Oculus/Integrate Oculus Integration Unity Modules")]
         internal static void IntegrateOculusWithMRTK()
         {
             // Check if Oculus Integration package is present
-            bool oculusIntegrationPresent = DetectOculusIntegrationAsset();
+            bool oculusIntegrationPresent = DetectOculusIntegrationDefine();
 
             if (!oculusIntegrationPresent)
             {
@@ -74,35 +76,33 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
             // Update the ScriptingDefinitions depending on the presence of the Oculus Integration Unity Modules
             ReconcileOculusIntegrationDefine(oculusIntegrationPresent);
 
-            // Update the CSC to filter out warnings emitted by the Oculus Integration Package
-            if (oculusIntegrationPresent)
-            {
-                UpdateCSC();
-            }
-            ConfigureOculusDeviceManagerDefaults();
+            // Configure the project definitions and prefabs
+            ConfigureOculusIntegration(oculusIntegrationPresent);
         }
 
         /// <summary>
         /// Separate MRTK and the Oculus Integration Unity Modules and display a prompt for the user to close unity and delete the assets.
         /// </summary>
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Oculus/Separate Oculus Integration Unity Modules")]
+        [MenuItem("Mixed Reality Toolkit/Utilities/Oculus/Separate Oculus Integration Unity Modules")]
         internal static void SeparateOculusFromMRTK()
         {
-            bool oculusIntegrationPresent = DetectOculusIntegrationAsset();
+            bool oculusIntegrationPresent = DetectOculusIntegrationDefine();
 
             // If the user tries to separate the Oculus Integration assets without assets in the project display a message
             if (!oculusIntegrationPresent)
-            {
-                EditorUtility.DisplayDialog(
-                       "MRTK Oculus Removal",
-                       "There are no Oculus Integration assets in the project to separate from MRTK",
-                       "OK");
+            {EditorUtility.DisplayDialog(
+                    "MRTK Oculus Removal",
+                    "There are no Oculus Integration assets in the project to separate from MRTK",
+                    "OK");
 
                 return;
             }
 
             // Force removal of the ScriptingDefinitions while the Oculus Integration is still in the project
             ReconcileOculusIntegrationDefine(false);
+
+            // Remove the references to the Oculus Integration assembly definitions
+            ConfigureOculusIntegration(false);
 
             // Prompt the user to close unity and delete the assets to completely remove.  Closing unity and deleting the assets is optional.
             EditorUtility.DisplayDialog(
@@ -112,81 +112,60 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
         }
 
         /// <summary>
-        /// Initialize the Oculus Project Config with the appropriate settings to enable handtracking and keyboard support.
+        /// Detects if the Oculus Integration package is present and updates the project definitions and prefab references.
         /// </summary>
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Oculus/Initialize Oculus Project Config")]
-        internal static void InitializeOculusProjectConfig()
+        internal static void ConfigureOculusIntegration(bool oculusIntegrationPresent)
         {
-#if OCULUSINTEGRATION_PRESENT
-            // Updating the oculus project config to allow for handtracking and system keyboard usage
-            OVRProjectConfig defaultOculusProjectConfig = OVRProjectConfig.GetProjectConfig();
-            if (defaultOculusProjectConfig != null)
+            // Update the CSC to filter out warnings emitted by the Oculus Integration Package
+            if(oculusIntegrationPresent)
             {
-                defaultOculusProjectConfig.handTrackingSupport = OVRProjectConfig.HandTrackingSupport.ControllersAndHands;
-                defaultOculusProjectConfig.requiresSystemKeyboard = true;
-
-                OVRProjectConfig.CommitProjectConfig(defaultOculusProjectConfig);
-
-                Debug.Log("Enabled Oculus Quest Keyboard and Handtracking in the Oculus Project Config");
+                UpdateCSC();
             }
-#endif
-        }
 
-        [MenuItem("Mixed Reality/Toolkit/Utilities/Oculus/Initialize Oculus Project Config", true)]
-        private static bool CheckScriptingDefinePresent()
-        {
-#if OCULUSINTEGRATION_PRESENT
-            return true;
-#else
-            return false;
-#endif
-        }
-
-        /// <summary>
-        /// Configures the default device manager profile with default prefabs if they are not yet loaded
-        /// </summary>
-        internal static void ConfigureOculusDeviceManagerDefaults()
-        {
             // Updating the device manager profile to point to the right gameobjects
-            string[] defaultOvrCameraRigPPrefabGuids = AssetDatabase.FindAssets(Path.GetFileNameWithoutExtension("MRTK-Quest_OVRCameraRig.prefab"));
-            string[] defaultLocalAvatarPrefabGuids = AssetDatabase.FindAssets(Path.GetFileNameWithoutExtension("MRTK-Quest_LocalAvatar.prefab"));
-            GameObject defaultOvrCameraRigPrefab = null;
-            GameObject defaultLocalAvatarPrefab = null;
+            string[] ovrCameraRigPPrefabGuids = AssetDatabase.FindAssets(Path.GetFileNameWithoutExtension("MRTK-Quest_OVRCameraRig.prefab"));
+            string[] localAvatarPrefabGuids = AssetDatabase.FindAssets(Path.GetFileNameWithoutExtension("MRTK-Quest_LocalAvatar.prefab"));
+            GameObject ovrCameraRigPrefab = null;
+            GameObject localAvatarPrefab = null;
 
-            if (defaultOvrCameraRigPPrefabGuids.Length > 0)
+            if (ovrCameraRigPPrefabGuids.Length > 0)
             {
-                string ovrCameraRigPrefabPath = AssetDatabase.GUIDToAssetPath(defaultOvrCameraRigPPrefabGuids[0]);
-                defaultOvrCameraRigPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ovrCameraRigPrefabPath);
+                string ovrCameraRigPrefabPath = AssetDatabase.GUIDToAssetPath(ovrCameraRigPPrefabGuids[0]);
+                ovrCameraRigPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ovrCameraRigPrefabPath);
             }
 
-            if (defaultLocalAvatarPrefabGuids.Length > 0)
+            if (localAvatarPrefabGuids.Length > 0)
             {
-                string localAvatarPrefabPath = AssetDatabase.GUIDToAssetPath(defaultLocalAvatarPrefabGuids[0]);
-                defaultLocalAvatarPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(localAvatarPrefabPath);
+                string localAvatarPrefabPath = AssetDatabase.GUIDToAssetPath(localAvatarPrefabGuids[0]);
+                localAvatarPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(localAvatarPrefabPath);
             }
 
-            string[] defaultDeviceManagerProfileGuids = AssetDatabase.FindAssets(Path.GetFileNameWithoutExtension("DefaultOculusXRSDKDeviceManagerProfile.asset"));
-            if (defaultDeviceManagerProfileGuids.Length > 0)
+            string[] deviceManagerProfileGuids = AssetDatabase.FindAssets("t:OculusXRSDKDeviceManagerProfile");
+            if(deviceManagerProfileGuids.Length > 0)
             {
-                string deviceManagerProfilePath = AssetDatabase.GUIDToAssetPath(defaultDeviceManagerProfileGuids[0]);
+                string deviceManagerProfilePath = AssetDatabase.GUIDToAssetPath(deviceManagerProfileGuids[0]);
                 OculusXRSDKDeviceManagerProfile deviceManagerProfile = AssetDatabase.LoadAssetAtPath<OculusXRSDKDeviceManagerProfile>(deviceManagerProfilePath);
+                if (oculusIntegrationPresent)
+                {
+                    deviceManagerProfile.OVRCameraRigPrefab = ovrCameraRigPrefab;
+                    deviceManagerProfile.LocalAvatarPrefab = localAvatarPrefab;
+                }
+                else
+                {
+                    deviceManagerProfile.OVRCameraRigPrefab = null;
+                    deviceManagerProfile.LocalAvatarPrefab = null;
+                }
 
-                if (deviceManagerProfile.OVRCameraRigPrefab == null)
-                    deviceManagerProfile.OVRCameraRigPrefab = defaultOvrCameraRigPrefab;
-                if (deviceManagerProfile.LocalAvatarPrefab == null)
-                    deviceManagerProfile.LocalAvatarPrefab = defaultLocalAvatarPrefab;
-
-                EditorUtility.SetDirty(deviceManagerProfile);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         /// <summary>
         /// Checks if the Oculus Integration Asset as present or not present
         /// </summary>
         /// <returns>true if Assets/Oculus/OculusProjectConfig exists, false otherwise</returns>
-        internal static bool DetectOculusIntegrationAsset()
+        internal static bool DetectOculusIntegrationDefine()
         {
             FileInfo[] files = FileUtilities.FindFilesInAssets(OculusIntegrationProjectConfig);
 
@@ -211,10 +190,9 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
         }
 
         /// <summary>
-        /// Adds warnings to the nowarn line in the csc.rsp file located at the root of assets.  Warning 618 is added to the nowarn line because if
+        /// Adds warnings to the nowarn line in the csc.rsp file located at the root of assets.  Warning 618 and 649 are added to the nowarn line because if
         /// the MRTK source is from the repo, warnings are converted to errors. Warnings are not converted to errors if the MRTK source is from the unity packages.
-        /// Warning 618 is logged when building the project as of Oculus Integration 39.0 https://developer.oculus.com/downloads/package/unity-integration/39.0
-        /// 618 is the obsolete property/function warning
+        /// Warning 618 and 649 are logged when Oculus Integration is imported into the project, 618 is the obsolete warning and 649 is a null on start warning.
         /// </summary>
         static void UpdateCSC()
         {
@@ -230,10 +208,11 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Oculus.Editor
             // List of new warning numbers to add to the csc file
             List<string> warningNumbersToAdd = new List<string>()
             {
-                "618"
+                "618",
+                "649"
             };
 
-            if (!File.Exists(cscFilePath))
+            if(!File.Exists(cscFilePath))
             {
                 return;
             }

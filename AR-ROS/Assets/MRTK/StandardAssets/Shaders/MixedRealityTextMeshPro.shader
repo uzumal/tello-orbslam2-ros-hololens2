@@ -1,9 +1,5 @@
-// TextMesh Pro copyright © 2021 Unity Technologies ApS
-// Licensed under the Unity Companion License for Unity-dependent projects--see http://www.unity3d.com/legal/licenses/Unity_Companion_License.
-// Unless expressly provided otherwise, the Software under this license is made available strictly on an “AS IS” BASIS WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. Please review the license for details on these and other terms and conditions.
-
-// NOTE: MRTK Shaders are versioned via the MRTK.Shaders.sentinel file.
-// When making changes to any shader's source file, the value in the sentinel _must_ be incremented.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 // Simplified SDF shader:
 // - No Shading Option (bevel / bump / env map)
@@ -201,11 +197,12 @@ SubShader {
 
 #if defined(_CLIPPING_SPHERE)
         fixed _ClipSphereSide;
-        float4x4 _ClipSphereInverseTransform;
+        float4 _ClipSphere;
 #endif
 
 #if defined(_CLIPPING_BOX)
         fixed _ClipBoxSide;
+        float4 _ClipBoxSize;
         float4x4 _ClipBoxInverseTransform;
 #endif
 
@@ -355,10 +352,10 @@ SubShader {
             primitiveDistance = min(primitiveDistance, PointVsPlane(input.worldPosition, _ClipPlane) * _ClipPlaneSide);
 #endif
 #if defined(_CLIPPING_SPHERE)
-            primitiveDistance = min(primitiveDistance, PointVsSphere(input.worldPosition, _ClipSphereInverseTransform) * _ClipSphereSide);
+            primitiveDistance = min(primitiveDistance, PointVsSphere(input.worldPosition, _ClipSphere) * _ClipSphereSide);
 #endif
 #if defined(_CLIPPING_BOX)
-            primitiveDistance = min(primitiveDistance, PointVsBox(input.worldPosition, _ClipBoxInverseTransform) * _ClipBoxSide);
+            primitiveDistance = min(primitiveDistance, PointVsBox(input.worldPosition, _ClipBoxSize.xyz, _ClipBoxInverseTransform) * _ClipBoxSide);
 #endif
             c *= step(0.0, primitiveDistance);
 #endif

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Licensed under the MIT License.license information.
 
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -25,9 +25,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         "Windows Mixed Reality Spatial Mesh Observer",
         "Profiles/DefaultMixedRealitySpatialAwarenessMeshObserverProfile.asset",
         "MixedRealityToolkit.SDK",
-        true,
-        SupportedUnityXRPipelines.LegacyXR)]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/spatial-awareness/spatial-awareness-getting-started")]
+        true)]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/SpatialAwareness/SpatialAwarenessGettingStarted.html")]
     public class WindowsMixedRealitySpatialMeshObserver :
         BaseSpatialMeshObserver,
         IMixedRealityCapabilityCheck
@@ -72,7 +71,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         /// </summary>
         protected override void CreateObserver()
         {
-            if (Service == null) { return; }
+            if (SpatialAwarenessSystem == null) { return; }
 
 #if UNITY_WSA
             if (observer == null)
@@ -126,7 +125,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     break;
 
                 case SpatialAwarenessMeshLevelOfDetail.Fine:
-                case SpatialAwarenessMeshLevelOfDetail.Unlimited:
                     triangleDensity = 2000;
                     break;
 
@@ -177,13 +175,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     UnityEditor.PlayerSettings.WSACapability.SpatialPerception,
                     this.GetType());
 #endif
-            // If we aren't using a HoloLens or there isn't an XR device present, return.
-            if (observer == null || HolographicSettings.IsDisplayOpaque || !XRDevice.isPresent) { return; }
-
-            if (RuntimeSpatialMeshPrefab != null)
-            {
-                AddRuntimeSpatialMeshPrefabToHierarchy();
-            }
         }
 
         private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.Update");
@@ -193,7 +184,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         {
             using (UpdatePerfMarker.Auto())
             {
-                base.Update();
                 UpdateObserver();
             }
         }
@@ -352,7 +342,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         /// </summary>
         private void UpdateObserver()
         {
-            if (Service == null || HolographicSettings.IsDisplayOpaque || !XRDevice.isPresent) { return; }
+            if (SpatialAwarenessSystem == null || HolographicSettings.IsDisplayOpaque || !XRDevice.isPresent) { return; }
 
             using (UpdateObserverPerfMarker.Auto())
             {
@@ -421,7 +411,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     Pose anchorPose = new Pose(transform.position, transform.rotation);
                     /// Propagate any global scale on the playspace into the position.
                     Vector3 playspaceScale = MixedRealityPlayspace.Transform.lossyScale;
-                    anchorPose.position *= playspaceScale.x;
+                    anchorPose.position *= playspaceScale.x; 
                     Pose parentPose = Concatenate(worldFromPlayspace, anchorPose);
                     transform.parent.position = parentPose.position;
                     transform.parent.rotation = parentPose.rotation;
@@ -429,7 +419,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.RequestMesh");
+        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.RequestMesh");
 
         /// <summary>
         /// Issue a request to the Surface Observer to begin baking the mesh.
@@ -504,7 +494,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.RemoveMeshObject");
+        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.RemoveMeshObject");
 
         /// <summary>
         /// Removes the <see cref="SpatialAwarenessMeshObject"/> associated with the specified id.
@@ -525,12 +515,12 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
 
                     // Send the mesh removed event
                     meshEventData.Initialize(this, id, null);
-                    Service?.HandleEvent(meshEventData, OnMeshRemoved);
+                    SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshRemoved);
                 }
             }
         }
 
-        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.ReclaimMeshObject");
+        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.ReclaimMeshObject");
 
         /// <summary>
         /// Reclaims the <see cref="SpatialAwarenessMeshObject"/> to allow for later reuse.
@@ -545,11 +535,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     // Do not destroy the game object, destroy the meshes.
                     SpatialAwarenessMeshObject.Cleanup(availableMeshObject, false);
 
-                    if (availableMeshObject.GameObject != null)
-                    {
-                        availableMeshObject.GameObject.name = "Unused Spatial Mesh";
-                        availableMeshObject.GameObject.SetActive(false);
-                    }
+                    availableMeshObject.GameObject.name = "Unused Spatial Mesh";
+                    availableMeshObject.GameObject.SetActive(false);
 
                     spareMeshObject = availableMeshObject;
                 }
@@ -562,7 +549,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.ConfigureObserverVolume");
+        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.ConfigureObserverVolume");
 
         /// <summary>
         /// Applies the configured observation extents.
@@ -608,7 +595,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker OnSurfaceChangedPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.SurfaceObserver_OnSurfaceChanged");
+        private static readonly ProfilerMarker OnSurfaceChangedPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.SurfaceObserver_OnSurfaceChanged");
 
         /// <summary>
         /// Handles the SurfaceObserver's OnSurfaceChanged event.
@@ -637,7 +624,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker OnDataReadyPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.SurfaceObserver_OnDataReady");
+        private static readonly ProfilerMarker OnDataReadyPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.SurfaceObserver_OnDataReady");
 
         /// <summary>
         /// Handles the SurfaceObserver's OnDataReady event.
@@ -693,7 +680,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                 // Check to see if the display option is set to none. If so, we disable
                 // the renderer.
                 meshObject.Renderer.enabled = (DisplayOption != SpatialAwarenessMeshDisplayOptions.None);
-
+                
                 // Set the physics material
                 if (meshObject.Renderer.enabled)
                 {
@@ -711,20 +698,19 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
 
                 // Preserve local transform relative to parent.
                 meshObject.GameObject.transform.SetParent(ObservedObjectParent != null ?
-                    ObservedObjectParent.transform : null, false);
+                    ObservedObjectParent.transform: null, false);
 
                 meshEventData.Initialize(this, meshObject.Id, meshObject);
                 if (isMeshUpdate)
                 {
-                    Service?.HandleEvent(meshEventData, OnMeshUpdated);
+                    SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshUpdated);
                 }
                 else
                 {
-                    Service?.HandleEvent(meshEventData, OnMeshAdded);
+                    SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshAdded);
                 }
             }
         }
-
 #endif // UNITY_WSA
 
         #endregion Helpers

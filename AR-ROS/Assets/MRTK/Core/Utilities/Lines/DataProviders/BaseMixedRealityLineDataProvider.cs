@@ -346,13 +346,13 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
                 Vector3 currentPoint = GetUnClampedPoint(normalizedLength);
 
-                float segmentLength = Vector3.Distance(lastPoint, currentPoint);
-                distanceSoFar += segmentLength;
+                float currDistance = Vector3.Distance(lastPoint, currentPoint);
+                distanceSoFar += currDistance;
 
                 if (distanceSoFar >= worldLength)
                 {
                     // We've reached the world length, so subtract the amount we overshot
-                    normalizedLength -= ((distanceSoFar - worldLength) / segmentLength) * normalizedSegmentLength;
+                    normalizedLength -= (distanceSoFar - worldLength) / currDistance * normalizedSegmentLength;
                     break;
                 }
 

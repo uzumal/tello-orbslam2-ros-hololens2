@@ -30,7 +30,6 @@ MonoBehaviour:
     code: 1
   mouseLookToggle: 0
   isControllerLookInverted: 1
-  cameraOriginOffset: {x: 0, y: 0, z: 0}
   currentControlMode: 0
   fastControlKey:
     bindingType: 2
@@ -43,22 +42,22 @@ MonoBehaviour:
   lookHorizontal: AXIS_4
   lookVertical: AXIS_5
   defaultEyeGazeSimulationMode: 0
-  defaultControllerSimulationMode: 1
-  toggleLeftControllerKey:
+  defaultHandSimulationMode: 1
+  toggleLeftHandKey:
     bindingType: 2
     code: 116
-  toggleRightControllerKey:
+  toggleRightHandKey:
     bindingType: 2
     code: 121
-  controllerHideTimeout: 0.2
-  leftControllerManipulationKey:
+  handHideTimeout: 0.2
+  leftHandManipulationKey:
     bindingType: 2
     code: 304
-  rightControllerManipulationKey:
+  rightHandManipulationKey:
     bindingType: 2
     code: 32
-  mouseControllerRotationSpeed: 30
-  controllerRotateButton:
+  mouseHandRotationSpeed: 30
+  handRotateButton:
     bindingType: 2
     code: 306
   defaultHandGesture: 2
@@ -68,15 +67,6 @@ MonoBehaviour:
   handGestureAnimationSpeed: 8
   holdStartDuration: 0.5
   navigationStartThreshold: 0.03
-  defaultControllerDistance: 0.5
-  controllerDepthMultiplier: 0.03
-  controllerJitterAmount: 0
-  motionControllerTriggerKey:
-    bindingType: 1
-    code: 0
-  motionControllerGrabKey:
-    bindingType: 2
-    code: 103
-  motionControllerMenuKey:
-    bindingType: 2
-    code: 109
+  defaultHandDistance: 0.5
+  handDepthMultiplier: 0.03
+  handJitterAmount: 0

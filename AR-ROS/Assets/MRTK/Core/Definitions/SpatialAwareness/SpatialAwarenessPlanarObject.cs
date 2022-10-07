@@ -12,21 +12,10 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         /// </summary>
         public BoxCollider Collider { get; set; }
 
-        private SpatialAwarenessSurfaceTypes planeType = SpatialAwarenessSurfaceTypes.Unknown;
-
-        /// <summary>
-        /// The type of surface (ex: wall) represented by this object. 
-        /// </summary>
-        public SpatialAwarenessSurfaceTypes SurfaceType
-        {
-            get => planeType;
-            private set => planeType = value;
-        }
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        private SpatialAwarenessPlanarObject() : base() { }
+        public SpatialAwarenessPlanarObject() : base() { }
 
         /// <summary>
         /// Creates a <see cref="SpatialAwarenessPlanarObject"/>.
@@ -34,35 +23,20 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
         /// <returns>
         /// SpatialAwarenessPlanarObject containing the fields that describe the plane.
         /// </returns>
-        public static SpatialAwarenessPlanarObject CreateSpatialObject(
-            Vector3 center,
-            Vector3 size,
-            Quaternion rotation,
-            int layer,
-            string name,
-            int planeId,
-            SpatialAwarenessSurfaceTypes surfaceType = SpatialAwarenessSurfaceTypes.Unknown)
+        public static SpatialAwarenessPlanarObject CreateSpatialObject(Vector3 size, int layer, string name, int planeId)
         {
-            SpatialAwarenessPlanarObject newPlane = new SpatialAwarenessPlanarObject();
+            SpatialAwarenessPlanarObject newMesh = new SpatialAwarenessPlanarObject();
 
-            newPlane.Id = planeId;
-            newPlane.SurfaceType = surfaceType;
+            newMesh.Id = planeId;
+            newMesh.GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newMesh.GameObject.layer = layer;
+            newMesh.GameObject.transform.localScale = size;
 
+            newMesh.Filter = newMesh.GameObject.GetComponent<MeshFilter>();
+            newMesh.Renderer = newMesh.GameObject.GetComponent<MeshRenderer>();
+            newMesh.Collider = newMesh.GameObject.GetComponent<BoxCollider>();
 
-            GameObject planeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            planeObject.transform.position = center;
-            planeObject.transform.rotation = rotation;
-            planeObject.transform.localScale = size;
-            planeObject.name = name;
-            planeObject.layer = layer;
-
-            newPlane.GameObject = planeObject;
-            newPlane.Filter = newPlane.GameObject.GetComponent<MeshFilter>();
-            newPlane.Renderer = newPlane.GameObject.GetComponent<MeshRenderer>();
-            newPlane.Renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            newPlane.Collider = newPlane.GameObject.GetComponent<BoxCollider>();
-
-            return newPlane;
+            return newMesh;
         }
     }
 }

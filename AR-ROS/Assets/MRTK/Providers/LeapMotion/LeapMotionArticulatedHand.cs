@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.﻿
 
+using System.Collections.Generic;
+using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
-using System.Collections.Generic;
-
-#if LEAPMOTIONCORE_PRESENT
-using Leap;
-using Leap.Unity;
-using Leap.Unity.Attachments;
 using System;
 using Unity.Profiling;
-using UnityEngine;
+
+#if LEAPMOTIONCORE_PRESENT
+using Leap.Unity.Attachments;
+using Leap.Unity;
+using Leap;
 #endif
 
 namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
@@ -31,13 +31,18 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
         /// <param name="controllerHandedness">Handedness of this controller (Left or Right)</param>
         /// <param name="inputSource">The origin of user input for this controller</param>
         /// <param name="interactions">The controller interaction map between physical inputs and the logical representation in MRTK</param>
-        public LeapMotionArticulatedHand(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null)
-            : base(trackingState, controllerHandedness, inputSource, interactions, new ArticulatedHandDefinition(inputSource, controllerHandedness))
-        { }
+        public LeapMotionArticulatedHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+            : base(trackingState, controllerHandedness, inputSource, interactions)
+        {
+            handDefinition = new ArticulatedHandDefinition(inputSource, controllerHandedness);
+        }
+
+        internal ArticulatedHandDefinition handDefinition;
+
+        // Set the interactions for each hand to the Default interactions of the hand definition
+        public override MixedRealityInteractionMapping[] DefaultInteractions => handDefinition?.DefaultInteractions;
+
+        private static readonly ProfilerMarker UpdateStatePerfMarker = new ProfilerMarker("[MRTK] LeapMotionArticulatedHand.UpdateState");
 
         // Joint poses of the MRTK hand based on the leap hand data
         private readonly Dictionary<TrackedHandJoint, MixedRealityPose> jointPoses = new Dictionary<TrackedHandJoint, MixedRealityPose>();
@@ -50,18 +55,16 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
         #endregion IMixedRealityHand Implementation
 
 #if LEAPMOTIONCORE_PRESENT
-        private ArticulatedHandDefinition handDefinition;
-        internal ArticulatedHandDefinition HandDefinition => handDefinition ?? (handDefinition = Definition as ArticulatedHandDefinition);
 
         /// <summary>
         /// If true, the current joint pose supports far interaction via the default controller ray.  
         /// </summary>
-        public override bool IsInPointingPose => HandDefinition.IsInPointingPose;
+        public override bool IsInPointingPose => handDefinition.IsInPointingPose;
 
         /// <summary>
         /// If true, the hand is in air tap gesture, also called the pinch gesture.
         /// </summary>
-        public bool IsPinching => HandDefinition.IsPinching;
+        public bool IsPinching => handDefinition.IsPinching;
 
         // Array of TrackedHandJoint names
         private static readonly TrackedHandJoint[] TrackedHandJointEnum = (TrackedHandJoint[])Enum.GetValues(typeof(TrackedHandJoint));
@@ -106,8 +109,6 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
             {
                 if (attachmentHand != null && attachmentHand.isTracked)
                 {
-                    IsPositionAvailable = IsRotationAvailable = true;
-
                     // Is the current joint a metacarpal
                     bool isMetacarpal = metacarpals.Contains(joint);
 
@@ -133,7 +134,6 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                 }
                 else
                 {
-                    IsPositionAvailable = IsRotationAvailable = false;
                     jointPoses[joint] = MixedRealityPose.ZeroIdentity;
                 }
             }
@@ -158,7 +158,7 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                 if ((hand.IsLeft && ControllerHandedness == Handedness.Left) ||
                     (hand.IsRight && ControllerHandedness == Handedness.Right))
                 {
-                    // Leap Motion thumb metacarpal is stored at index 1
+                    // Leapmotion thumb metacarpal is stored at index 1
                     int boneIndex = (metacarpalJoint == TrackedHandJoint.ThumbMetacarpalJoint) ? 1 : 0;
                     Vector3 position = hand.Fingers[metacarpalIndex].bones[boneIndex].PrevJoint.ToVector3();
                     Quaternion rotation = hand.Fingers[metacarpalIndex].bones[boneIndex].Rotation.ToQuaternion();
@@ -211,8 +211,6 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
             }
         }
 
-        private static readonly ProfilerMarker UpdateStatePerfMarker = new ProfilerMarker("[MRTK] LeapMotionArticulatedHand.UpdateState");
-
         /// <summary>
         /// Updates the joint poses and interactions for the articulated hand.
         /// </summary>
@@ -224,7 +222,7 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                 SetJointPoses();
 
                 // Update hand joints and raise event via handDefinition
-                HandDefinition?.UpdateHandJoints(jointPoses);
+                handDefinition?.UpdateHandJoints(jointPoses);
 
                 UpdateInteractions();
 
@@ -250,8 +248,6 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                 pointerPose.Position = ray.origin;
                 pointerPose.Rotation = Quaternion.LookRotation(ray.direction);
             }
-        
-            CoreServices.InputSystem?.RaiseSourcePoseChanged(InputSource, this, gripPose);
 
             for (int i = 0; i < Interactions?.Length; i++)
             {
@@ -273,7 +269,6 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                         break;
                     case DeviceInputType.Select:
                     case DeviceInputType.TriggerPress:
-                    case DeviceInputType.GripPress:
                         Interactions[i].BoolData = IsPinching;
                         if (Interactions[i].Changed)
                         {
@@ -288,14 +283,16 @@ namespace Microsoft.MixedReality.Toolkit.LeapMotion.Input
                         }
                         break;
                     case DeviceInputType.IndexFinger:
-                        HandDefinition?.UpdateCurrentIndexPose(Interactions[i]);
-                        break;
-                    case DeviceInputType.ThumbStick:
-                        HandDefinition?.UpdateCurrentTeleportPose(Interactions[i]);
+                        Interactions[i].PoseData = indexPose;
+                        if (Interactions[i].Changed)
+                        {
+                            CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, Interactions[i].MixedRealityInputAction, indexPose);
+                        }
                         break;
                 }
             }
         }
 #endif
     }
+
 }

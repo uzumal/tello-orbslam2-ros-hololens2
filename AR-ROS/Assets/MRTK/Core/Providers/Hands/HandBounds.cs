@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Input
@@ -17,7 +17,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// Accessor for the bounds associated with a handedness, calculated in global-axis-aligned space.
         /// </summary>
         public Dictionary<Handedness, Bounds> Bounds { get; private set; } = new Dictionary<Handedness, Bounds>();
-
+        
         /// <summary>
         /// Accessor for the bounds associated with a handedness, calculated in local hand-space, locally axis aligned.
         /// </summary>
@@ -97,33 +97,38 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public void OnSourceDetected(SourceStateEventData eventData)
         {
-            IMixedRealityController hand = eventData.Controller;
+            var hand = eventData.Controller;
 
-            // If a hand does not contain joints, OnHandJointsUpdated will not be called the bounds should
-            // be calculated based on the proxy visuals.
-            if (hand != null && !(hand is IMixedRealityHand))
+            if (hand != null)
             {
-                var proxy = hand.Visualizer?.GameObjectProxy;
+                // If a hand does not contain joints, OnHandJointsUpdated will not be called the bounds should
+                // be calculated based on the proxy visuals.
+                bool handContainsJoints = (hand as IMixedRealityHand) != null;
 
-                if (proxy != null)
+                if (!handContainsJoints)
                 {
-                    // Bounds calculated in proxy-space will have an origin of zero, but bounds
-                    // calculated in global space will have an origin centered on the proxy transform.
-                    var newGlobalBounds = new Bounds(proxy.transform.position, Vector3.zero);
-                    var newLocalBounds = new Bounds(Vector3.zero, Vector3.zero);
-                    var boundsPoints = new List<Vector3>();
-                    BoundsExtensions.GetRenderBoundsPoints(proxy, boundsPoints, 0);
+                    var proxy = hand.Visualizer?.GameObjectProxy;
 
-                    foreach (var point in boundsPoints)
+                    if (proxy != null)
                     {
-                        newGlobalBounds.Encapsulate(point);
-                        // Local hand-space bounds are encapsulated using proxy-space point coordinates
-                        newLocalBounds.Encapsulate(proxy.transform.InverseTransformPoint(point));
-                    }
+                        // Bounds calculated in proxy-space will have an origin of zero, but bounds
+                        // calculated in global space will have an origin centered on the proxy transform.
+                        var newGlobalBounds = new Bounds(proxy.transform.position, Vector3.zero);
+                        var newLocalBounds = new Bounds(Vector3.zero, Vector3.zero);
+                        var boundsPoints = new List<Vector3>();
+                        BoundsExtensions.GetRenderBoundsPoints(proxy, boundsPoints, 0);
 
-                    Bounds[hand.ControllerHandedness] = newGlobalBounds;
-                    LocalBounds[hand.ControllerHandedness] = newLocalBounds;
-                    BoundsTransforms[hand.ControllerHandedness] = proxy.transform.localToWorldMatrix;
+                        foreach (var point in boundsPoints)
+                        {
+                            newGlobalBounds.Encapsulate(point);
+                            // Local hand-space bounds are encapsulated using proxy-space point coordinates
+                            newLocalBounds.Encapsulate(proxy.transform.InverseTransformPoint(point));
+                        }
+
+                        Bounds[hand.ControllerHandedness] = newGlobalBounds;
+                        LocalBounds[hand.ControllerHandedness] = newLocalBounds;
+                        BoundsTransforms[hand.ControllerHandedness] = proxy.transform.localToWorldMatrix;
+                    }
                 }
             }
         }
@@ -148,26 +153,23 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public void OnHandJointsUpdated(InputEventData<IDictionary<TrackedHandJoint, MixedRealityPose>> eventData)
         {
-            if (eventData.InputData.TryGetValue(TrackedHandJoint.Palm, out MixedRealityPose palmPose))
+            MixedRealityPose palmPose;
+
+            if (eventData.InputData.TryGetValue(TrackedHandJoint.Palm, out palmPose))
             {
                 var newGlobalBounds = new Bounds(palmPose.Position, Vector3.zero);
                 var newLocalBounds = new Bounds(Vector3.zero, Vector3.zero);
 
-                // This starts at 1 to skip over TrackedHandJoint.None.
-                for (int i = 1; i < ArticulatedHandPose.JointCount; i++)
+                foreach (var kvp in eventData.InputData)
                 {
-                    TrackedHandJoint handJoint = (TrackedHandJoint)i;
-
-                    if (handJoint == TrackedHandJoint.Palm)
+                    if (kvp.Key == TrackedHandJoint.None ||
+                        kvp.Key == TrackedHandJoint.Palm)
                     {
                         continue;
                     }
 
-                    if (eventData.InputData.TryGetValue(handJoint, out MixedRealityPose pose))
-                    {
-                        newGlobalBounds.Encapsulate(pose.Position);
-                        newLocalBounds.Encapsulate(Quaternion.Inverse(palmPose.Rotation) * (pose.Position - palmPose.Position));
-                    }
+                    newGlobalBounds.Encapsulate(kvp.Value.Position);
+                    newLocalBounds.Encapsulate(Quaternion.Inverse(palmPose.Rotation) * (kvp.Value.Position - palmPose.Position));
                 }
 
                 Bounds[eventData.Handedness] = newGlobalBounds;

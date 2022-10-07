@@ -11,9 +11,9 @@ namespace Microsoft.MixedReality.Toolkit.Audio
     /// over various telephony or radio sources.
     /// </summary>
     /// <remarks>
-    /// <para>For the best results, also attach an <see cref="AudioInfluencerController"/> to the sound
+    /// For the best results, also attach an <see cref="AudioInfluencerController"/> to the sound
     /// source. This will ensure that the proper frequencies will be restored
-    /// when audio influencers are used in the scene.</para>
+    /// when audio influencers are used in the scene.
     /// </remarks>
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(AudioLowPassFilter))]

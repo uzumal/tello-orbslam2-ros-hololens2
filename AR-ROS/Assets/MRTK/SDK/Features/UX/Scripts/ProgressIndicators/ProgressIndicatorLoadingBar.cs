@@ -70,7 +70,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             smoothProgress = 0;
             lastSmoothProgress = 0;
-            progressText.text = string.Format(progressStringFormat, smoothProgress);
 
             gameObject.SetActive(true);
 
@@ -95,18 +94,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             state = ProgressIndicatorState.Closed;
 
-            gameObject.SetActive(false);
-        }
-
-        /// <inheritdoc/>
-        public void CloseImmediate()
-        {
-            if (state != ProgressIndicatorState.Open)
-            {
-                throw new System.Exception("Can't close in state " + state);
-            }
-
-            state = ProgressIndicatorState.Closed;
             gameObject.SetActive(false);
         }
 

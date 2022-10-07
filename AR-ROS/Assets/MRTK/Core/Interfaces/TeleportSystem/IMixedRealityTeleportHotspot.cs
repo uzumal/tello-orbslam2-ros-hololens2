@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Teleport
 {
-    public interface IMixedRealityTeleportHotspot
+    public interface IMixedRealityTeleportHotSpot
     {
         /// <summary>
         /// The position the teleport will end at.
@@ -18,19 +18,23 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         Vector3 Normal { get; }
 
         /// <summary>
-        /// Determines whether the teleport target is active
+        /// Is the teleport target active?
         /// </summary>
         bool IsActive { get; }
 
         /// <summary>
-        /// Whether to override the user's rotation on the y-axis with the hotspots TargetRotation
+        /// Should the target orientation be overridden?
         /// </summary>
-        bool OverrideOrientation { get; }
+        bool OverrideTargetOrientation { get; }
 
         /// <summary>
-        /// The rotation in angles around the y axis to set the user after teleport
+        /// Should the destination orientation be overridden?
+        /// Useful when you want to orient the user in a specific direction when they teleport to this position.
         /// </summary>
-        float TargetRotation { get; }
+        /// <remarks>
+        /// Override orientation is the transform forward of the GameObject this component is attached to.
+        /// </remarks>
+        float TargetOrientation { get; }
 
         /// <summary>
         /// Returns the <see href="https://docs.unity3d.com/ScriptReference/GameObject.html">GameObject</see> reference for this teleport target.

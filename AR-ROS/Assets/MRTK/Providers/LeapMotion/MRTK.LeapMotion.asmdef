@@ -3,8 +3,7 @@
     "references": [
         "Microsoft.MixedReality.Toolkit",
         "LeapMotion",
-        "LeapMotion.LeapCSharp",
-        "Ultraleap.Tracking.Core"
+        "LeapMotion.LeapCSharp"
     ],
     "includePlatforms": [
         "Editor",

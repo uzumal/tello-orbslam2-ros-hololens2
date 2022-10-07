@@ -4,12 +4,12 @@
 namespace Microsoft.MixedReality.Toolkit.Utilities
 {
     /// <summary>
-    /// The possible shapes of bounding volumes for spatial awareness of the user's surroundings.
+    /// todo
     /// </summary>
     public enum VolumeType
     {
         /// <summary>
-        /// No specified type.
+        /// No Specified type.
         /// </summary>
         None = 0,
 

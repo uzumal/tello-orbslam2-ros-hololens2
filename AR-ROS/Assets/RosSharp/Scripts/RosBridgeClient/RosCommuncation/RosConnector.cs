@@ -1,4 +1,4 @@
-﻿/*
+/*
 © Siemens AG, 2017-2019
 Author: Dr. Martin Bischoff (martin.bischoff@siemens.com)
 
@@ -29,14 +29,22 @@ namespace RosSharp.RosBridgeClient
         public RosSocket RosSocket { get; private set; }
         public RosSocket.SerializerEnum Serializer;
         public Protocol protocol;
-        public string RosBridgeServerUrl = "ws://192.168.0.1:9090";
+        private string RosBridgeServerUrl = "ws://192.168.11.14:9090";
 
         public ManualResetEvent IsConnected { get; private set; }
 
         public virtual void Awake()
         {
+#if WINDOWS_UWP
+            // overwrite selection
+            protocol = Protocol.WebSocketUWP;
+#endif
             IsConnected = new ManualResetEvent(false);
+#if WINDOWS_UWP
+            ConnectAndWait();
+#else
             new Thread(ConnectAndWait).Start();
+#endif
         }
 
         protected void ConnectAndWait()
@@ -54,6 +62,28 @@ namespace RosSharp.RosBridgeClient
             protocol.OnClosed += onClosed;
 
             return new RosSocket(protocol, serializer);
+        }
+
+        private static RosBridgeClient.Protocols.IProtocol GetProtocol(Protocol protocol, string rosBridgeServerUrl)
+        {
+
+#if WINDOWS_UWP
+            Debug.Log("Defaulted to UWP Protocol");
+            return new RosBridgeClient.Protocols.WebSocketUWPProtocol(rosBridgeServerUrl);
+#else
+            switch (protocol)
+            {
+                case Protocol.WebSocketNET:
+                    return new RosBridgeClient.Protocols.WebSocketNetProtocol(rosBridgeServerUrl);
+                case Protocol.WebSocketSharp:
+                    return new RosBridgeClient.Protocols.WebSocketSharpProtocol(rosBridgeServerUrl);
+                case Protocol.WebSocketUWP:
+                    Debug.Log("WebSocketUWP only works when deployed to HoloLens, defaulting to WebSocketNetProtocol");
+                    return new RosBridgeClient.Protocols.WebSocketNetProtocol(rosBridgeServerUrl);
+                default:
+                    return null;
+            }
+#endif
         }
 
         private void OnApplicationQuit()

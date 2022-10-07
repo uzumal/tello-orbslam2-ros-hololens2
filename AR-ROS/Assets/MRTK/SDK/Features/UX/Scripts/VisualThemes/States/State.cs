@@ -34,6 +34,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         public int ActiveIndex;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return Name;

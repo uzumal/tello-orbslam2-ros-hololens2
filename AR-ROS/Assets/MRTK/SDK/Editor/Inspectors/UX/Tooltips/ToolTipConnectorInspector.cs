@@ -146,7 +146,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                                         break;
                                 }
                                 ConnectorPivotDirection newPivotDirection = DrawPivotDirection(connector.PivotDirection);
-                                pivotDirection.intValue = (int)newPivotDirection;
+                                pivotDirection.enumValueIndex = (int)newPivotDirection;
                                 switch (connector.PivotDirection)
                                 {
                                     case ConnectorPivotDirection.Manual:

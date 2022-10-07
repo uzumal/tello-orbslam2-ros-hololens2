@@ -26,14 +26,16 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseHand(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null,
-            IMixedRealityInputSourceDefinition definition = null)
-            : base(trackingState, controllerHandedness, inputSource, interactions, definition)
-        { }
+        protected BaseHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+                : base(trackingState, controllerHandedness, inputSource, interactions)
+        {
+        }
+
+        /// <inheritdoc />
+        public override MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => DefaultInteractions;
+
+        /// <inheritdoc />
+        public override MixedRealityInteractionMapping[] DefaultRightHandedInteractions => DefaultInteractions;
 
         #region Protected InputSource Helpers
 

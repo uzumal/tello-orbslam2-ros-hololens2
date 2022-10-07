@@ -73,7 +73,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 1
   CanDeselect: 1
-  voiceCommand: Select
+  VoiceCommand: Select
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 1391235132048104}
@@ -128,7 +128,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       Options: []
-  resetOnDestroy: 0
   enabledOnStart: 1
 --- !u!114 &4389918657735180436
 MonoBehaviour:

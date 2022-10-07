@@ -289,22 +289,17 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, TypeGrouping grouping)
         {
             var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("(None)"), selectedType == null, OnSelectedTypeName, null);
+            menu.AddSeparator(string.Empty);
 
-            if (types.Count == 0)
+            for (int i = 0; i < types.Count; ++i)
             {
-                menu.AddItem(new GUIContent("No types available"), selectedType == null, OnSelectedTypeName, null);
-            }
-            else
-            {
-                for (int i = 0; i < types.Count; ++i)
-                {
-                    string menuLabel = FormatGroupedTypeName(types[i], grouping);
+                string menuLabel = FormatGroupedTypeName(types[i], grouping);
 
-                    if (string.IsNullOrEmpty(menuLabel)) { continue; }
+                if (string.IsNullOrEmpty(menuLabel)) { continue; }
 
-                    var content = new GUIContent(menuLabel);
-                    menu.AddItem(content, types[i] == selectedType, OnSelectedTypeName, types[i]);
-                }
+                var content = new GUIContent(menuLabel);
+                menu.AddItem(content, types[i] == selectedType, OnSelectedTypeName, types[i]);
             }
 
             menu.DropDown(position);

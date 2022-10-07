@@ -15,8 +15,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// A value that should be larger than the maximum boundary width.
         /// </summary>
         /// <remarks>
-        /// <para>This value is used to ensure that line segments are created 
-        /// that will intersect with a piece of the room boundary.</para>
+        /// This value is used to ensure that line segments are created 
+        /// that will intersect with a piece of the room boundary.
         /// </remarks>
         internal static readonly float maxWidth = 10000f;
 

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.MixedReality.Toolkit.Input;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
+using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.Input;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
 {
@@ -146,17 +146,10 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             proximityPointers.Clear();
             proximityPoints.Clear();
 
-            HashSet<IMixedRealityInputSource> inputSources = CoreServices.InputSystem?.DetectedInputSources;
-
-            if (inputSources == null)
-            {
-                return;
-            }
-
             // Find all valid pointers
-            foreach (IMixedRealityInputSource inputSource in inputSources)
+            foreach (var inputSource in CoreServices.InputSystem.DetectedInputSources)
             {
-                foreach (IMixedRealityPointer pointer in inputSource.Pointers)
+                foreach (var pointer in inputSource.Pointers)
                 {
                     // don't use IsInteractionEnabled for near pointers as the pointers might have a different radius when deciding
                     // if they can interact with a near-by object - we might still want to show proximity scaling even if
@@ -194,8 +187,10 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             float closestDistanceSqr = float.MaxValue;
             foreach (var point in proximityPoints)
             {
+
                 foreach (var keyValuePair in registeredObjects)
                 {
+
                     foreach (var item in keyValuePair.Value)
                     {
                         // If object can't be visible, skip calculations
@@ -277,8 +272,7 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
                     break;
             }
 
-            float maxScaleAxis = VisualUtils.GetMaxComponent(scaleVisual.localScale);
-            float newLocalScale = (maxScaleAxis * (1.0f - weight)) + (objectSize * targetScale * weight);
+            float newLocalScale = (scaleVisual.localScale.x * (1.0f - weight)) + (objectSize * targetScale * weight);
             scaleVisual.localScale = new Vector3(newLocalScale, newLocalScale, newLocalScale);
         }
 

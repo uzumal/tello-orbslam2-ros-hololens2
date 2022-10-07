@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
 {
@@ -11,7 +10,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
     /// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.sampler.schema.json
     /// </summary>
     [Serializable]
-    public class GltfAnimationSampler : GltfProperty, ISerializationCallbackReceiver
+    public class GltfAnimationSampler : GltfProperty
     {
         /// <summary>
         /// The index of an accessor containing keyframe input values, e.G., time.
@@ -28,10 +27,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// interpolation is `\"STEP\"`, animated value remains constant to the value
         /// of the first point of the timeframe, until the next timeframe.
         /// </summary>
-        public GltfInterpolationType Interpolation { get; set; }
-
-        [SerializeField]
-        private string interpolation = null;
+        public GltfInterpolationType interpolation = GltfInterpolationType.LINEAR;
 
         /// <summary>
         /// The index of an accessor, containing keyframe output values. Output and input
@@ -39,22 +35,5 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// output accessors componentType must be `FLOAT`.
         /// </summary>
         public int output;
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            if (Enum.TryParse(interpolation, out GltfInterpolationType result))
-            {
-                Interpolation = result;
-            }
-            else
-            {
-                Interpolation = GltfInterpolationType.LINEAR;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
-            interpolation = Interpolation.ToString();
-        }
     }
 }

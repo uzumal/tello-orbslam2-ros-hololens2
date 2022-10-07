@@ -14,6 +14,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
     [Serializable]
     public class SimulatedHandData
     {
+        private static readonly int jointCount = Enum.GetNames(typeof(TrackedHandJoint)).Length;
+
         [SerializeField]
         private bool isTracked = false;
 
@@ -21,15 +23,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// Whether the hand is currently being tracked
         /// </summary>
         public bool IsTracked => isTracked;
-
         [SerializeField]
-        private MixedRealityPose[] joints = new MixedRealityPose[ArticulatedHandPose.JointCount];
+        private MixedRealityPose[] joints = new MixedRealityPose[jointCount];
 
         /// <summary>
         /// Array storing the joints of the hand
         /// </summary>
         public MixedRealityPose[] Joints => joints;
-
         [SerializeField]
         private bool isPinching = false;
 
@@ -47,7 +47,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             isTracked = other.isTracked;
             isPinching = other.isPinching;
-            for (int i = 0; i < ArticulatedHandPose.JointCount; ++i)
+            for (int i = 0; i < jointCount; ++i)
             {
                 joints[i] = other.joints[i];
             }
@@ -86,41 +86,42 @@ namespace Microsoft.MixedReality.Toolkit.Input
     {
         public abstract ControllerSimulationMode SimulationMode { get; }
 
+        protected static readonly int jointCount = Enum.GetNames(typeof(TrackedHandJoint)).Length;
+
         protected readonly Dictionary<TrackedHandJoint, MixedRealityPose> jointPoses = new Dictionary<TrackedHandJoint, MixedRealityPose>();
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected SimulatedHand(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null,
-            IMixedRealityInputSourceDefinition definition = null)
-            : base(trackingState, controllerHandedness, inputSource, interactions, definition)
-        { }
+        protected SimulatedHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+                : base(trackingState, controllerHandedness, inputSource, interactions) { }
 
         /// <inheritdoc />
         public override bool TryGetJoint(TrackedHandJoint joint, out MixedRealityPose pose) => jointPoses.TryGetValue(joint, out pose);
 
         public void UpdateState(SimulatedHandData handData)
         {
-            UpdateHandJoints(handData);
+            for (int i = 0; i < jointCount; i++)
+            {
+                TrackedHandJoint handJoint = (TrackedHandJoint)i;
+
+                if (!jointPoses.ContainsKey(handJoint))
+                {
+                    jointPoses.Add(handJoint, handData.Joints[i]);
+                }
+                else
+                {
+                    jointPoses[handJoint] = handData.Joints[i];
+                }
+            }
+
+            CoreServices.InputSystem?.RaiseHandJointsUpdated(InputSource, ControllerHandedness, jointPoses);
+
             UpdateVelocity();
 
             UpdateInteractions(handData);
         }
 
-        /// <summary>
-        /// Updates the positions and orientations of the hand joints of the simulated hand
-        /// </summary>
-        /// <param name="handData">hand data provided by the simulation</param>
-        protected abstract void UpdateHandJoints(SimulatedHandData handData);
-
-        /// <summary>
-        /// Updates the interactions raised by the simulated hand
-        /// </summary>
-        /// <param name="handData">hand data provided by the simulation</param>
         protected abstract void UpdateInteractions(SimulatedHandData handData);
     }
 }

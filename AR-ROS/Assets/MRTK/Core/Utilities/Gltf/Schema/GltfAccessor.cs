@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
 {
@@ -10,7 +9,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
     /// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.schema.json
     /// </summary>
     [Serializable]
-    public class GltfAccessor : GltfChildOfRootProperty, ISerializationCallbackReceiver
+    public class GltfAccessor : GltfChildOfRootProperty
     {
         /// <summary>
         /// The index of the bufferView.
@@ -32,10 +31,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// 5125 (UNSIGNED_INT) is only allowed when the accessor contains indices
         /// i.e., the accessor is only referenced by `primitive.indices`.
         /// </summary>
-        public GltfComponentType ComponentType { get; set; }
-
-        [SerializeField]
-        private string componentType = null;
+        public GltfComponentType componentType;
 
         /// <summary>
         /// Specifies whether integer data values should be normalized
@@ -104,22 +100,5 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/bufferView.schema.json
         /// </summary>
         public GltfBufferView BufferView { get; internal set; }
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            if (Enum.TryParse(componentType, out GltfComponentType result))
-            {
-                ComponentType = result;
-            }
-            else
-            {
-                ComponentType = default;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
-            componentType = ComponentType.ToString();
-        }
     }
 }

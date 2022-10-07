@@ -43,11 +43,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (OnPreSceneQueryPerfMarker.Auto())
             {
-                if (!IsInteractionEnabled)
-                {
-                    return;
-                }
-
                 Rays[0].CopyRay(TouchRay, PointerExtent);
 
                 if (RayStabilizer != null)
@@ -68,10 +63,22 @@ namespace Microsoft.MixedReality.Toolkit.Input
         }
 
         /// <inheritdoc />
-        public override Vector3 Position => TouchRay.origin;
+        public override Vector3 Position
+        {
+            get
+            {
+                return TouchRay.origin;
+            }
+        }
 
         /// <inheritdoc />
-        public override Quaternion Rotation => Quaternion.LookRotation(TouchRay.direction);
+        public override Quaternion Rotation
+        {
+            get
+            {
+                return Quaternion.LookRotation(TouchRay.direction);
+            }
+        }
 
         private static readonly ProfilerMarker OnSourceDetectedPerfMarker = new ProfilerMarker("[MRTK] TouchPointer.OnSourceDetected");
 

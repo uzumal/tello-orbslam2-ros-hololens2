@@ -13,7 +13,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Solvers
     public class SolverHandlerInspector : UnityEditor.Editor
     {
         private SerializedProperty trackedTargetProperty;
-        private SerializedProperty trackedHandednessProperty;
+        private SerializedProperty trackedHandnessProperty;
         private SerializedProperty trackedHandJointProperty;
         private SerializedProperty transformOverrideProperty;
         private SerializedProperty additionalOffsetProperty;
@@ -26,7 +26,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Solvers
         protected void OnEnable()
         {
             trackedTargetProperty = serializedObject.FindProperty("trackedTargetType");
-            trackedHandednessProperty = serializedObject.FindProperty("trackedHandedness");
+            trackedHandnessProperty = serializedObject.FindProperty("trackedHandness");
             trackedHandJointProperty = serializedObject.FindProperty("trackedHandJoint");
             transformOverrideProperty = serializedObject.FindProperty("transformOverride");
             additionalOffsetProperty = serializedObject.FindProperty("additionalOffset");
@@ -45,6 +45,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Solvers
                 InspectorUIUtility.RenderHelpURL(target.GetType());
             }
 
+            bool trackedObjectChanged = false;
+
             EditorGUI.BeginChangeCheck();
 
             InspectorUIUtility.DrawEnumSerializedProperty(trackedTargetProperty, TrackedTypeLabel, solverHandler.TrackedTargetType);
@@ -56,21 +58,21 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Solvers
                     + "\" is obsolete. Select MotionController or HandJoint values instead");
             }
 
-            if (trackedTargetProperty.intValue == (int)TrackedObjectType.HandJoint ||
-                trackedTargetProperty.intValue == (int)TrackedObjectType.ControllerRay)
+            if (trackedTargetProperty.enumValueIndex == (int)TrackedObjectType.HandJoint ||
+                trackedTargetProperty.enumValueIndex == (int)TrackedObjectType.ControllerRay)
             {
-                EditorGUILayout.PropertyField(trackedHandednessProperty);
-                if (trackedHandednessProperty.intValue > (int)Handedness.Both)
+                EditorGUILayout.PropertyField(trackedHandnessProperty);
+                if (trackedHandnessProperty.enumValueIndex > (int)Handedness.Both)
                 {
                     InspectorUIUtility.DrawWarning("Only Handedness values of None, Left, Right, and Both are valid");
                 }
             }
 
-            if (trackedTargetProperty.intValue == (int)TrackedObjectType.HandJoint)
+            if (trackedTargetProperty.enumValueIndex == (int)TrackedObjectType.HandJoint)
             {
                 EditorGUILayout.PropertyField(trackedHandJointProperty);
             }
-            else if (trackedTargetProperty.intValue == (int)TrackedObjectType.CustomOverride)
+            else if (trackedTargetProperty.enumValueIndex == (int)TrackedObjectType.CustomOverride)
             {
                 EditorGUILayout.PropertyField(transformOverrideProperty);
             }
@@ -78,7 +80,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Solvers
             EditorGUILayout.PropertyField(additionalOffsetProperty);
             EditorGUILayout.PropertyField(additionalRotationProperty);
 
-            bool trackedObjectChanged = EditorGUI.EndChangeCheck();
+            trackedObjectChanged = EditorGUI.EndChangeCheck();
 
             EditorGUILayout.PropertyField(updateSolversProperty);
 

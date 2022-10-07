@@ -166,7 +166,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                             {
                                 MixedRealityInputAction inputAction = actionId.intValue == 0 ? MixedRealityInputAction.None : MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.InputActionsProfile.InputActions[actionId.intValue - 1];
                                 actionDescription.stringValue = inputAction.Description;
-                                actionConstraint.intValue = (int)inputAction.AxisConstraint;
+                                actionConstraint.enumValueIndex = (int)inputAction.AxisConstraint;
                             }
                         }
                         EditorGUILayout.Space();

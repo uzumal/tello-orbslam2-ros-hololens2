@@ -45,7 +45,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.UI
 
 #if WINDOWS_UWP
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
             if ((inputField = GetComponent<T>()) == null)
             {
@@ -56,13 +56,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.UI
 
         #region IDeselectHandler implementation
 
-        public void OnDeselect(BaseEventData eventData)
-        {
-            if (!DisableUIInteractionWhenTyping)
-            {
-                HideKeyboard();
-            }
-        }
+        public void OnDeselect(BaseEventData eventData) => HideKeyboard();
 
         #endregion
 

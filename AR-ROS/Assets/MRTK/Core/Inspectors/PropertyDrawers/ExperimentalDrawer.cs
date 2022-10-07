@@ -1,8 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 namespace Microsoft.MixedReality.Toolkit.Editor
 {
@@ -18,7 +17,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         /// <param name="position">Rectangle to display the GUI in</param>
         public override void OnGUI(Rect position)
         {
-            if (attribute is ExperimentalAttribute experimental)
+            var experimental = attribute as ExperimentalAttribute;
+
+            if (experimental != null)
             {
                 var defaultValue = EditorStyles.helpBox.richText;
                 EditorStyles.helpBox.richText = true;
@@ -33,7 +34,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         /// <returns>The height required by OnGUI.</returns>
         public override float GetHeight()
         {
-            if (attribute is ExperimentalAttribute experimental)
+            var experimental = attribute as ExperimentalAttribute;
+
+            if (experimental != null)
             {
                 return EditorStyles.helpBox.CalcHeight(new GUIContent(experimental.Text), EditorGUIUtility.currentViewWidth);
             }

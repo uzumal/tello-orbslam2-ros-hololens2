@@ -3,6 +3,7 @@
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -109,17 +110,22 @@ namespace Microsoft.MixedReality.Toolkit.UI
         [SerializeField]
         [Tooltip("Current scale value. 1 is the original 100%.")]
         private float currentScale;
-
         /// <summary>
         /// Current scale value. 1 is the original 100%.
         /// </summary>
-        public float CurrentScale => currentScale;
+        public float CurrentScale
+        {
+            get { return currentScale; }
+        }
 
         /// <summary>
         /// Returns the current pan delta (pan value - previous pan value)
-        /// in UV coordinates (0 being no pan, 1 being pan of the entire slate)
+        /// in UV coordinates (0 being no pan, 1, being pan of the entire ) 
         /// </summary>
-        public Vector2 CurrentPanDelta => totalUVOffset;
+        public Vector2 CurrentPanDelta
+        {
+            get { return totalUVOffset; }
+        }
 
         [Header("Events")]
         public PanUnityEvent PanStarted = new PanUnityEvent();
@@ -133,12 +139,23 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private Mesh mesh;
         private MeshFilter meshFilter;
         private BoxCollider boxCollider;
-
-        private bool TouchActive => handDataMap.Count > 0;
-        private bool ScaleActive => enableZoom && handDataMap.Count > 1;
-
+        private bool touchActive
+        {
+            get
+            {
+                return handDataMap.Count > 0;
+            }
+        }
+        private bool scaleActive
+        {
+            get
+            {
+                return enableZoom && handDataMap.Count > 1;
+            }
+        }
         private float previousContactRatio = 1.0f;
         private float initialTouchDistance = 0.0f;
+        private float lastTouchDistance = 0.0f;
         private Vector2 totalUVOffset = Vector2.zero;
         private Vector2 totalUVScale = Vector2.one;
         private bool affordancesVisible = false;
@@ -151,7 +168,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private Dictionary<uint, HandPanData> handDataMap = new Dictionary<uint, HandPanData>();
         private List<Vector2> uvs = new List<Vector2>();
         private List<Vector2> uvsOrig = new List<Vector2>();
-        private List<Vector2> uvDeltas = new List<Vector2>();
         private bool oldIsTargetPositionLockedOnFocusLock;
 
 #if UNITY_2019_3_OR_NEWER
@@ -204,7 +220,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             if (isEnabled)
             {
-                if (TouchActive)
+                if (touchActive)
                 {
                     foreach (uint key in handDataMap.Keys)
                     {
@@ -220,7 +236,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 UpdateIdle();
                 UpdateUVMapping();
 
-                if (!TouchActive && affordancesVisible)
+                if (!touchActive && affordancesVisible)
                 {
                     SetAffordancesActive(false);
                 }
@@ -358,7 +374,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateIdle()
         {
-            if (!TouchActive)
+            if (!touchActive)
             {
                 if (Mathf.Abs(totalUVOffset.x) < 0.01f && Mathf.Abs(totalUVOffset.y) < 0.01f)
                 {
@@ -374,18 +390,20 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateUVMapping()
         {
+            Vector2 tiling = currentMaterial != null ? currentMaterial.mainTextureScale : new Vector2(1.0f, 1.0f);
+            Vector2 uvTestValue;
             mesh.GetUVs(0, uvs);
             uvsOrig.Clear();
             uvsOrig.AddRange(uvs);
+            float scaleUVDelta = 0.0f;
+            Vector2 scaleUVCentroid = Vector2.zero;
+            float currentContactRatio = 0.0f;
 
-            Vector2 offsetUVDelta = new Vector2(-totalUVOffset.x, totalUVOffset.y);
-
-            // Scale
-            if (ScaleActive)
+            if (scaleActive)
             {
-                var scaleUVCentroid = GetDisplayedUVCentroid(uvs);
-                var currentContactRatio = GetUVScaleFromTouches();
-                var scaleUVDelta = currentContactRatio / previousContactRatio;
+                scaleUVCentroid = GetDisplayedUVCentroid(uvs);
+                currentContactRatio = GetUVScaleFromTouches();
+                scaleUVDelta = currentContactRatio / previousContactRatio;
                 previousContactRatio = currentContactRatio;
 
                 currentScale = totalUVScale.x / scaleUVDelta;
@@ -393,52 +411,25 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 // Test for scale limits
                 if (currentScale > minScale && currentScale < maxScale)
                 {
-                    uvDeltas.Clear();
-                    for (int i = 0; i < uvs.Count; i++)
+                    // Track total scale
+                    totalUVScale /= scaleUVDelta;
+                    for (int i = 0; i < uvs.Count; ++i)
                     {
-                        Vector2 adjustedScaleUVDelta = ((uvs[i] - scaleUVCentroid) / scaleUVDelta) + scaleUVCentroid - uvs[i];
-                        uvDeltas.Add(adjustedScaleUVDelta + offsetUVDelta);
+                        // This is where zoom is applied if Active
+                        uvs[i] = ((uvs[i] - scaleUVCentroid) / scaleUVDelta) + scaleUVCentroid;
                     }
-                    UpdateUV(uvs, uvDeltas);
-
-                    Vector2 upperLeft = uvs[UpperLeftQuadIndex];
-                    Vector2 upperRight = uvs[UpperRightQuadIndex];
-                    Vector2 lowerLeft = uvs[LowerLeftQuadIndex];
-                    totalUVScale.x = upperRight.x - upperLeft.x;
-                    totalUVScale.y = upperLeft.y - lowerLeft.y;
                 }
             }
-            else
-            {
-                // Scroll
-                UpdateUVWithScroll(uvs, offsetUVDelta);
-            }
 
-            mesh.SetUVs(0, uvs);
-        }
-
-        private void UpdateUVWithScroll(List<Vector2> uvs, Vector2 uvDelta)
-        {
-            uvDeltas.Clear();
-            for (int i = 0; i < uvs.Count; i++)
-            {
-                uvDeltas.Add(uvDelta);
-            }
-            UpdateUV(uvs, uvDeltas, true);
-        }
-
-        private void UpdateUV(List<Vector2> uvs, List<Vector2> uvDeltas, bool scrollOnly = false)
-        {
-            Vector2 tiling = currentMaterial != null ? currentMaterial.mainTextureScale : new Vector2(1.0f, 1.0f);
-
+            // Test for pan limits
+            Vector2 uvDelta = new Vector2(totalUVOffset.x, -totalUVOffset.y);
             if (!unlimitedPan)
             {
                 bool xLimited = false;
                 bool yLimited = false;
-
-                for (int i = 0; i < uvs.Count; i++)
+                for (int i = 0; i < uvs.Count; ++i)
                 {
-                    var uvTestValue = uvs[i] + uvDeltas[i];
+                    uvTestValue = uvs[i] - uvDelta;
                     if (uvTestValue.x > tiling.x * maxPanHorizontal || uvTestValue.x < -(tiling.x * maxPanHorizontal))
                     {
                         xLimited = true;
@@ -449,33 +440,25 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     }
                 }
 
-                if (scrollOnly)
+                for (int i = 0; i < uvs.Count; ++i)
                 {
-                    for (int i = 0; i < uvs.Count; ++i)
-                    {
-                        uvs[i] = new Vector2(xLimited ? uvs[i].x : uvs[i].x + uvDeltas[i].x, yLimited ? uvs[i].y : uvs[i].y + uvDeltas[i].y);
-                    }
-                }
-                else if (!xLimited && !yLimited)
-                {
-                    for (int i = 0; i < uvs.Count; ++i)
-                    {
-                        uvs[i] += uvDeltas[i];
-                    }
+                    uvs[i] = new Vector2(xLimited ? uvs[i].x : uvs[i].x - uvDelta.x, yLimited ? uvs[i].y : uvs[i].y - uvDelta.y);
                 }
             }
             else
             {
                 for (int i = 0; i < uvs.Count; ++i)
                 {
-                    uvs[i] += uvDeltas[i];
+                    uvs[i] -= uvDelta;
                 }
             }
+
+            mesh.SetUVs(0, uvs);
         }
 
         private float GetUVScaleFromTouches()
         {
-            if (!ScaleActive || initialTouchDistance == 0)
+            if (!scaleActive || initialTouchDistance == 0)
             {
                 return 0.0f;
             }
@@ -494,7 +477,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private Vector2 GetUvOffset()
         {
-            if (TouchActive && AreSourcesCompatible())
+            if (touchActive && AreSourcesCompatible())
             {
                 Vector2 offset = Vector2.zero;
                 foreach (uint key in handDataMap.Keys)
@@ -587,7 +570,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private Vector3 GetTouchPoint()
         {
-            if (TouchActive)
+            if (touchActive)
             {
                 Vector3 touchingPoint = Vector3.zero;
                 foreach (uint key in handDataMap.Keys)
@@ -618,7 +601,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private float GetContactDistance()
         {
-            if (!ScaleActive || handDataMap.Keys.Count < 2)
+            if (!scaleActive || handDataMap.Keys.Count < 2)
             {
                 return 0.0f;
             }
@@ -757,6 +740,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             data.touchingUVOffset = data.touchingUVTotalOffset;
             handDataMap.Add(data.touchingSource.SourceId, data);
             initialTouchDistance = GetContactDistance();
+            lastTouchDistance = initialTouchDistance;
             totalUVOffset = Vector2.zero;
 
             if (handDataMap.Keys.Count > 1)
@@ -780,7 +764,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private bool TryGetHandPositionFromController(IMixedRealityController controller, TrackedHandJoint joint, out Vector3 position)
         {
-            if (controller is IMixedRealityHand hand)
+            var hand = controller as IMixedRealityHand;
+            if (hand != null)
             {
                 if (hand.TryGetJoint(joint, out MixedRealityPose pose))
                 {
@@ -814,11 +799,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void EndAllTouches()
         {
-            if (handDataMap.Count > 0)
-            {
-                handDataMap.Clear();
-                RaisePanEnded(0);
-            }
+            handDataMap.Clear();
+            RaisePanEnded(0);
         }
 
         private void MoveTouch(uint sourceId)
@@ -896,15 +878,14 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         public void OnPointerDown(MixedRealityPointerEventData eventData)
         {
-            bool isNear = eventData.Pointer is IMixedRealityNearPointer;
             oldIsTargetPositionLockedOnFocusLock = eventData.Pointer.IsTargetPositionLockedOnFocusLock;
-            if (!isNear && eventData.Pointer.Controller.IsRotationAvailable)
+            if (!(eventData.Pointer is IMixedRealityNearPointer) && eventData.Pointer.Controller.IsRotationAvailable)
             {
                 eventData.Pointer.IsTargetPositionLockedOnFocusLock = false;
             }
             SetAffordancesActive(false);
             EndTouch(eventData.SourceId);
-            SetHandDataFromController(eventData.Pointer.Controller, eventData.Pointer, isNear);
+            SetHandDataFromController(eventData.Pointer.Controller, eventData.Pointer, false);
             eventData.Use();
         }
 

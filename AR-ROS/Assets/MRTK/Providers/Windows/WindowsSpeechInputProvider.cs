@@ -18,7 +18,7 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
         typeof(IMixedRealityInputSystem),
         SupportedPlatforms.WindowsStandalone | SupportedPlatforms.WindowsUniversal | SupportedPlatforms.WindowsEditor,
         "Windows Speech Input")]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/speech")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Speech.html")]
     public class WindowsSpeechInputProvider : BaseInputDeviceManager, IMixedRealitySpeechSystem, IMixedRealityCapabilityCheck
     {
         /// <summary>
@@ -61,17 +61,12 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
         /// <summary>
         /// The Input Source for Windows Speech Input.
         /// </summary>
-        public IMixedRealityInputSource InputSource => globalInputSource;
+        public IMixedRealityInputSource InputSource = null;
 
         /// <summary>
         /// The minimum confidence level for the recognizer to fire an event.
         /// </summary>
         public RecognitionConfidenceLevel RecognitionConfidenceLevel { get; set; }
-
-        /// <summary>
-        /// The global input source used by the the speech input provider to raise events.
-        /// </summary>
-        private BaseGlobalInputSource globalInputSource = null;
 
         /// <inheritdoc />
         public bool IsRecognitionActive =>
@@ -139,36 +134,27 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
                 InitializeKeywordRecognizer();
                 StartRecognition();
             }
-
-            // Call the base here to ensure any early exits do not
-            // artificially declare the service as enabled.
-            base.Enable();
         }
 
         private void InitializeKeywordRecognizer()
         {
             if (!Application.isPlaying ||
+                (Commands == null) ||
+                (Commands.Length == 0) ||
                 InputSystemProfile == null ||
-                keywordRecognizer != null)
+                keywordRecognizer != null
+                )
             {
                 return;
             }
 
-            SpeechCommands[] commands = Commands;
-            int commandsCount = commands?.Length ?? 0;
+            InputSource = Service?.RequestNewGenericInputSource("Windows Speech Input Source", sourceType: InputSourceType.Voice);
 
-            if (commandsCount == 0)
+            var newKeywords = new string[Commands.Length];
+
+            for (int i = 0; i < Commands.Length; i++)
             {
-                return;
-            }
-
-            globalInputSource = Service?.RequestNewGlobalInputSource("Windows Speech Input Source", sourceType: InputSourceType.Voice);
-
-            var newKeywords = new string[commandsCount];
-
-            for (int i = 0; i < commandsCount; i++)
-            {
-                newKeywords[i] = commands[i].LocalizedKeyword;
+                newKeywords[i] = Commands[i].LocalizedKeyword;
             }
 
             RecognitionConfidenceLevel = InputSystemProfile.SpeechCommandsProfile.SpeechRecognitionConfidenceLevel;
@@ -179,11 +165,7 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
             }
             catch (Exception ex)
             {
-                // Don't log if the application is currently running in batch mode (for example, when running tests). This failure is expected in this case.
-                if (!Application.isBatchMode)
-                {
-                    Debug.LogWarning($"Failed to start keyword recognizer. Are microphone permissions granted? Exception: {ex}");
-                }
+                Debug.LogWarning($"Failed to start keyword recognizer. Are microphone permissions granted? Exception: {ex}");
                 keywordRecognizer = null;
                 return;
             }
@@ -198,18 +180,13 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
         {
             using (UpdatePerfMarker.Auto())
             {
-                base.Update();
-
                 if (keywordRecognizer != null && keywordRecognizer.IsRunning)
                 {
-                    SpeechCommands[] commands = Commands;
-                    int commandsCount = commands?.Length ?? 0;
-                    for (int i = 0; i < commandsCount; i++)
+                    for (int i = 0; i < Commands.Length; i++)
                     {
-                        SpeechCommands command = commands[i];
-                        if (UInput.GetKeyDown(command.KeyCode))
+                        if (UInput.GetKeyDown(Commands[i].KeyCode))
                         {
-                            OnPhraseRecognized((ConfidenceLevel)RecognitionConfidenceLevel, TimeSpan.Zero, DateTime.UtcNow, command.LocalizedKeyword);
+                            OnPhraseRecognized((ConfidenceLevel)RecognitionConfidenceLevel, TimeSpan.Zero, DateTime.UtcNow, Commands[i].LocalizedKeyword);
                         }
                     }
                 }
@@ -228,8 +205,6 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
             }
 
             keywordRecognizer = null;
-
-            base.Disable();
         }
 
         /// <inheritdoc />
@@ -252,15 +227,11 @@ namespace Microsoft.MixedReality.Toolkit.Windows.Input
         {
             using (OnPhraseRecognizedPerfMarker.Auto())
             {
-                SpeechCommands[] commands = Commands;
-                int commandsCount = commands?.Length ?? 0;
-                for (int i = 0; i < commandsCount; i++)
+                for (int i = 0; i < Commands?.Length; i++)
                 {
-                    SpeechCommands command = commands[i];
-                    if (command.LocalizedKeyword == text)
+                    if (Commands[i].LocalizedKeyword == text)
                     {
-                        globalInputSource.UpdateActivePointers();
-                        Service?.RaiseSpeechCommandRecognized(InputSource, (RecognitionConfidenceLevel)confidence, phraseDuration, phraseStartTime, command);
+                        Service?.RaiseSpeechCommandRecognized(InputSource, (RecognitionConfidenceLevel)confidence, phraseDuration, phraseStartTime, Commands[i]);
                         break;
                     }
                 }

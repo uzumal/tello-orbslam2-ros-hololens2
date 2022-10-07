@@ -22,10 +22,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// Active controllers
         /// </summary>
-        private IMixedRealityController[] activeControllers = Array.Empty<IMixedRealityController>();
+        private IMixedRealityController[] activeControllers = System.Array.Empty<IMixedRealityController>();
 
         /// <inheritdoc />
-        public override IMixedRealityController[] GetActiveControllers() => activeControllers;
+        public override IMixedRealityController[] GetActiveControllers()
+        {
+            return activeControllers;
+        }
 
         #region BaseInputDeviceManager Implementation
 
@@ -69,13 +72,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             if (controllerData != null)
             {
-                if (controllerData is SimulatedHandData handData && handData.IsTracked)
+                if(controllerData is SimulatedHandData handData && handData.IsTracked)
                 {
-
+                    
                     SimulatedHand hand = GetOrAddControllerDevice(handedness, simulationMode) as SimulatedHand;
                     hand.UpdateState(handData);
                     return;
-
+                    
                 }
                 else if (controllerData is SimulatedMotionControllerData motionControllerData && motionControllerData.IsTracked)
                 {
@@ -84,8 +87,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     return;
                 }
             }
-
+            
             RemoveControllerDevice(handedness);
+            
         }
 
         public BaseController GetControllerDevice(Handedness handedness)
@@ -126,19 +130,19 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 case ControllerSimulationMode.HandGestures:
                     st = SupportedControllerType.GGVHand;
-                    inputSource = Service?.RequestNewGenericInputSource($"Simulated GGV {handedness} Hand", RequestPointers(st, handedness), InputSourceType.Hand);
+                    inputSource = Service?.RequestNewGenericInputSource($"{handedness} Hand", RequestPointers(st, handedness), InputSourceType.Hand);
                     controller = new SimulatedGestureHand(TrackingState.Tracked, handedness, inputSource);
                     controllerType = typeof(SimulatedGestureHand);
                     break;
                 case ControllerSimulationMode.ArticulatedHand:
                     st = SupportedControllerType.ArticulatedHand;
-                    inputSource = Service?.RequestNewGenericInputSource($"Simulated Articulated {handedness} Hand", RequestPointers(st, handedness), InputSourceType.Hand);
+                    inputSource = Service?.RequestNewGenericInputSource($"{handedness} Hand", RequestPointers(st, handedness), InputSourceType.Hand);
                     controller = new SimulatedArticulatedHand(TrackingState.Tracked, handedness, inputSource);
                     controllerType = typeof(SimulatedArticulatedHand);
                     break;
                 case ControllerSimulationMode.MotionController:
                     st = SupportedControllerType.WindowsMixedReality;
-                    inputSource = Service?.RequestNewGenericInputSource($"Simulated {handedness} MotionController", RequestPointers(st, handedness), InputSourceType.Controller);
+                    inputSource = Service?.RequestNewGenericInputSource($"{handedness} MotionController", RequestPointers(st, handedness), InputSourceType.Controller);
                     controller = new SimulatedMotionController(TrackingState.Tracked, handedness, inputSource);
                     controllerType = typeof(SimulatedMotionController);
                     break;
@@ -236,5 +240,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         }
 
         #endregion
+
+        
     }
 }

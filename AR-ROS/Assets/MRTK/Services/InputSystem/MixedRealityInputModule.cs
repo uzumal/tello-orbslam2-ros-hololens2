@@ -45,16 +45,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         public Camera RaycastCamera { get; private set; }
 
-        /// <summary>
-        /// Whether the input module is auto initialized by event system or requires a manual call to Initialize()
-        /// </summary>
-        public bool ManualInitializationRequired { get; private set; } = false;
-
-        /// <summary>
-        /// Whether the input module should pause processing temporarily
-        /// </summary>
-        public bool ProcessPaused { get; set; } = false;
-
         public IEnumerable<IMixedRealityPointer> ActiveMixedRealityPointers
         {
             get
@@ -73,34 +63,16 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
             if (CoreServices.InputSystem != null)
             {
-                Initialize();
-            }
-        }
+                RaycastCamera = CoreServices.InputSystem.FocusProvider.UIRaycastCamera;
 
-        /// <summary>
-        /// Initialize the input module.
-        /// </summary>
-        public void Initialize()
-        {
-            RaycastCamera = CoreServices.InputSystem.FocusProvider.UIRaycastCamera;
-            foreach (IMixedRealityInputSource inputSource in CoreServices.InputSystem.DetectedInputSources)
-            {
-                OnSourceDetected(inputSource);
-            }
-            CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>(this);
-            CoreServices.InputSystem.RegisterHandler<IMixedRealitySourceStateHandler>(this);
-            ManualInitializationRequired = false;
-        }
+                foreach (IMixedRealityInputSource inputSource in CoreServices.InputSystem.DetectedInputSources)
+                {
+                    OnSourceDetected(inputSource);
+                }
 
-        /// <summary>
-        /// Suspend the input module when a runtime profile change is about to happen.
-        /// </summary>
-        public void Suspend()
-        {
-            // Process once more to handle pointer removals.
-            Process();
-            // Set the flag so that we manually initialize the input module after the profile switch.
-            ManualInitializationRequired = true;
+                CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>(this);
+                CoreServices.InputSystem.RegisterHandler<IMixedRealitySourceStateHandler>(this);
+            }
         }
 
         /// <inheritdoc />
@@ -135,11 +107,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (ProcessPerfMarker.Auto())
             {
-                // Do not process when we are waiting for initialization
-                if (ManualInitializationRequired || ProcessPaused)
-                {
-                    return;
-                }
                 CursorLockMode cursorLockStateBackup = Cursor.lockState;
 
                 try
@@ -179,12 +146,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
                 base.Process();
             }
-        }
-
-        /// <inheritdoc />
-        public override bool IsModuleSupported()
-        {
-            return true;
         }
 
         private static readonly ProfilerMarker ProcessMrtkPointerLostPerfMarker = new ProfilerMarker("[MRTK] MixedRealityInputModule.ProcessMrtkPointerLost");
@@ -240,7 +201,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
                 if (pointer.Controller != null && pointer.Controller.IsRotationAvailable)
                 {
-                    RaycastCamera.transform.SetPositionAndRotation(pointer.Rays[0].Origin, Quaternion.LookRotation(pointer.Rays[0].Direction));
+                    RaycastCamera.transform.position = pointer.Rays[0].Origin;
+                    RaycastCamera.transform.rotation = Quaternion.LookRotation(pointer.Rays[0].Direction);
                 }
                 else
                 {
@@ -248,7 +210,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     // In this case pointer.Rays[0].Origin will be the head position, but we want the 
                     // hand to do drag operations, not the head.
                     // pointer.Position gives the position of the hand, use that to compute drag deltas.
-                    RaycastCamera.transform.SetPositionAndRotation(pointer.Position, Quaternion.LookRotation(pointer.Rays[0].Direction));
+                    RaycastCamera.transform.position = pointer.Position;
+                    RaycastCamera.transform.rotation = Quaternion.LookRotation(pointer.Rays[0].Direction);
                 }
 
                 // Populate eventDataLeft
@@ -425,17 +388,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     if (pointer.InputSourceParent == inputSource)
                     {
                         int pointerId = (int)pointer.PointerId;
-                        if (!pointerDataToUpdate.ContainsKey(pointerId))
-                        {
-                            // During runtime profile switch this may happen but we can ignore
-                            if (!MixedRealityToolkit.Instance.IsProfileSwitching)
-                            {
-                                Debug.LogError("The pointer you are trying to remove does not exist in the mapping dict!");
-                            }
-                            return;
-                        }
+                        Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId));
 
-                        if (pointerDataToUpdate.TryGetValue(pointerId, out PointerData pointerData))
+                        PointerData pointerData = null;
+                        if (pointerDataToUpdate.TryGetValue(pointerId, out pointerData))
                         {
                             Debug.Assert(!pointerDataToRemove.Contains(pointerData));
                             pointerDataToRemove.Add(pointerData);

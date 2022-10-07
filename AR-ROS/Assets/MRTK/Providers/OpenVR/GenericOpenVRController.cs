@@ -15,25 +15,11 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
     [MixedRealityController(
         SupportedControllerType.GenericOpenVR,
         new[] { Handedness.Left, Handedness.Right },
-        flags: MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings,
-        supportedUnityXRPipelines: SupportedUnityXRPipelines.LegacyXR)]
+        flags: MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings)]
     public class GenericOpenVRController : GenericJoystickController
     {
-        public GenericOpenVRController(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null)
-            : this(trackingState, controllerHandedness, new GenericOpenVRControllerDefinition(controllerHandedness), inputSource, interactions)
-        { }
-
-        public GenericOpenVRController(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSourceDefinition definition,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null)
-            : base(trackingState, controllerHandedness, definition, inputSource, interactions)
+        public GenericOpenVRController(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
+            : base(trackingState, controllerHandedness, inputSource, interactions)
         {
             nodeType = controllerHandedness == Handedness.Left ? XRNode.LeftHand : XRNode.RightHand;
         }
@@ -55,108 +41,108 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
         /// </summary>
         private static readonly Dictionary<Handedness, GameObject> controllerDictionary = new Dictionary<Handedness, GameObject>(0);
 
-        protected override MixedRealityInteractionMappingLegacyInput[] LeftHandedLegacyInputSupport => new[]
+        public override MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => new[]
         {
             // Controller Pose
-            new MixedRealityInteractionMappingLegacyInput(),
+            new MixedRealityInteractionMapping(0, "Spatial Pointer", AxisType.SixDof, DeviceInputType.SpatialPointer),
             // HTC Vive Controller - Left Controller Trigger (7) Squeeze
             // Oculus Touch Controller - Axis1D.PrimaryIndexTrigger Squeeze
             // Valve Knuckles Controller - Left Controller Trigger Squeeze
             // Windows Mixed Reality Controller - Left Trigger Squeeze
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_9),
+            new MixedRealityInteractionMapping(1, "Trigger Position", AxisType.SingleAxis, DeviceInputType.Trigger, ControllerMappingLibrary.AXIS_9),
             // HTC Vive Controller - Left Controller Trigger (7)
             // Oculus Touch Controller - Axis1D.PrimaryIndexTrigger
             // Valve Knuckles Controller - Left Controller Trigger
             // Windows Mixed Reality Controller - Left Trigger Press (Select)
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton14),
+            new MixedRealityInteractionMapping(2, "Trigger Press (Select)", AxisType.Digital, DeviceInputType.Select, KeyCode.JoystickButton14),
             // HTC Vive Controller - Left Controller Trigger (7)
             // Oculus Touch Controller - Axis1D.PrimaryIndexTrigger
             // Valve Knuckles Controller - Left Controller Trigger
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_9),
+            new MixedRealityInteractionMapping(3, "Trigger Touch", AxisType.Digital, DeviceInputType.TriggerTouch, ControllerMappingLibrary.AXIS_9),
             // HTC Vive Controller - Left Controller Grip Button (8)
             // Oculus Touch Controller - Axis1D.PrimaryHandTrigger
             // Valve Knuckles Controller - Left Controller Grip Average
             // Windows Mixed Reality Controller - Left Grip Button Press
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_11),
+            new MixedRealityInteractionMapping(4, "Grip Trigger Position", AxisType.SingleAxis, DeviceInputType.Trigger, ControllerMappingLibrary.AXIS_11),
             // HTC Vive Controller - Left Controller Trackpad (2)
             // Oculus Touch Controller - Axis2D.PrimaryThumbstick
             // Valve Knuckles Controller - Left Controller Trackpad
             // Windows Mixed Reality Controller - Left Thumbstick Position
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_1, axisCodeY: ControllerMappingLibrary.AXIS_2, invertYAxis: true),
+            new MixedRealityInteractionMapping(5, "Trackpad-Thumbstick Position", AxisType.DualAxis, DeviceInputType.Touchpad, ControllerMappingLibrary.AXIS_1, ControllerMappingLibrary.AXIS_2, false, true),
             // HTC Vive Controller - Left Controller Trackpad (2)
             // Oculus Touch Controller - Button.PrimaryThumbstick
             // Valve Knuckles Controller - Left Controller Trackpad
             // Windows Mixed Reality Controller - Left Touchpad Touch
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton16),
+            new MixedRealityInteractionMapping(6, "Trackpad-Thumbstick Touch", AxisType.Digital, DeviceInputType.TouchpadTouch, KeyCode.JoystickButton16),
             // HTC Vive Controller - Left Controller Trackpad (2)
             // Oculus Touch Controller - Button.PrimaryThumbstick
             // Valve Knuckles Controller - Left Controller Trackpad
             // Windows Mixed Reality Controller - Left Thumbstick Press
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton8),
+            new MixedRealityInteractionMapping(7, "Trackpad-Thumbstick Press", AxisType.Digital, DeviceInputType.TouchpadPress, KeyCode.JoystickButton8),
             // HTC Vive Controller - Left Controller Menu Button (1)
             // Oculus Touch Controller - Button.Three Press
             // Valve Knuckles Controller - Left Controller Inner Face Button
             // Windows Mixed Reality Controller - Left Menu Button
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton2),
+            new MixedRealityInteractionMapping(8, "Unity Button Id 2", AxisType.Digital, DeviceInputType.ButtonPress, KeyCode.JoystickButton2),
             // Oculus Touch Controller - Button.Four Press
             // Valve Knuckles Controller - Left Controller Outer Face Button
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton3),
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton18),
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_17, axisCodeY: ControllerMappingLibrary.AXIS_18),
-            new MixedRealityInteractionMappingLegacyInput(),
+            new MixedRealityInteractionMapping(9, "Unity Button Id 3", AxisType.Digital, DeviceInputType.ButtonPress, KeyCode.JoystickButton3),
+            new MixedRealityInteractionMapping(10, "WMR Touchpad Touch", AxisType.Digital, DeviceInputType.TouchpadTouch, KeyCode.JoystickButton18),
+            new MixedRealityInteractionMapping(11, "WMR Touchpad Position", AxisType.DualAxis, DeviceInputType.Touchpad, ControllerMappingLibrary.AXIS_17, ControllerMappingLibrary.AXIS_18),
+            new MixedRealityInteractionMapping(12, "Spatial Grip", AxisType.SixDof, DeviceInputType.SpatialGrip),
         };
 
-        protected override MixedRealityInteractionMappingLegacyInput[] RightHandedLegacyInputSupport => new[]
+        public override MixedRealityInteractionMapping[] DefaultRightHandedInteractions => new[]
         {
             // Controller Pose
-            new MixedRealityInteractionMappingLegacyInput(),
+            new MixedRealityInteractionMapping(0, "Spatial Pointer", AxisType.SixDof, DeviceInputType.SpatialPointer),
             // HTC Vive Controller - Right Controller Trigger (7) Squeeze
             // Oculus Touch Controller - Axis1D.SecondaryIndexTrigger Squeeze
             // Valve Knuckles Controller - Right Controller Trigger Squeeze
             // Windows Mixed Reality Controller - Right Trigger Squeeze
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_10),
+            new MixedRealityInteractionMapping(1, "Trigger Position", AxisType.SingleAxis, DeviceInputType.Trigger, ControllerMappingLibrary.AXIS_10),
             // HTC Vive Controller - Right Controller Trigger (7)
             // Oculus Touch Controller - Axis1D.SecondaryIndexTrigger
             // Valve Knuckles Controller - Right Controller Trigger
             // Windows Mixed Reality Controller - Right Trigger Press (Select)
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton15),
+            new MixedRealityInteractionMapping(2, "Trigger Press (Select)", AxisType.Digital, DeviceInputType.Select, KeyCode.JoystickButton15),
             // HTC Vive Controller - Right Controller Trigger (7)
             // Oculus Touch Controller - Axis1D.SecondaryIndexTrigger
             // Valve Knuckles Controller - Right Controller Trigger
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_10),
+            new MixedRealityInteractionMapping(3, "Trigger Touch", AxisType.Digital, DeviceInputType.TriggerTouch, ControllerMappingLibrary.AXIS_10),
             // HTC Vive Controller - Right Controller Grip Button (8)
             // Oculus Touch Controller - Axis1D.SecondaryHandTrigger
             // Valve Knuckles Controller - Right Controller Grip Average
             // Windows Mixed Reality Controller - Right Grip Button Press
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_12),
+            new MixedRealityInteractionMapping(4, "Grip Trigger Position", AxisType.SingleAxis, DeviceInputType.Trigger, ControllerMappingLibrary.AXIS_12),
             // HTC Vive Controller - Right Controller Trackpad (2)
             // Oculus Touch Controller - Axis2D.PrimaryThumbstick
             // Valve Knuckles Controller - Right Controller Trackpad
             // Windows Mixed Reality Controller - Right Thumbstick Position
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_4, axisCodeY: ControllerMappingLibrary.AXIS_5, invertYAxis: true),
+            new MixedRealityInteractionMapping(5, "Trackpad-Thumbstick Position", AxisType.DualAxis, DeviceInputType.Touchpad, ControllerMappingLibrary.AXIS_4, ControllerMappingLibrary.AXIS_5, false, true),
             // HTC Vive Controller - Right Controller Trackpad (2)
             // Oculus Touch Controller - Button.SecondaryThumbstick
             // Valve Knuckles Controller - Right Controller Trackpad
             // Windows Mixed Reality Controller - Right Touchpad Touch
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton17),
+            new MixedRealityInteractionMapping(6, "Trackpad-Thumbstick Touch", AxisType.Digital, DeviceInputType.TouchpadTouch, KeyCode.JoystickButton17),
             // HTC Vive Controller - Right Controller Trackpad (2)
             // Oculus Touch Controller - Button.SecondaryThumbstick
             // Valve Knuckles Controller - Right Controller Trackpad
             // Windows Mixed Reality Controller - Right Thumbstick Press
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton9),
+            new MixedRealityInteractionMapping(7, "Trackpad-Thumbstick Press", AxisType.Digital, DeviceInputType.TouchpadPress, KeyCode.JoystickButton9),
             // HTC Vive Controller - Right Controller Menu Button (1)
             // Oculus Remote - Button.One Press
             // Oculus Touch Controller - Button.One Press
             // Valve Knuckles Controller - Right Controller Inner Face Button
             // Windows Mixed Reality Controller - Right Menu Button
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton0),
+            new MixedRealityInteractionMapping(8, "Unity Button Id 0", AxisType.Digital, DeviceInputType.ButtonPress, KeyCode.JoystickButton0),
             // Oculus Remote - Button.Two Press
             // Oculus Touch Controller - Button.Two Press
             // Valve Knuckles Controller - Right Controller Outer Face Button
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton1),
-            new MixedRealityInteractionMappingLegacyInput(keyCode: KeyCode.JoystickButton19),
-            new MixedRealityInteractionMappingLegacyInput(axisCodeX: ControllerMappingLibrary.AXIS_19, axisCodeY: ControllerMappingLibrary.AXIS_20),
-            new MixedRealityInteractionMappingLegacyInput(),
+            new MixedRealityInteractionMapping(9, "Unity Button Id 1", AxisType.Digital, DeviceInputType.ButtonPress, KeyCode.JoystickButton1),
+            new MixedRealityInteractionMapping(10, "WMR Touchpad Touch", AxisType.Digital, DeviceInputType.TouchpadTouch, KeyCode.JoystickButton19),
+            new MixedRealityInteractionMapping(11, "WMR Touchpad Position", AxisType.DualAxis, DeviceInputType.Touchpad, ControllerMappingLibrary.AXIS_19, ControllerMappingLibrary.AXIS_20),
+            new MixedRealityInteractionMapping(12, "Spatial Grip", AxisType.SixDof, DeviceInputType.SpatialGrip),
         };
 
         private static readonly ProfilerMarker UpdateControllerPerfMarker = new ProfilerMarker("[MRTK] GenericOpenVRController.UpdateController");
@@ -255,7 +241,7 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
 
             // Intercept this call if we are using the default driver provided models.
             if (visualizationProfile == null ||
-                !visualizationProfile.GetUsePlatformModelsOverride(GetType(), ControllerHandedness))
+                !visualizationProfile.GetUseDefaultModelsOverride(GetType(), ControllerHandedness))
             {
                 return base.TryRenderControllerModel(controllerType, inputSourceType);
             }
@@ -283,7 +269,7 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
                 }
 
                 OpenVRRenderModel openVRRenderModel = controllerModelGameObject.AddComponent<OpenVRRenderModel>();
-                Material overrideMaterial = visualizationProfile.GetPlatformModelMaterialOverride(GetType(), ControllerHandedness);
+                Material overrideMaterial = visualizationProfile.GetDefaultControllerModelMaterialOverride(GetType(), ControllerHandedness);
                 if (overrideMaterial != null)
                 {
                     openVRRenderModel.shader = overrideMaterial.shader;

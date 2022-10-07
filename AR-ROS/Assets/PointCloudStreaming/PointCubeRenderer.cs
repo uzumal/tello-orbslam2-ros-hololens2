@@ -7,10 +7,11 @@ using RosSharp.RosBridgeClient;
 public class PointCubeRenderer : MonoBehaviour
 {
     public PointCloudSubscriber subscriber;
-    
+
     private GameObject drone;
     private GameObject pointCloud;
     private GameObject obj;
+    private GameObject ComPosition;
     // GetPCL
     private Vector3[] positions = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 1, 0) };
     // List of generating prefab's transform
@@ -24,8 +25,11 @@ public class PointCubeRenderer : MonoBehaviour
     {
         drone = GameObject.Find("droneModel");
         pointCloud = GameObject.Find("PointCloud1");
-        obj = (GameObject)Resources.Load ("Point");
-        myPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
+        obj = (GameObject)Resources.Load("Point");
+        ComPosition = Instantiate(obj);
+        ComPosition.transform.parent = pointCloud.transform;
+        ComPosition.SetActive(false);
+        myPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
         cnt = 0;
         InvokeRepeating("ResetMesh", 10.0f, 10.0f);
         GeneratePrefab();
@@ -33,14 +37,14 @@ public class PointCubeRenderer : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
         UpdateMesh();
     }
 
     void GeneratePrefab()
     {
         //最初にInstantiateで全て生成してprefabArrayに格納しておく
-        for(int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; i++)
         {
             GameObject prefab = Instantiate(obj);
             prefab.transform.parent = pointCloud.transform;
@@ -52,12 +56,13 @@ public class PointCubeRenderer : MonoBehaviour
 
     void ResetMesh()
     {
-        for(int i = 0; i < prefabList.Count; i++){
+        for (int i = 0; i < prefabList.Count; i++)
+        {
             prefabList[i].SetActive(false);
             cnt = 0;
         }
         myPositions.Clear();
-        myPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
+        myPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
         // foreach(GameObject prefab in prefabList){
         //     prefab.SetActive(false);
         //     prefabList.Remove(prefab);
@@ -74,29 +79,36 @@ public class PointCubeRenderer : MonoBehaviour
         bool isPrefabEnough = false;
 
         // Cubeの重なり判定
-        Vector3 halfExtents = new Vector3(0.01f, 0.01f, 0.01f);
+        Vector3 halfExtents = new Vector3(0.025f, 0.025f, 0.025f);
 
         if (positions == null)
         {
             return;
         }
-        for(int i = 0; i < positions.Length; i++){
-            if (!Physics.CheckBox(pointCloud.transform.InverseTransformPoint(positions[i]), halfExtents, Quaternion.identity)){
+        for (int i = 0; i < positions.Length; i++)
+        {
+            ComPosition.transform.localPosition = positions[i];
+            if (!Physics.CheckBox(pointCloud.transform.TransformPoint(ComPosition.transform.localPosition), halfExtents, Quaternion.identity))
+            {
                 int isPosition = myPositions.IndexOf(positions[i]);
                 // Check if exists
-                if(isPosition < 0){
-                    if(prefabList.Count > cnt){
+                if (isPosition < 0)
+                {
+                    if (prefabList.Count > cnt)
+                    {
                         if (prefabList[cnt].activeSelf == false)
                         {
                             prefabList[cnt].transform.localPosition = positions[i];
                             prefabList[cnt].SetActive(true);
-                            myPositions.Add (positions[i]);
+                            myPositions.Add(positions[i]);
                             //prefabが足りているからtrueにする(追加)
                             isPrefabEnough = true;
                             cnt++;
                             // break;
                         }
-                    }else{
+                    }
+                    else
+                    {
                         //もしもprefabが足りずbreakしなかった時の処理(追加)
                         GeneratePrefab();
                     }

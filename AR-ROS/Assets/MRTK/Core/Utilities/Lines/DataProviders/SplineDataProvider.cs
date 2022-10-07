@@ -83,7 +83,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                     }
                     else if (changedControlPoint >= PointCount)
                     {
-                        changedControlPoint %= (PointCount - 1);
+                        changedControlPoint = changedControlPoint % (PointCount - 1);
                     }
 
                     if (prevControlPoint < 0)
@@ -92,7 +92,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                     }
                     else if (prevControlPoint >= PointCount)
                     {
-                        prevControlPoint %= (PointCount - 1);
+                        prevControlPoint = prevControlPoint % (PointCount - 1);
                     }
 
                     Vector3 midPoint = controlPoints[midPointIndex].Position;

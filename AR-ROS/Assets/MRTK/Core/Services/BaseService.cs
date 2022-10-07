@@ -2,21 +2,15 @@
 // Licensed under the MIT License.
 
 using System;
-using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit
 {
     /// <summary>
     /// The base service implements <see cref="IMixedRealityService"/> and provides default properties for all services.
     /// </summary>
-    public abstract class BaseService : IMixedRealityService, IMixedRealityServiceState
+    public abstract class BaseService : IMixedRealityService
     {
         public const uint DefaultPriority = 10;
-
-        public BaseService()
-        {
-            typeName = new[] { GetType().ToString() };
-        }
 
         #region IMixedRealityService Implementation
 
@@ -30,22 +24,13 @@ namespace Microsoft.MixedReality.Toolkit
         public virtual BaseMixedRealityProfile ConfigurationProfile { get; protected set; } = null;
 
         /// <inheritdoc />
-        public virtual void Initialize()
-        {
-            IsInitialized = true;
-        }
+        public virtual void Initialize() { }
 
         /// <inheritdoc />
-        public virtual void Reset()
-        {
-            IsInitialized = false;
-        }
+        public virtual void Reset() { }
 
         /// <inheritdoc />
-        public virtual void Enable()
-        {
-            IsEnabled = true;
-        }
+        public virtual void Enable() { }
 
         /// <inheritdoc />
         public virtual void Update() { }
@@ -54,72 +39,12 @@ namespace Microsoft.MixedReality.Toolkit
         public virtual void LateUpdate() { }
 
         /// <inheritdoc />
-        public virtual void Disable()
-        {
-            IsEnabled = false;
-        }
+        public virtual void Disable() { }
 
         /// <inheritdoc />
-        public virtual void Destroy()
-        {
-            IsInitialized = false;
-            IsEnabled = false;
-            IsMarkedDestroyed = true;
-        }
+        public virtual void Destroy() { }
 
         #endregion IMixedRealityService Implementation
-
-        #region IMixedRealityServiceState Implementation
-
-        private bool? isInitialized = null;
-
-        private readonly string[] typeName = null;
-
-        private const string IsInitializedAssert = "{0} has not set a value for IsInitialized; returning false.";
-        private const string IsEnabledAssert = "{0} has not set a value for IsEnabled; returning false.";
-        private const string IsMarkedDestroyedAssert = "{0} has not set a value for IsMarkedDestroyed; returning false.";
-
-        /// <inheritdoc />
-        public virtual bool IsInitialized
-        {
-            get
-            {
-                Debug.AssertFormat(isInitialized.HasValue, IsInitializedAssert, typeName);
-                return isInitialized ?? false;
-            }
-
-            protected set => isInitialized = value;
-        }
-
-        private bool? isEnabled = null;
-
-        /// <inheritdoc />
-        public virtual bool IsEnabled
-        {
-            get
-            {
-                Debug.AssertFormat(isEnabled.HasValue, IsEnabledAssert, typeName);
-                return isEnabled ?? false;
-            }
-
-            protected set => isEnabled = value;
-        }
-
-        private bool? isMarkedDestroyed = null;
-
-        /// <inheritdoc />
-        public virtual bool IsMarkedDestroyed
-        {
-            get
-            {
-                Debug.AssertFormat(isMarkedDestroyed.HasValue, IsMarkedDestroyedAssert, typeName);
-                return isMarkedDestroyed ?? false;
-            }
-
-            protected set => isMarkedDestroyed = value;
-        }
-
-        #endregion IMixedRealityServiceState Implementation
 
         #region IDisposable Implementation
 

@@ -72,7 +72,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         internal override void SimulateInput(ref long lastMotionControllerTrackedTimestamp, SimulatedControllerState state, bool isSimulating, bool isAlwaysVisible, MouseDelta mouseDelta, bool useMouseRotation)
         {
-            if (!(state is SimulatedMotionControllerState motionControllerState))
+            var motionControllerState = state as SimulatedMotionControllerState;
+            if (motionControllerState == null)
             {
                 return;
             }
@@ -122,10 +123,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
             SimulatedMotionControllerState motionControllerStateLeft = InputStateLeft as SimulatedMotionControllerState;
             SimulatedMotionControllerState motionControllerStateRight = InputStateRight as SimulatedMotionControllerState;
-
+            
             motionControllerStateLeft.Update();
             motionControllerStateRight.Update();
-
+            
             // Cache the generator delegates so we don't gc alloc every frame
             if (updaterLeft == null)
             {

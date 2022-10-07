@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -120,8 +121,8 @@ namespace Microsoft.MixedReality.Toolkit
         /// <param name="positions">Output corner positions</param>
         /// <param name="bounds">Input bounds, in local space</param>
         /// <remarks>
-        /// <para>Use BoxColliderExtensions.{Left|Right}{Bottom|Top}{Front|Back} consts to index into the output
-        /// corners array.</para>
+        /// Use BoxColliderExtensions.{Left|Right}{Bottom|Top}{Front|Back} consts to index into the output
+        /// corners array.
         /// </remarks>
         public static void GetCornerPositions(this Bounds bounds, Transform transform, ref Vector3[] positions)
         {
@@ -157,8 +158,8 @@ namespace Microsoft.MixedReality.Toolkit
         /// Gets all the corner points of the bounds 
         /// </summary>
         /// <remarks>
-        /// <para>Use BoxColliderExtensions.{Left|Right}{Bottom|Top}{Front|Back} consts to index into the output
-        /// corners array.</para>
+        /// Use BoxColliderExtensions.{Left|Right}{Bottom|Top}{Front|Back} consts to index into the output
+        /// corners array.
         /// </remarks>
         public static void GetCornerPositions(this Bounds bounds, ref Vector3[] positions)
         {
@@ -436,15 +437,15 @@ namespace Microsoft.MixedReality.Toolkit
             }
         }
 
-        private static void InverseTransformPoints(ref Vector3[] positions, Transform relativeTo)
-        {
-            if (relativeTo)
-            {
-                for (var i = 0; i < positions.Length; ++i)
-                {
-                    positions[i] = relativeTo.InverseTransformPoint(positions[i]);
-                }
-            }
+        private static void InverseTransformPoints(ref Vector3[] positions, Transform relativeTo)	 
+        {	 	 
+            if (relativeTo)	 	 
+            {	 	 
+                for (var i = 0; i < positions.Length; ++i)	 	 
+                {	 	 
+                    positions[i] = relativeTo.InverseTransformPoint(positions[i]);	 	 
+                }	 	 
+            }	 	 
         }
 
 
@@ -592,11 +593,11 @@ namespace Microsoft.MixedReality.Toolkit
         /// Transforms 'bounds' using the specified transform matrix.
         /// </summary>
         /// <remarks>
-        /// <para>Transforming a 'Bounds' instance means that the function will construct a new 'Bounds' 
+        /// Transforming a 'Bounds' instance means that the function will construct a new 'Bounds' 
         /// instance which has its center translated using the translation information stored in
         /// the specified matrix and its size adjusted to account for rotation and scale. The size
         /// of the new 'Bounds' instance will be calculated in such a way that it will contain the
-        /// old 'Bounds'.</para>
+        /// old 'Bounds'.
         /// </remarks>
         /// <param name="bounds">
         /// The 'Bounds' instance which must be transformed.

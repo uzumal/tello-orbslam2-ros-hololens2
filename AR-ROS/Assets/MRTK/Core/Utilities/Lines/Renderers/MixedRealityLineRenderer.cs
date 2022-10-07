@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Collections;
+using System;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities
 {
@@ -84,11 +83,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             get => fadeLineAnimationTime;
             set => fadeLineAnimationTime = value;
         }
-
-        /// <summary>
-        /// Gets the LineRenderer points
-        /// </summary>
-        public IReadOnlyList<Vector3> Positions => positions;
 
         [SerializeField]
         [HideInInspector]

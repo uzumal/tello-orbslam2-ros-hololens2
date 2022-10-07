@@ -100,7 +100,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             float startTime = Time.unscaledTime;
             float openScale = 0f;
-            while (openScale < 1 && isActiveAndEnabled)
+            while (openScale < 1)
             {
                 openScale = openCurve.Evaluate(Time.unscaledTime - startTime);
                 scaleTargetObject.transform.localScale = Vector3.one * currentScale * openScale;
@@ -133,7 +133,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             float startTime = Time.unscaledTime;
             float closeScale = 1f;
-            while (closeScale > 0 && isActiveAndEnabled)
+            while (closeScale > 0)
             {
                 closeScale = closeCurve.Evaluate(Time.unscaledTime - startTime);
                 scaleTargetObject.transform.localScale = Vector3.one * currentScale * closeScale;
@@ -142,30 +142,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             state = ProgressIndicatorState.Closed;
 
-            gameObject.SetActive(false);
-        }
-
-        /// <inheritdoc/>
-        public void CloseImmediate()
-        {
-            if (closeCurve.length == 0)
-            {
-                Debug.LogWarning("Open curve length is zero - this may result in an infinite loop.");
-            }
-
-            float minScale = closeCurve.Evaluate(Mathf.Infinity);
-            if (minScale > 0)
-            {
-                Debug.LogWarning("Open curve value never reaches 0 - this may result in an infinite loop.");
-            }
-
-            if (state != ProgressIndicatorState.Open)
-            {
-                throw new System.Exception("Can't close in state " + state);
-            }
-
-            scaleTargetObject.transform.localScale = Vector3.zero;
-            state = ProgressIndicatorState.Closed;
             gameObject.SetActive(false);
         }
 

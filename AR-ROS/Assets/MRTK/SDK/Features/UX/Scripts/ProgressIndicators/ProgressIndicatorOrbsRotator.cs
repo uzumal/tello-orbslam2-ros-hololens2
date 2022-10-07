@@ -85,25 +85,13 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             StopOrbs();
 
-            while (!hasAnimationFinished && isActiveAndEnabled)
+            while (!hasAnimationFinished)
             {
                 await Task.Yield();
             }
 
             state = ProgressIndicatorState.Closed;
-            gameObject.SetActive(false);
-        }
 
-        /// <inheritdoc/>
-        public void CloseImmediate()
-        {
-            if (state != ProgressIndicatorState.Open)
-            {
-                throw new System.Exception("Can't close in state " + state);
-            }
-
-            StopOrbsImmediately();
-            state = ProgressIndicatorState.Closed;
             gameObject.SetActive(false);
         }
 
@@ -142,7 +130,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             for (int i = 0; i < orbs.Length; ++i)
             {
-                propertyBlocks[i].SetColor("_Color", Color.white);
+                propertyBlocks[i].SetColor("_Color", new Color(1, 1, 1, 1));
                 dots[i].SetPropertyBlock(propertyBlocks[i]);
                 orbs[i].transform.localRotation = Quaternion.identity;
             }
@@ -154,20 +142,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
             rotationWhenStopped = angles[0];
         }
 
-        private void StopOrbsImmediately()
-        {
-            for (int i = 0; i < orbs.Length; ++i)
-            {
-                Color orbColor = propertyBlocks[i].GetColor("_Color");
-                orbColor.a = 0.0f;
-                propertyBlocks[i].SetColor("_Color", orbColor);
-                dots[i].SetPropertyBlock(propertyBlocks[i]);
-                orbs[i].transform.localRotation = Quaternion.identity;
-            }
-
-            hasAnimationFinished = true;
-        }
-
         private void Awake()
         {
             angles = new float[orbs.Length];
@@ -177,7 +151,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             for (int i = 0; i < orbs.Length; ++i)
             {
                 propertyBlocks[i] = new MaterialPropertyBlock();
-                propertyBlocks[i].SetColor("_Color", Color.white);
+                propertyBlocks[i].SetColor("_Color", new Color(1, 1, 1, 1));
                 dots[i] = orbs[i].transform.GetChild(0).gameObject.GetComponent<Renderer>();
                 dots[i].SetPropertyBlock(propertyBlocks[i]);
                 angles[i] = 0;
@@ -207,7 +181,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 for (int index = 0; index < deployedCount; ++index)
                 {
                     float acceleratedDegrees = (rotationSpeedRawDegrees * (acceleration + -Mathf.Cos(Mathf.Deg2Rad * angles[index]))) * timeSlice;
-                    orbs[index].transform.Rotate(0, 0, acceleratedDegrees);
+                    orbs[index].gameObject.transform.Rotate(0, 0, acceleratedDegrees);
                     angles[index] += Mathf.Abs(acceleratedDegrees);
 
                     Color orbColor = propertyBlocks[index].GetColor("_Color");

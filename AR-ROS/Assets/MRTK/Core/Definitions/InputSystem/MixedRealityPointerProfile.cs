@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
-using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Input
@@ -11,9 +9,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// <summary>
     /// Configuration profile settings for setting up controller pointers.
     /// </summary>
-    [CreateAssetMenu(menuName = "Mixed Reality/Toolkit/Profiles/Mixed Reality Pointer Profile", fileName = "MixedRealityInputPointerProfile", order = (int)CreateProfileMenuItemIndices.Pointer)]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/pointers")]
-    public class MixedRealityPointerProfile : BaseMixedRealityProfile, ISerializationCallbackReceiver
+    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Pointer Profile", fileName = "MixedRealityInputPointerProfile", order = (int)CreateProfileMenuItemIndices.Pointer)]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Pointers.html")]
+    public class MixedRealityPointerProfile : BaseMixedRealityProfile
     {
         [SerializeField]
         [Tooltip("Maximum distance at which all pointers can collide with a GameObject, unless it has an override extent.")]
@@ -25,12 +23,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public float PointingExtent => pointingExtent;
 
         [SerializeField]
-        [Tooltip("The default LayerMasks, in prioritized order, that are used to determine pointer's target. These layer masks are used if " +
-            "the pointer doesn't specify its own override")]
+        [Tooltip("The LayerMasks, in prioritized order, that are used to determine the GazeTarget when raycasting.")]
         private LayerMask[] pointingRaycastLayerMasks = { UnityEngine.Physics.DefaultRaycastLayers };
 
         /// <summary>
-        /// The default layerMasks, in prioritized order, that are used to determine the target when raycasting.
+        /// The LayerMasks, in prioritized order, that are used to determine the GazeTarget when raycasting.
         /// </summary>
         public LayerMask[] PointingRaycastLayerMasks => pointingRaycastLayerMasks;
 
@@ -84,11 +81,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public bool UseHeadGazeOverride => useHeadGazeOverride;
 
         [SerializeField]
-        [Tooltip("If true, eye-based tracking will be used as gaze input when available. This field does not control whether eye tracking data is provided.")]
+        [Tooltip("If true, eye-based tracking will be used as gaze input when available. Requires the 'Gaze Input' permission and device eye calibration to have been run.")]
         private bool isEyeTrackingEnabled = false;
 
         /// <summary>
-        /// If true, eye-based tracking will be used as gaze input when available. This field does not control whether eye tracking data is provided.
+        /// If true, eye-based tracking will be used as gaze input when available.
         /// </summary>
         public bool IsEyeTrackingEnabled
         {
@@ -114,7 +111,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// The concrete Pointer Mediator component to use.
         /// This is a component that mediates all pointers in system, disabling / enabling them based on the state of other pointers.
         /// </summary>
-        public SystemType PointerMediator => pointerMediator;
+        public SystemType PointerMediator
+        {
+            get { return pointerMediator; }
+        }
 
         [SerializeField]
         [Implements(typeof(IMixedRealityPrimaryPointerSelector), TypeGrouping.ByNamespaceFlat)]
@@ -124,51 +124,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// Primary pointer selector implementation to use. This is used by the focus provider to choose the primary pointer.
         /// </summary>
-        public SystemType PrimaryPointerSelector => primaryPointerSelector;
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        public SystemType PrimaryPointerSelector
         {
-            for (int i = 0; i < pointerOptions.Length; i++)
-            {
-                ref PointerOption pointerOption = ref pointerOptions[i];
-                IMixedRealityPointer pointer = pointerOption.PointerPrefab != null ? pointerOption.PointerPrefab.GetComponent<IMixedRealityPointer>() : null;
-
-                if (pointer.IsNull()
-                    || (pointer.PrioritizedLayerMasksOverride != null
-                    && pointer.PrioritizedLayerMasksOverride.Length > 0
-                    && pointerOption.PrioritizedLayerMasks != null
-                    && pointerOption.PrioritizedLayerMasks.SequenceEqual(pointer.PrioritizedLayerMasksOverride))
-                    || (pointingRaycastLayerMasks != null
-                    && pointingRaycastLayerMasks.Length > 0
-                    && pointerOption.PrioritizedLayerMasks != null
-                    && pointerOption.PrioritizedLayerMasks.SequenceEqual(pointingRaycastLayerMasks)))
-                {
-                    continue;
-                }
-
-                // If the prefab has new LayerMasks, sync with prioritizedLayerMasks
-                int pointerPrioritizedLayerMasksOverrideCount = pointer.PrioritizedLayerMasksOverride?.Length ?? 0;
-                if (pointerPrioritizedLayerMasksOverrideCount != 0)
-                {
-                    if (pointerOption.PrioritizedLayerMasks?.Length != pointerPrioritizedLayerMasksOverrideCount)
-                    {
-                        pointerOption.PrioritizedLayerMasks = new LayerMask[pointerPrioritizedLayerMasksOverrideCount];
-                    }
-                    Array.Copy(pointer.PrioritizedLayerMasksOverride, pointerOption.PrioritizedLayerMasks, pointerPrioritizedLayerMasksOverrideCount);
-                }
-                // If the prefab doesn't have any LayerMasks, initialize with the global default
-                else
-                {
-                    int pointingRaycastLayerMasksCount = pointingRaycastLayerMasks.Length;
-                    if (pointerOption.PrioritizedLayerMasks?.Length != pointingRaycastLayerMasksCount)
-                    {
-                        pointerOption.PrioritizedLayerMasks = new LayerMask[pointingRaycastLayerMasksCount];
-                    }
-                    Array.Copy(pointingRaycastLayerMasks, pointerOption.PrioritizedLayerMasks, pointingRaycastLayerMasksCount);
-                }
-            }
+            get { return primaryPointerSelector; }
         }
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize() { }
     }
 }

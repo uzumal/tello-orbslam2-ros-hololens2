@@ -6,10 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/hololens-tello-orbslam2.unity
-    guid: 5b787dae9e3ec4f79815bd99bfcc20db
-  m_configObjects:
-    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 1977922b224f53b4b93ee9af8155aae6,
-      type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 20ac31ce58a23b14bac838101829c9c1,
-      type: 2}
+    path: Assets/Scenes/HoloROS.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  m_configObjects: {}

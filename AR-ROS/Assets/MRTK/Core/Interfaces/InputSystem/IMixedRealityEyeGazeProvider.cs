@@ -33,12 +33,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         /// <summary>
         /// If true, eye-based tracking will be used when available.
-        /// This field does not control whether eye tracking data is provided.
         /// </summary>
         /// <remarks>
-        /// <para>The usage of eye-based tracking depends on having the Gaze Input permission set
+        /// The usage of eye-based tracking depends on having the Gaze Input permission set
         /// and user approved, along with proper device eye calibration. This will fallback to head-based
-        /// gaze when eye-based tracking is not available.</para>
+        /// gaze when eye-based tracking is not available.
         /// </remarks>
         bool IsEyeTrackingEnabled { get; set; }
 
@@ -62,8 +61,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <param name="provider">The provider raising the event.</param>
         /// <param name="userIsEyeCalibrated">Boolean whether the user is eye calibrated or not.</param>
         /// <remarks>
-        /// <para>Note that this function is not invoked when eye tracking is lost - use IsEyeTrackingAvailable
-        /// to detect when eye tracking is lost.</para>
+        /// Note that this function is not invoked when eye tracking is lost - use IsEyeTrackingAvailable
+        /// to detect when eye tracking is lost.
         /// </remarks>
         void UpdateEyeTrackingStatus(IMixedRealityEyeGazeDataProvider provider, bool userIsEyeCalibrated);
     }

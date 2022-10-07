@@ -13,7 +13,7 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
     /// <summary>
     /// The default implementation of the <see cref="Microsoft.MixedReality.Toolkit.Diagnostics.IMixedRealityDiagnosticsSystem"/>
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/diagnostics/diagnostics-system-getting-started")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Diagnostics/DiagnosticsSystemGettingStarted.html")]
     public class MixedRealityDiagnosticsSystem : BaseCoreSystem, IMixedRealityDiagnosticsSystem
     {
         /// <summary>
@@ -81,8 +81,6 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
             MixedRealityDiagnosticsProfile profile = ConfigurationProfile as MixedRealityDiagnosticsProfile;
             if (profile == null) { return; }
 
-            base.Initialize();
-
             eventData = new DiagnosticsEventData(EventSystem.current);
 
             // Apply profile settings
@@ -117,8 +115,6 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
 
                 diagnosticVisualizationParent = null;
             }
-
-            base.Destroy();
         }
 
         #endregion IMixedRealityService

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Physics;
+using Microsoft.MixedReality.Toolkit.Teleport;
 using System.Collections;
 using UnityEngine;
 
@@ -60,6 +61,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public ICursorModifier CursorModifier { get; set; }
 
+        /// <inheritdoc />
+        public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
+
         private bool isInteractionEnabled = true;
 
         /// <inheritdoc />
@@ -79,7 +83,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
-        /// <inheritdoc />
         public bool IsActive { get; set; }
 
         /// <inheritdoc />
@@ -97,7 +100,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public RayStep[] Rays { get; protected set; } = { new RayStep(Vector3.zero, Vector3.forward) };
 
         /// <inheritdoc />
-        public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
+        public LayerMask[] PrioritizedLayerMasksOverride { get; set; }
 
         /// <inheritdoc />
         public IMixedRealityFocusHandler FocusTarget { get; set; }
@@ -141,7 +144,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             return left.Equals(right);
         }
 
-        /// <inheritdoc />
         bool IEqualityComparer.Equals(object left, object right)
         {
             return left.Equals(right);
@@ -161,12 +163,12 @@ namespace Microsoft.MixedReality.Toolkit.Input
             return other != null && PointerId == other.PointerId && string.Equals(PointerName, other.PointerName);
         }
 
-        /// <inheritdoc />
         int IEqualityComparer.GetHashCode(object obj)
         {
             return obj.GetHashCode();
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked

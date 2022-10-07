@@ -128,6 +128,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             set { state = value; }
         }
 
+
         [Header("Default Button Options")]
 
         [Tooltip("Should the AppBar have a remove button")]
@@ -372,7 +373,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
         protected virtual void OnClickRemove()
         {
             // Set the app bar and bounding box to inactive
-            if (Target is IBoundsTargetProvider boundsProvider && !boundsProvider.IsNull())
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider != null)
             {
                 boundsProvider.Target.SetActive(false);
             }
@@ -459,12 +461,17 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateTargetObject()
         {
-            if (!(Target is IBoundsTargetProvider boundsProvider) || boundsProvider.IsNull() || boundsProvider.Target == null)
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider == null || boundsProvider.Target == null)
             {
-                bool isDisplayTypeNotManipulation = DisplayType != AppBarDisplayTypeEnum.Manipulation;
-                if (BaseRenderer.activeSelf != isDisplayTypeNotManipulation)
+                if (DisplayType == AppBarDisplayTypeEnum.Manipulation)
                 {
-                    BaseRenderer.SetActive(isDisplayTypeNotManipulation);
+                    // Hide our buttons
+                    BaseRenderer.SetActive(false);
+                }
+                else
+                {
+                    BaseRenderer.SetActive(true);
                 }
                 return;
             }
@@ -490,10 +497,9 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void FollowTargetObject(bool smooth)
         {
-            if (!(Target is IBoundsTargetProvider boundsProvider) || boundsProvider.IsNull())
-            {
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider == null)
                 return;
-            }
 
             // Calculate the best follow position
             Vector3 finalPosition = Vector3.zero;
@@ -557,10 +563,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     {
                         // Show hide, adjust, remove buttons
                         // The rest are hidden
-                        case ButtonTypeEnum.Hide:
-                        case ButtonTypeEnum.Remove:
-                        case ButtonTypeEnum.Adjust:
-                        case ButtonTypeEnum.Custom:
+                        case AppBar.ButtonTypeEnum.Hide:
+                        case AppBar.ButtonTypeEnum.Remove:
+                        case AppBar.ButtonTypeEnum.Adjust:
+                        case AppBar.ButtonTypeEnum.Custom:
                             return true;
 
                         default:
@@ -570,7 +576,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 case AppBarStateEnum.Hidden:
                     switch (buttonType)
                     {
-                        // Show the show button
+                        // Show show button
                         // The rest are hidden
                         case ButtonTypeEnum.Show:
                             return true;
@@ -584,7 +590,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                     {
                         // Show done button
                         // The rest are hidden
-                        case ButtonTypeEnum.Done:
+                        case AppBar.ButtonTypeEnum.Done:
                             return true;
 
                         default:

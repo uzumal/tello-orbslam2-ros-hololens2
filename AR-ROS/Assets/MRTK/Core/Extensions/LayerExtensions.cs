@@ -52,7 +52,7 @@ namespace Microsoft.MixedReality.Toolkit
             int combinedLayerMask = 0;
             for (int i = 0; i < layerMaskList.Length; i++)
             {
-                combinedLayerMask |= layerMaskList[i].value;
+                combinedLayerMask = combinedLayerMask | layerMaskList[i].value;
             }
             return combinedLayerMask;
         }

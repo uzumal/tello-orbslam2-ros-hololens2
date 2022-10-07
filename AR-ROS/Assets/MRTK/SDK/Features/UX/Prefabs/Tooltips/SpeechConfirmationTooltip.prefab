@@ -35,7 +35,7 @@ MonoBehaviour:
   moveLerpTime: 0
   rotateLerpTime: 0
   scaleLerpTime: 0
-  maintainScaleOnInitialization: 1
+  maintainScale: 1
   smoothing: 1
   lifetime: 0
   referenceDirection: 1
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackedTargetType: 0
-  trackedHandedness: 3
+  trackedHandness: 3
   trackedHandJoint: 2
   transformOverride: {fileID: 0}
   additionalOffset: {x: 0, y: -0.4, z: 0}

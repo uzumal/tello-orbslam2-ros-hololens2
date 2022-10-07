@@ -3,6 +3,7 @@
 
 using Microsoft.MixedReality.Toolkit.Editor;
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using UnityEditor;
 
 namespace Microsoft.MixedReality.Toolkit.Inspectors
@@ -13,12 +14,11 @@ namespace Microsoft.MixedReality.Toolkit.Inspectors
         private SerializedProperty jointPrefab;
         private SerializedProperty palmPrefab;
         private SerializedProperty fingertipPrefab;
-        private SerializedProperty systemHandMeshMaterial;
-        private SerializedProperty riggedHandMeshMaterial;
+        private SerializedProperty handMeshPrefab;
         private SerializedProperty handMeshVisualizationModes;
         private SerializedProperty handJointVisualizationModes;
 
-        private const string ProfileTitle = "Articulated Hand Tracking Settings";
+        private const string ProfileTitle = "Hand Tracking Settings";
         private const string ProfileDescription = "Use this for hand tracking settings.";
 
         protected override void OnEnable()
@@ -28,8 +28,7 @@ namespace Microsoft.MixedReality.Toolkit.Inspectors
             jointPrefab = serializedObject.FindProperty("jointPrefab");
             fingertipPrefab = serializedObject.FindProperty("fingertipPrefab");
             palmPrefab = serializedObject.FindProperty("palmPrefab");
-            systemHandMeshMaterial = serializedObject.FindProperty("systemHandMeshMaterial");
-            riggedHandMeshMaterial = serializedObject.FindProperty("riggedHandMeshMaterial");
+            handMeshPrefab = serializedObject.FindProperty("handMeshPrefab");
             handMeshVisualizationModes = serializedObject.FindProperty("handMeshVisualizationModes");
             handJointVisualizationModes = serializedObject.FindProperty("handJointVisualizationModes");
         }
@@ -49,10 +48,7 @@ namespace Microsoft.MixedReality.Toolkit.Inspectors
                 EditorGUILayout.PropertyField(jointPrefab);
                 EditorGUILayout.PropertyField(palmPrefab);
                 EditorGUILayout.PropertyField(fingertipPrefab);
-                EditorGUILayout.PropertyField(systemHandMeshMaterial);
-                EditorGUILayout.PropertyField(riggedHandMeshMaterial);
-
-                EditorGUILayout.LabelField("Visualization settings", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(handMeshPrefab);
                 EditorGUILayout.PropertyField(handMeshVisualizationModes);
                 EditorGUILayout.PropertyField(handJointVisualizationModes);
 

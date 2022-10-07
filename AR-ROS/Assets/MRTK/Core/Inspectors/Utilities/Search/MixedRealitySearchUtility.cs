@@ -129,7 +129,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor.Search
             ProfileSearchResult result = new ProfileSearchResult();
             result.Profile = profile;
             BaseMixedRealityProfile baseProfile = (profile as BaseMixedRealityProfile);
-            result.IsCustomProfile = baseProfile != null && baseProfile.IsCustomProfile;
+            result.IsCustomProfile = (baseProfile != null) ? baseProfile.IsCustomProfile : false;
             searchResults.Add(result);
 
             // Go through the profile's serialized fields

@@ -224,7 +224,7 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
                                 }
 
                                 actionDescription.stringValue = inputAction.Description;
-                                actionConstraint.intValue = (int)inputAction.AxisConstraint;
+                                actionConstraint.enumValueIndex = (int)inputAction.AxisConstraint;
                                 serializedObject.ApplyModifiedProperties();
                             }
 

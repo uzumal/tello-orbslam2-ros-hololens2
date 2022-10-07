@@ -45,15 +45,17 @@ namespace RosSharp.RosBridgeClient
         }
         private void UpdateMessage()
         {
-           
-            Vector3 linearVelocity = (PublishedTransform.localPosition - previousPosition) / Time.fixedDeltaTime;
-            Vector3 angularVelocity = (PublishedTransform.localRotation.eulerAngles - previousRotation.eulerAngles) / Time.fixedDeltaTime;
+            float deltaTime = Time.realtimeSinceStartup - previousRealTime;
 
-            message.linear = GetGeometryVector3(linearVelocity.Unity2Ros());
-            message.angular = GetGeometryVector3(-angularVelocity.Unity2Ros());
+            Vector3 linearVelocity = (PublishedTransform.position - previousPosition)/deltaTime;
+            Vector3 angularVelocity = (PublishedTransform.rotation.eulerAngles - previousRotation.eulerAngles)/deltaTime;
+                
+            message.linear = GetGeometryVector3(linearVelocity.Unity2Ros()); ;
+            message.angular = GetGeometryVector3(- angularVelocity.Unity2Ros());
 
-            previousPosition = PublishedTransform.localPosition;
-            previousRotation = PublishedTransform.localRotation;
+            previousRealTime = Time.realtimeSinceStartup;
+            previousPosition = PublishedTransform.position;
+            previousRotation = PublishedTransform.rotation;
 
             Publish(message);
         }

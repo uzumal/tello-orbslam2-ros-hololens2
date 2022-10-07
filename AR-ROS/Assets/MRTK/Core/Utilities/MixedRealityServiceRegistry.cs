@@ -12,8 +12,8 @@ namespace Microsoft.MixedReality.Toolkit
     /// Static class that represents the Mixed Reality Toolkit service registry.
     /// </summary>
     /// <remarks>
-    /// <para>The service registry is used to enable discovery of and access to active Mixed Reality Toolkit services at
-    /// runtime without requiring direct code reference to a singleton style component.</para>
+    /// The service registry is used to enable discovery of and access to active Mixed Reality Toolkit services at
+    /// runtime without requiring direct code reference to a singleton style component.
     /// </remarks>
     public static class MixedRealityServiceRegistry
     {
@@ -28,8 +28,8 @@ namespace Microsoft.MixedReality.Toolkit
         /// A cache used to power <seealso cref="GetAllServices(IMixedRealityServiceRegistrar)"/>
         /// </summary>
         /// <remarks>
-        /// <para>Lists are sorted in ascending priority order (i.e. services with a smaller priority
-        /// value are first in the list).</para>
+        /// Lists are sorted in ascending priority order (i.e. services with a smaller priority
+        /// value are first in the list).
         /// </remarks>
         private static Dictionary<IMixedRealityServiceRegistrar, List<IMixedRealityService>> allServicesByRegistrar =
             new Dictionary<IMixedRealityServiceRegistrar, List<IMixedRealityService>>();
@@ -38,8 +38,8 @@ namespace Microsoft.MixedReality.Toolkit
         /// A cache used to power <seealso cref="GetAllServices"/>
         /// </summary>
         /// <remarks>
-        /// <para>The list is sorted in ascending priority order (i.e. services with a smaller priority
-        /// value are first in the list).</para>
+        /// The list is sorted in ascending priority order (i.e. services with a smaller priority
+        /// value are first in the list).
         /// </remarks>
         private static List<IMixedRealityService> allServices = new List<IMixedRealityService>();
 
@@ -80,12 +80,13 @@ namespace Microsoft.MixedReality.Toolkit
                 return false;
             }
 
-            if (TryGetService<T>(out _, serviceInstance.Name))
+            Type interfaceType = typeof(T);
+            T existingService;
+
+            if (TryGetService<T>(out existingService, serviceInstance.Name))
             {
                 return false;
             }
-
-            Type interfaceType = typeof(T);
 
             // Ensure we have a place to put our newly registered service.
             if (!registry.ContainsKey(interfaceType))
@@ -268,7 +269,8 @@ namespace Microsoft.MixedReality.Toolkit
         {
             Type interfaceType = typeof(T);
 
-            if (TryGetServiceInternal(interfaceType, out IMixedRealityService tempService, out registrar, name))
+            IMixedRealityService tempService;
+            if (TryGetServiceInternal(interfaceType, out tempService, out registrar, name))
             {
                 Debug.Assert(tempService is T, "The service in the registry does not match the expected type.");
                 serviceInstance = (T)tempService;

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities
@@ -15,28 +14,21 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     public class ClippingSphere : ClippingPrimitive
     {
         /// <summary>
-        /// The radius of the clipping sphere, determined by the largest axis of the transform's scale.
+        /// The radius of the clipping sphere, which is determined by the largest axis of the transform's scale.
         /// </summary>
-        [Obsolete("Use Radii instead as ellipsoids are supported. ")]
         public float Radius
         {
             get
             {
-                Vector3 radii = Radii;
-                return Mathf.Max(radii.x, radii.y, radii.z);
+                Vector3 lossyScale = transform.lossyScale * 0.5f;
+                return Mathf.Max(Mathf.Max(lossyScale.x, lossyScale.y), lossyScale.z);
             }
         }
 
         /// <summary>
-        /// The radius of the clipping sphere on each axis, determined by the transform's scale.
-        /// </summary>
-        public Vector3 Radii => transform.lossyScale * 0.5f;
-
-        /// <summary>
         /// The property name of the clip sphere data within the shader.
         /// </summary>
-        protected int clipSphereInverseTransformID;
-        private Matrix4x4 clipSphereInverseTransform;
+        protected int clipSphereID;
 
         /// <inheritdoc />
         protected override string Keyword
@@ -57,8 +49,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         {
             if (enabled)
             {
-                Gizmos.matrix = transform.localToWorldMatrix;
-                Gizmos.DrawWireSphere(Vector3.zero, 0.5f);
+                Gizmos.DrawWireSphere(transform.position, Radius);
             }
         }
 
@@ -67,19 +58,15 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         {
             base.Initialize();
 
-            clipSphereInverseTransformID = Shader.PropertyToID("_ClipSphereInverseTransform");
-        }
-
-        protected override void BeginUpdateShaderProperties()
-        {
-            clipSphereInverseTransform = transform.worldToLocalMatrix;
-            base.BeginUpdateShaderProperties();
+            clipSphereID = Shader.PropertyToID("_ClipSphere");
         }
 
         /// <inheritdoc />
         protected override void UpdateShaderProperties(MaterialPropertyBlock materialPropertyBlock)
         {
-            materialPropertyBlock.SetMatrix(clipSphereInverseTransformID, clipSphereInverseTransform);
+            Vector3 position = transform.position;
+            Vector4 sphere = new Vector4(position.x, position.y, position.z, Radius);
+            materialPropertyBlock.SetVector(clipSphereID, sphere);
         }
     }
 }

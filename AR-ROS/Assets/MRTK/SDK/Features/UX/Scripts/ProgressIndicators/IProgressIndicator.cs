@@ -44,10 +44,5 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         Task CloseAsync();
 
-        /// <summary>
-        /// Closes the progress indicator immediately. No fade out animation. All gameObjects for the progress indicator are reset  to the correct values.
-        /// </summary>
-        void CloseImmediate();
-
     }
 }

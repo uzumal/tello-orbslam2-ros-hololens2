@@ -61,11 +61,6 @@ namespace Microsoft.MixedReality.Toolkit.Input.UnityInput
         {
             using (UpdatePerfMarker.Auto())
             {
-                if (!IsEnabled)
-                {
-                    return;
-                }
-
                 base.Update();
 
                 // Ensure that touch up and source lost events are at least one frame apart.

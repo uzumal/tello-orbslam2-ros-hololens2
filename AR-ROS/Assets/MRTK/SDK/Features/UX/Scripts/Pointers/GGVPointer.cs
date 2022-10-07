@@ -14,13 +14,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// for focus with hand and gesture-based input and interaction across it.
     /// </summary>
     /// <remarks>
-    /// <para>GGV stands for gaze, gesture, and voice.
+    /// GGV stands for gaze, gesture, and voice.
     /// This pointer's position is given by hand position (grip pose),
-    /// and the input focus is given by head gaze.</para>
+    /// and the input focus is given by head gaze.
     /// </remarks>
     [AddComponentMenu("Scripts/MRTK/SDK/GGVPointer")]
     public class GGVPointer : InputSystemGlobalHandlerListener,
-        IMixedRealityQueryablePointer,
+        IMixedRealityPointer,
         IMixedRealityInputHandler,
         IMixedRealityInputHandler<MixedRealityPose>,
         IMixedRealitySourceStateHandler
@@ -49,7 +49,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 controller = value;
 
-                if (controller != null && this.IsNotNull())
+                if (controller != null && this != null)
                 {
                     gameObject.name = $"{Controller.ControllerHandedness}_GGVPointer";
                     pointerName = gameObject.name;
@@ -83,7 +83,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             set
             {
                 pointerName = value;
-                if (this.IsNotNull())
+                if (this != null)
                 {
                     gameObject.name = value;
                 }
@@ -174,62 +174,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
-        private static readonly ProfilerMarker OnPreSceneQueryPerfMarker = new ProfilerMarker("[MRTK] GGVPointer.OnPreSceneQuery");
-
-        /// <inheritdoc />
-        public void OnPreSceneQuery()
-        {
-            using (OnPreSceneQueryPerfMarker.Auto())
-            {
-                Vector3 newGazeOrigin = gazeProvider.GazePointer.Rays[0].Origin;
-                Vector3 endPoint = newGazeOrigin + (gazeProvider.GazePointer.Rays[0].Direction * CoreServices.InputSystem.FocusProvider.GlobalPointingExtent);
-                Rays[0].UpdateRayStep(ref newGazeOrigin, ref endPoint);
-            }
-        }
-
-        // Returns the hit values from the gaze provider. Gaze provider queries the scene using the perferred method.
-        public bool OnSceneQuery(LayerMask[] prioritizedLayerMasks, bool focusIndividualCompoundCollider, out MixedRealityRaycastHit hitInfo, out RayStep Ray, out int rayStepIndex)
-        {
-            if (gazeProvider.GazePointer is IMixedRealityQueryablePointer queryPointer)
-            {
-                return queryPointer.OnSceneQuery(prioritizedLayerMasks, focusIndividualCompoundCollider, out hitInfo, out Ray, out rayStepIndex);
-            }
-            else
-            {
-                bool didHit = MixedRealityRaycaster.RaycastSimplePhysicsStep(Rays[0], Rays[0].Length, prioritizedLayerMasks, focusIndividualCompoundCollider, out RaycastHit physicsHit);
-                hitInfo = new MixedRealityRaycastHit(didHit, physicsHit);
-                Ray = Rays[0];
-                rayStepIndex = 0;
-                return didHit;
-            }
-        }
-
-        public bool OnSceneQuery(LayerMask[] prioritizedLayerMasks, bool focusIndividualCompoundCollider, out GameObject hitObject, out Vector3 hitPoint, out float hitDistance)
-        {
-            if (gazeProvider.GazePointer is IMixedRealityQueryablePointer queryPointer)
-            {
-                return queryPointer.OnSceneQuery(prioritizedLayerMasks, focusIndividualCompoundCollider, out hitObject, out hitPoint, out hitDistance);
-            }
-            else
-            {
-                bool didHit = MixedRealityRaycaster.RaycastSimplePhysicsStep(Rays[0], Rays[0].Length, prioritizedLayerMasks, focusIndividualCompoundCollider, out RaycastHit physicsHit);
-                if (didHit)
-                {
-                    hitObject = physicsHit.collider.gameObject;
-                    hitPoint = physicsHit.point;
-                    hitDistance = physicsHit.distance;
-                    return didHit;
-                }
-                else
-                {
-                    hitObject = null;
-                    hitPoint = Vector3.zero;
-                    hitDistance = Mathf.Infinity;
-                    return false;
-                }
-            }
-        }
-
         private static readonly ProfilerMarker OnPostSceneQueryPerfMarker = new ProfilerMarker("[MRTK] GGVPointer.OnPostSceneQuery");
 
         /// <inheritdoc />
@@ -241,6 +185,19 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 {
                     CoreServices.InputSystem.RaisePointerDragged(this, MixedRealityInputAction.None, Controller.ControllerHandedness);
                 }
+            }
+        }
+
+        private static readonly ProfilerMarker OnPreSceneQueryPerfMarker = new ProfilerMarker("[MRTK] GGVPointer.OnPreSceneQuery");
+
+        /// <inheritdoc />
+        public void OnPreSceneQuery()
+        {
+            using (OnPreSceneQueryPerfMarker.Auto())
+            {
+                Vector3 newGazeOrigin = gazeProvider.GazePointer.Rays[0].Origin;
+                Vector3 endPoint = newGazeOrigin + (gazeProvider.GazePointer.Rays[0].Direction * CoreServices.InputSystem.FocusProvider.GlobalPointingExtent);
+                Rays[0].UpdateRayStep(ref newGazeOrigin, ref endPoint);
             }
         }
 
@@ -269,14 +226,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 // Now we're returning a rotation based on the vector from the camera position
                 // to the hand. This rotation is not affected by rotating your head.
                 Vector3 look = Position - CameraCache.Main.transform.position;
-
-                // If the input source is at the same position as the camera, assume it's the camera and return the InternalGazeProvider rotation.
-                // This prevents passing Vector3.zero into Quaternion.LookRotation, which isn't possible and causes a console log.
-                if (look == Vector3.zero)
-                {
-                    return Quaternion.LookRotation(gazeProvider.GazePointer.Rays[0].Direction);
-                }
-
                 return Quaternion.LookRotation(look);
             }
         }
@@ -292,33 +241,25 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (OnInputUpPerfMarker.Auto())
             {
-                if (InputSourceParent.IsNotNull() && eventData.SourceId == InputSourceParent.SourceId)
+                if (eventData.SourceId == InputSourceParent.SourceId)
                 {
                     if (eventData.MixedRealityInputAction == selectAction)
                     {
                         isSelectPressed = false;
                         if (IsInteractionEnabled)
                         {
-                            BaseCursor c = null;
-                            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                            {
-                                c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
-                            }
-
+                            BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
                             if (c != null)
                             {
                                 c.SourceDownIds.Remove(eventData.SourceId);
                             }
 
-                            CoreServices.InputSystem?.RaisePointerClicked(this, selectAction, 0, Controller.ControllerHandedness);
-                            CoreServices.InputSystem?.RaisePointerUp(this, selectAction, Controller.ControllerHandedness);
+                            CoreServices.InputSystem.RaisePointerClicked(this, selectAction, 0, Controller.ControllerHandedness);
+                            CoreServices.InputSystem.RaisePointerUp(this, selectAction, Controller.ControllerHandedness);
 
-                            // For GGV, the gaze pointer does not set this value itself.
+                            // For GGV, the gaze pointer does not set this value itself. 
                             // See comment in OnInputDown for more details.
-                            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                            {
-                                gazeProvider.GazePointer.IsFocusLocked = false;
-                            }
+                            gazeProvider.GazePointer.IsFocusLocked = false;
                         }
                     }
                 }
@@ -332,7 +273,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (OnInputDownPerfMarker.Auto())
             {
-                if (eventData.SourceId == InputSourceParent?.SourceId)
+                if (eventData.SourceId == InputSourceParent.SourceId)
                 {
                     if (eventData.MixedRealityInputAction == selectAction)
                     {
@@ -340,26 +281,18 @@ namespace Microsoft.MixedReality.Toolkit.Input
                         lastControllerHandedness = Controller.ControllerHandedness;
                         if (IsInteractionEnabled)
                         {
-                            BaseCursor c = null;
-                            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                            {
-                                c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
-                            }
-
+                            BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
                             if (c != null)
                             {
                                 c.SourceDownIds.Add(eventData.SourceId);
                             }
 
-                            CoreServices.InputSystem?.RaisePointerDown(this, selectAction, Controller.ControllerHandedness);
+                            CoreServices.InputSystem.RaisePointerDown(this, selectAction, Controller.ControllerHandedness);
 
-                            // For GGV, the gaze pointer does not set this value itself as it does not receive input
-                            // events from the hands. Because this value is important for certain gaze behavior,
+                            // For GGV, the gaze pointer does not set this value itself as it does not receive input 
+                            // events from the hands. Because this value is important for certain gaze behavior, 
                             // such as positioning the gaze cursor, it is necessary to set it here.
-                            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                            {
-                                gazeProvider.GazePointer.IsFocusLocked = (gazeProvider.GazePointer.Result?.Details.Object != null);
-                            }
+                            gazeProvider.GazePointer.IsFocusLocked = (gazeProvider.GazePointer.Result?.Details.Object != null);
                         }
                     }
                 }
@@ -368,39 +301,30 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         #endregion  IMixedRealityInputHandler Implementation
 
-        #region MonoBehaviour Implementation
-
         protected override void OnEnable()
         {
             base.OnEnable();
 
             gazeProvider = CoreServices.InputSystem.GazeProvider;
-
-            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
+            BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
+            if (c != null)
             {
-
-                BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
-                if (c.IsNotNull())
-                {
-                    c.VisibleSourcesCount++;
-                }
+                c.VisibleSourcesCount++;
             }
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-
-            if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
+            if (gazeProvider != null)
             {
                 BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
-                if (c.IsNotNull())
+                if (c != null)
                 {
                     c.VisibleSourcesCount--;
                 }
             }
         }
-        #endregion MonoBehaviour Implementation
 
         #region InputSystemGlobalHandlerListener Implementation
 
@@ -434,14 +358,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (OnSourceLostPerfMarker.Auto())
             {
-                if (eventData.SourceId == InputSourceParent?.SourceId)
+                if (eventData.SourceId == InputSourceParent.SourceId)
                 {
-                    BaseCursor c = null;
-                    if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                    {
-                        c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
-                    }
-
+                    BaseCursor c = gazeProvider.GazePointer.BaseCursor as BaseCursor;
                     if (c != null)
                     {
                         c.SourceDownIds.Remove(eventData.SourceId);
@@ -450,14 +369,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     if (isSelectPressed)
                     {
                         // Raise OnInputUp if pointer is lost while select is pressed
-                        CoreServices.InputSystem?.RaisePointerUp(this, selectAction, lastControllerHandedness);
+                        CoreServices.InputSystem.RaisePointerUp(this, selectAction, lastControllerHandedness);
 
-                        // For GGV, the gaze pointer does not set this value itself.
+                        // For GGV, the gaze pointer does not set this value itself. 
                         // See comment in OnInputDown for more details.
-                        if (gazeProvider.IsNotNull() && gazeProvider.GazePointer.IsNotNull())
-                        {
-                            gazeProvider.GazePointer.IsFocusLocked = false;
-                        }
+                        gazeProvider.GazePointer.IsFocusLocked = false;
                     }
 
                     // Destroy the pointer since nobody else is destroying us

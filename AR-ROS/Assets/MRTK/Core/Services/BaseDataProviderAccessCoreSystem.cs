@@ -105,9 +105,9 @@ namespace Microsoft.MixedReality.Toolkit
 
             foreach (var provider in dataProviders)
             {
-                if (provider is T providerT)
+                if (provider is T)
                 {
-                    selected.Add(providerT);
+                    selected.Add((T)provider);
                 }
             }
 
@@ -133,11 +133,11 @@ namespace Microsoft.MixedReality.Toolkit
         {
             foreach (var provider in dataProviders)
             {
-                if (provider is T providerT)
+                if (provider is T)
                 {
                     if (name == null || provider.Name == name)
                     {
-                        return providerT;
+                        return (T)provider;
                     }
                 }
             }
@@ -203,28 +203,9 @@ namespace Microsoft.MixedReality.Toolkit
 
             if (concreteType == null)
             {
-                if (!Application.isEditor)
-                {
-                    Debug.LogWarning($"Unable to register {typeof(T).Name} data provider ({(!string.IsNullOrWhiteSpace(providerName) ? providerName : "unknown")}) because the value of concreteType is null.\n" +
-                        "This may be caused by code being stripped during linking. The link.xml file in the MixedRealityToolkit.Generated folder is used to control code preservation.\n" +
-                        "More information can be found at https://docs.unity3d.com/Manual/ManagedCodeStripping.html.");
-                }
-                return false;
-            }
-
-            SupportedUnityXRPipelines selectedPipeline =
-#if UNITY_2020_1_OR_NEWER
-                SupportedUnityXRPipelines.XRSDK;
-#elif UNITY_2019
-                XRSettingsUtilities.XRSDKEnabled ? SupportedUnityXRPipelines.XRSDK : SupportedUnityXRPipelines.LegacyXR;
-#else
-                SupportedUnityXRPipelines.LegacyXR;
-#endif
-
-            if (MixedRealityExtensionServiceAttribute.Find(concreteType) is MixedRealityDataProviderAttribute providerAttribute
-                && !providerAttribute.SupportedUnityXRPipelines.IsMaskSet(selectedPipeline))
-            {
-                DebugUtilities.LogVerboseFormat("{0} not suitable for the current XR pipeline ({1})", concreteType.Name, selectedPipeline);
+                Debug.LogError($"Unable to register {typeof(T).Name} data provider ({(!string.IsNullOrWhiteSpace(providerName) ? providerName : "unknown")}) because the value of concreteType is null.\n" +
+                    "This may be caused by code being stripped during linking. The link.xml file in the MixedRealityToolkit.Generated folder is used to control code preservation.\n" +
+                    "More information can be found at https://docs.unity3d.com/Manual/ManagedCodeStripping.html.");
                 return false;
             }
 

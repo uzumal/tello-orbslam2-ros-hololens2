@@ -2,9 +2,7 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Rendering;
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities
@@ -14,18 +12,13 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// used to drive per pixel based clipping.
     /// </summary>
     [ExecuteAlways]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/rendering/clipping-primitive")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Rendering/ClippingPrimitive.html")]
     public abstract class ClippingPrimitive : MonoBehaviour, IMaterialInstanceOwner
     {
-        /// <summary>
-        /// The renderer(s) that should be affected by the primitive.
-        /// </summary>
-        protected readonly Dictionary<Renderer, MaterialInstance> rendererDict =
-            new Dictionary<Renderer, MaterialInstance>();
-
         [Tooltip("The renderer(s) that should be affected by the primitive.")]
         [SerializeField]
         protected List<Renderer> renderers = new List<Renderer>();
+
         public enum Side
         {
             Inside = 1,
@@ -49,31 +42,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         [Tooltip("Toggles whether the primitive will use the Camera OnPreRender event")]
         private bool useOnPreRender;
 
-        [SerializeField, Tooltip("Controls clipping features on the shared materials rather than material instances.")]
-        private bool applyToSharedMaterial = false;
-
-        /// <summary>
-        /// Toggles whether the clipping features will apply to shared materials or material instances (default).
-        /// </summary>
-        /// <remarks>
-        /// Applying to shared materials will allow for GPU instancing to batch calls between Renderers that interact with the same clipping primitives.
-        /// </remarks>
-        public bool ApplyToSharedMaterial
-        {
-            get => applyToSharedMaterial;
-            set
-            {
-                if (value != applyToSharedMaterial)
-                {
-                    if (renderers.Count > 0)
-                    {
-                        throw new InvalidOperationException("Cannot change material applied to after renderers have been added.");
-                    }
-                    applyToSharedMaterial = value;
-                }
-            }
-        }
-
         /// <summary>
         /// Toggles whether the primitive will use the Camera OnPreRender event.
         /// </summary>
@@ -90,35 +58,17 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                     cameraMethods = CameraCache.Main.gameObject.EnsureComponent<CameraEventRouter>();
                 }
 
-                if (useOnPreRender != value)
+                if (value)
                 {
-                    if (value)
-                    {
-                        cameraMethods.OnCameraPreRender += OnCameraPreRender;
-                    }
-                    else if (!value)
-                    {
-                        cameraMethods.OnCameraPreRender -= OnCameraPreRender;
-                    }
-
-                    useOnPreRender = value;
+                    cameraMethods.OnCameraPreRender += OnCameraPreRender;
                 }
+                else
+                {
+                    cameraMethods.OnCameraPreRender -= OnCameraPreRender;
+                }
+
+                useOnPreRender = value;
             }
-        }
-
-        [SerializeField]
-        [Tooltip("Whether to let managed MaterialInstances use a cached copy of cachedRenderer.sharedMaterials or call sharedMaterials on the Renderer directly. " +
-            "Enabling the option will lead to better performance but you must turn it off before modifying sharedMaterials of the Renderer.")]
-        private bool cacheSharedMaterialsFromRenderer = false;
-
-        /// <summary>
-        /// Whether to let managed MaterialInstances use a cached copy of cachedRenderer.sharedMaterials or call sharedMaterials on the Renderer directly.
-        /// Enabling the option will lead to better performance but you must turn it off before modifying sharedMaterials of the Renderer.
-        /// </summary>
-        public bool CacheSharedMaterialsFromRenderer
-        {
-            get => cacheSharedMaterialsFromRenderer;
-            set => cacheSharedMaterialsFromRenderer = value;
         }
 
         protected abstract string Keyword { get; }
@@ -129,25 +79,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         private int clippingSideID;
         private CameraEventRouter cameraMethods;
 
-        private Material[] AcquireMaterials(Renderer renderer, bool instance = true)
-        {
-            if (renderer == null)
-            {
-                return null;
-            }
-
-            if (applyToSharedMaterial)
-            {
-                return renderer.sharedMaterials;
-            }
-            else
-            {
-                return renderer.EnsureComponent<MaterialInstance>().AcquireMaterials(this, instance);
-            }
-        }
-
         private bool isDirty;
-
         /// <summary>
         /// Keeping track of any field, property or transformation changes to optimize material property block setting.
         /// </summary>
@@ -160,68 +92,38 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <summary>
         /// Adds a renderer to the list of objects this clipping primitive clips.
         /// </summary>
-        /// <param name="renderer">The renderer to add.</param>
-        public void AddRenderer(Renderer renderer)
+        /// <param name="_renderer"></param>
+        public void AddRenderer(Renderer _renderer)
         {
-            if (renderer != null)
+            if (_renderer != null)
             {
-                if (!rendererDict.ContainsKey(renderer))
+                if (!renderers.Contains(_renderer))
                 {
-                    Material[] materials;
-                    if (applyToSharedMaterial)
-                    {
-                        rendererDict.Add(renderer, null);
-
-                        materials = renderer.sharedMaterials;
-                    }
-                    else
-                    {
-                        var materialInstance = renderer.EnsureComponent<MaterialInstance>();
-                        if (!materialInstance)
-                        {
-                            return;
-                        }
-
-                        materialInstance.CacheSharedMaterialsFromRenderer = CacheSharedMaterialsFromRenderer;
-                        rendererDict.Add(renderer, materialInstance);
-
-                        materials = materialInstance.AcquireMaterials(this);
-                    }
-                    renderers.Add(renderer);
-                    ToggleClippingFeature(materials, gameObject.activeInHierarchy);
-                    IsDirty = true;
+                    renderers.Add(_renderer);
                 }
+
+                ToggleClippingFeature(_renderer.EnsureComponent<MaterialInstance>().AcquireMaterials(this), gameObject.activeInHierarchy);
+                IsDirty = true;
             }
         }
 
         /// <summary>
-        /// Removes a renderer from the list of objects this clipping primitive clips.
+        /// Removes a renderer to the list of objects this clipping primitive clips.
         /// </summary>
-        public void RemoveRenderer(Renderer _renderer, bool autoDestroyMaterial = true)
+        public void RemoveRenderer(Renderer _renderer)
         {
-            int index = renderers.IndexOf(_renderer);
-            if (index >= 0)
-            {
-                RemoveRenderer(index, autoDestroyMaterial);
-            }
-        }
+            renderers.Remove(_renderer);
 
-        /// <summary>
-        /// Removes a renderer from the list of objects this clipping primitive clips based on index.
-        /// </summary>
-        private void RemoveRenderer(int rendererIndex, bool autoDestroyMaterial = true)
-        {
-            var _renderer = renderers[rendererIndex];
-            renderers.RemoveAt(rendererIndex);
-            if (rendererDict.TryGetValue(_renderer, out MaterialInstance materialInstance))
+            if (_renderer != null)
             {
-                rendererDict.Remove(_renderer);
-                // There is no need to acquire new instances if ones do not already exist since we are
-                // in the process of removing.
-                ToggleClippingFeature(AcquireMaterials(_renderer, instance: false), false);
+                var materialInstance = _renderer.GetComponent<MaterialInstance>();
+
                 if (materialInstance != null)
                 {
-                    materialInstance.ReleaseMaterial(this, autoDestroyMaterial);
+                    // There is no need to acquire new instances if ones do not already exist since we are 
+                    // in the process of removing.
+                    ToggleClippingFeature(materialInstance.AcquireMaterials(this, false), false);
+                    materialInstance.ReleaseMaterial(this);
                 }
             }
         }
@@ -229,11 +131,15 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <summary>
         /// Removes all renderers in the list of objects this clipping primitive clips.
         /// </summary>
-        public void ClearRenderers(bool autoDestroyMaterial = true)
+        public void ClearRenderers()
         {
-            while (renderers.Count != 0)
+            if (renderers != null)
             {
-                RemoveRenderer(renderers.Count - 1, autoDestroyMaterial);
+                // Remove from end of list to avoid re-allocation of array
+                for (int i = renderers.Count - 1; i >= 0; i--)
+                {
+                    RemoveRenderer(renderers[0]);
+                }
             }
         }
 
@@ -243,49 +149,15 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <returns>The current list of renderers.</returns>
         public IEnumerable<Renderer> GetRenderersCopy()
         {
-            return renderers.AsReadOnly();
+            return new List<Renderer>(renderers);
         }
 
         #region MonoBehaviour Implementation
-
-        protected void Awake()
-        {
-            if (renderers.Count != rendererDict.Count)
-            {
-                rendererDict.Clear();
-                foreach (var renderer in renderers)
-                {
-                    if (applyToSharedMaterial)
-                    {
-                        rendererDict[renderer] = null;
-                    }
-                    else
-                    {
-                        MaterialInstance materialInstance = renderer.EnsureComponent<MaterialInstance>();
-                        rendererDict[renderer] = materialInstance;
-                        materialInstance.CacheSharedMaterialsFromRenderer = CacheSharedMaterialsFromRenderer;
-                    }
-                }
-            }
-            if (renderers.Count != rendererDict.Count)
-            {
-                renderers.Clear();
-                renderers.AddRange(rendererDict.Keys);
-            }
-        }
 
         protected void OnEnable()
         {
             Initialize();
             UpdateRenderers();
-
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                EditorApplication.update += EditorUpdate;
-            }
-#endif
-
             ToggleClippingFeature(true);
 
             if (useOnPreRender)
@@ -297,26 +169,27 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         protected void OnDisable()
         {
-#if UNITY_EDITOR
-            EditorApplication.update -= EditorUpdate;
-#endif
-
             UpdateRenderers();
             ToggleClippingFeature(false);
 
             if (cameraMethods != null)
             {
-                UseOnPreRender = false;
+                cameraMethods.OnCameraPreRender -= OnCameraPreRender;
             }
         }
 
 #if UNITY_EDITOR
         // We need this class to be updated once per frame even when in edit mode. Ideally this would 
         // occur after all other objects are updated in LateUpdate(), but because the ExecuteInEditMode 
-        // attribute only invokes Update() we handle edit mode updating here and runtime updating 
+        // attribute only invokes Update() we handle edit mode updating in Update() and runtime updating 
         // in LateUpdate().
-        protected void EditorUpdate()
+        protected void Update()
         {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
             Initialize();
             UpdateRenderers();
         }
@@ -367,47 +240,48 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         protected virtual void UpdateRenderers()
         {
-            if (renderers == null || renderers.Count == 0) { return; }
+            if (renderers == null)
+            {
+                return;
+            }
 
             CheckTransformChange();
-            if (!IsDirty) { return; }
 
-            BeginUpdateShaderProperties();
-            for (int i = renderers.Count - 1; i >= 0; --i)
+            for (var i = renderers.Count - 1; i >= 0; --i)
             {
                 var _renderer = renderers[i];
+
                 if (_renderer == null)
                 {
-                    if (Application.isPlaying)
-                    {
-                        RemoveRenderer(i);
-                    }
+                    renderers.RemoveAt(i);
                     continue;
                 }
 
-                _renderer.GetPropertyBlock(materialPropertyBlock);
-                materialPropertyBlock.SetFloat(clippingSideID, (float)clippingSide);
-                UpdateShaderProperties(materialPropertyBlock);
-                _renderer.SetPropertyBlock(materialPropertyBlock);
+                if (IsDirty)
+                {
+                    _renderer.GetPropertyBlock(materialPropertyBlock);
+                    materialPropertyBlock.SetFloat(clippingSideID, (float)clippingSide);
+                    UpdateShaderProperties(materialPropertyBlock);
+                    _renderer.SetPropertyBlock(materialPropertyBlock);
+                }              
             }
-
-            EndUpdateShaderProperties();
+            
             IsDirty = false;
         }
 
-        protected virtual void BeginUpdateShaderProperties() { }
         protected abstract void UpdateShaderProperties(MaterialPropertyBlock materialPropertyBlock);
-        protected virtual void EndUpdateShaderProperties() { }
 
         protected void ToggleClippingFeature(bool keywordOn)
         {
-            if (renderers.Count > 0)
+            if (renderers != null)
             {
-                foreach (var cachedRenderer in renderers)
+                for (var i = 0; i < renderers.Count; ++i)
                 {
-                    if (cachedRenderer != null)
+                    var _renderer = renderers[i];
+
+                    if (_renderer != null)
                     {
-                        ToggleClippingFeature(AcquireMaterials(cachedRenderer), keywordOn);
+                        ToggleClippingFeature(_renderer.EnsureComponent<MaterialInstance>().AcquireMaterials(this), keywordOn);
                     }
                 }
             }
@@ -445,7 +319,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             {
                 IsDirty = true;
                 transform.hasChanged = false;
-            }
+            }          
         }
     }
 }

@@ -426,7 +426,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 0
   CanDeselect: 0
-  voiceCommand: Select
+  VoiceCommand: Select
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 2362211160933184460}
@@ -528,7 +528,6 @@ MonoBehaviour:
       - Near and Far
       - Near Only
       - Far Only
-  resetOnDestroy: 0
   enabledOnStart: 1
 --- !u!1 &5234426577528310576
 GameObject:

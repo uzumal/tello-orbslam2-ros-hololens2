@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
-using System;
+using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
+using System;
 
 namespace Microsoft.MixedReality.Toolkit.Input
 {

@@ -19,7 +19,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         /// <summary>
         /// The teleport hot spot.
         /// </summary>
-        public IMixedRealityTeleportHotspot Hotspot { get; private set; }
+        public IMixedRealityTeleportHotSpot HotSpot { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -30,11 +30,11 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         /// <summary>
         /// Used to initialize/reset the event and populate the data.
         /// </summary>
-        public void Initialize(IMixedRealityPointer pointer, IMixedRealityTeleportHotspot target)
+        public void Initialize(IMixedRealityPointer pointer, IMixedRealityTeleportHotSpot target)
         {
             BaseInitialize(pointer.InputSourceParent);
             Pointer = pointer;
-            Hotspot = target;
+            HotSpot = target;
         }
     }
 }

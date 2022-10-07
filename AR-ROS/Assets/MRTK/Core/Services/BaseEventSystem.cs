@@ -99,7 +99,8 @@ namespace Microsoft.MixedReality.Toolkit
             }
 
             // Send events to all handlers registered via RegisterHandler API.
-            if (EventHandlersByType.TryGetValue(typeof(T), out List<EventHandlerEntry> handlers))
+            List<EventHandlerEntry> handlers;
+            if (EventHandlersByType.TryGetValue(typeof(T), out handlers))
             {
                 for (int i = handlers.Count - 1; i >= 0; i--)
                 {
@@ -125,19 +126,10 @@ namespace Microsoft.MixedReality.Toolkit
 
             eventExecutionDepth--;
 
-            if (eventExecutionDepth == 0)
+            if (eventExecutionDepth == 0 && (postponedActions.Count > 0 || postponedObjectActions.Count > 0))
             {
-                int postponedActionsCount = postponedActions.Count;
-                int postponedObjectActionsCount = postponedObjectActions.Count;
-
-                if (postponedActionsCount <= 0 && postponedObjectActionsCount <= 0)
+                foreach (var handler in postponedActions)
                 {
-                    return;
-                }
-
-                for (int i = 0; i < postponedActionsCount; i++)
-                {
-                    Tuple<Action, Type, IEventSystemHandler> handler = postponedActions[i];
                     if (handler.Item1 == Action.Add)
                     {
                         AddHandlerToMap(handler.Item2, handler.Item3);
@@ -148,9 +140,8 @@ namespace Microsoft.MixedReality.Toolkit
                     }
                 }
 
-                for (int i = 0; i < postponedObjectActionsCount; i++)
+                foreach (var obj in postponedObjectActions)
                 {
-                    Tuple<Action, GameObject> obj = postponedObjectActions[i];
                     if (obj.Item1 == Action.Add)
                     {
                         // Can call it here, because guaranteed that eventExecutionDepth is 0
@@ -183,7 +174,7 @@ namespace Microsoft.MixedReality.Toolkit
 #endif
             Debug.Assert(typeof(T).IsAssignableFrom(handler.GetType()), "Handler passed to RegisterHandler doesn't implement a type given as generic parameter.");
 
-            DebugUtilities.LogVerboseFormat("Registering handler {0} against system {1}", handler.ToString().Trim(), this);
+            DebugUtilities.LogVerboseFormat("Registering handler {0} against system {1}", handler, this);
 
             TraverseEventSystemHandlerHierarchy<T>(handler, RegisterHandler);
         }
@@ -415,14 +406,14 @@ namespace Microsoft.MixedReality.Toolkit
         /// Utility function for registering parent interfaces of a given handler.
         /// </summary>
         /// <remarks>
-        /// <para>Event handler interfaces may derive from each other. Some events will be raised using a base handler class, and are supposed to trigger on
+        /// Event handler interfaces may derive from each other. Some events will be raised using a base handler class, and are supposed to trigger on
         /// all derived handler classes too. Example of that is IMixedRealityBaseInputHandler hierarchy.
         /// To support that current implementation registers multiple dictionary entries per handler, one for each level of event handler hierarchy.
         /// Alternative would be to register just one root type and 
         /// then determine which handlers to call dynamically in 'HandleEvent'.
         /// Implementation was chosen based on performance of 'HandleEvent'. Without determining type it is about 2+ times faster.
         /// There are possible ways to bypass that, but this will make implementation of classes 
-        /// that derive from Input System unnecessarily more complicated.</para>
+        /// that derive from Input System unnecessarily more complicated.
         /// </remarks>
         private void TraverseEventSystemHandlerHierarchy<T>(IEventSystemHandler handler, Action<Type, IEventSystemHandler> func) where T : IEventSystemHandler
         {

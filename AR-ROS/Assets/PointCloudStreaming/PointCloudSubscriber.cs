@@ -94,7 +94,7 @@ namespace RosSharp.RosBridgeClient
             float b;
             
             // Cube Size
-            int _disNum = 5;
+            int _disNum = 1;
             
             // Cubeの重なり判定
             // Vector3 halfExtents = new Vector3(0.25f, 0.25f, 0.25f);

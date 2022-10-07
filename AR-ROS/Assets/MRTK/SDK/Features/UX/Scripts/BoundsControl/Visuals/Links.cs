@@ -113,7 +113,7 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
                 }
 
                 List<int> flattenedHandles = VisualUtils.GetFlattenedIndices(cachedFlattenAxis, VisualUtils.EdgeAxisType);
-                if (flattenedHandles != null && VisualUtils.EdgeAxisType.Length == links.Count)
+                if (flattenedHandles != null)
                 {
                     for (int i = 0; i < flattenedHandles.Count; ++i)
                     {

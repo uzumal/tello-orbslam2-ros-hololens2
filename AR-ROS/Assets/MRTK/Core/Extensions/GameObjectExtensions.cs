@@ -140,7 +140,7 @@ namespace Microsoft.MixedReality.Toolkit
         /// <typeparam name="T">Component Type</typeparam>
         /// <param name="gameObject">this gameObject</param>
         /// <param name="action">Action to perform.</param>
-        public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action) where T : Component
+        public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action)
         {
             foreach (T i in gameObject.GetComponents<T>())
             {
@@ -184,7 +184,8 @@ namespace Microsoft.MixedReality.Toolkit
 
                 foreach (var attribute in attributes)
                 {
-                    if (attribute is RequireComponent requireComponentAttribute)
+                    var requireComponentAttribute = attribute as RequireComponent;
+                    if (requireComponentAttribute != null)
                     {
                         if (requireComponentAttribute.m_Type0 == genericType ||
                             requireComponentAttribute.m_Type1 == genericType ||

@@ -2,11 +2,8 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Boundary;
-using Microsoft.MixedReality.Toolkit.CameraSystem;
 using Microsoft.MixedReality.Toolkit.Diagnostics;
 using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.Rendering;
-using Microsoft.MixedReality.Toolkit.SceneSystem;
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit.Teleport;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -16,6 +13,9 @@ using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Microsoft.MixedReality.Toolkit.SceneSystem;
+using Microsoft.MixedReality.Toolkit.CameraSystem;
+using Microsoft.MixedReality.Toolkit.Rendering;
 
 #if UNITY_EDITOR
 using Microsoft.MixedReality.Toolkit.Input.Editor;
@@ -37,11 +37,6 @@ namespace Microsoft.MixedReality.Toolkit
         private static bool isApplicationQuitting = false;
         private static bool internalShutdown = false;
         private const string NoMRTKProfileErrorMessage = "No Mixed Reality Configuration Profile found, cannot initialize the Mixed Reality Toolkit";
-
-        /// <summary>
-        /// Whether an active profile switching is currently in progress
-        /// </summary>
-        public bool IsProfileSwitching { get; private set; }
 
         #region Mixed Reality Toolkit Profile configuration
 
@@ -86,16 +81,11 @@ namespace Microsoft.MixedReality.Toolkit
         /// The public property of the Active Profile, ensuring events are raised on the change of the configuration
         /// </summary>
         /// <remarks>
-        /// <para>If changing the Active profile prior to the initialization (i.e. Awake()) of <see cref="MixedRealityToolkit"/> is desired, 
-        /// call the static function <see cref="SetProfileBeforeInitialization(MixedRealityToolkitConfigurationProfile)"/> instead.</para>
-        /// <para>When setting the ActiveProfile during runtime, the destroy of the currently running services will happen after the last LateUpdate()
+        /// When setting the ActiveProfile during runtime, the destroy of the currently running services will happen after the last LateUpdate()
         /// of all services, and the instantiation and initialization of the services associated with the new profile will happen before the
-        /// first Update() of all services.</para>
-        /// <para>A noticeable application hesitation may occur during this process. Also any script with higher priority than this can enter its Update
-        /// before the new profile is properly setup.</para>
-        /// <para>You are strongly recommended to see 
-        /// <see href="https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/configuration/mixed-reality-configuration-guide#changing-profiles-at-runtime">here</see> 
-        /// for more information on profile switching.</para>
+        /// first Update() of all services.
+        /// A noticable application hesitation may occur during this process. Also any scripts with high priority than this can enter its Update
+        /// before the new profiles are properly setup.
         /// </remarks>
         public MixedRealityToolkitConfigurationProfile ActiveProfile
         {
@@ -120,32 +110,8 @@ namespace Microsoft.MixedReality.Toolkit
         }
 
         /// <summary>
-        /// Set the active profile prior to the initialization (i.e. Awake()) of <see cref="MixedRealityToolkit"/>
-        /// </summary>
-        /// <remarks>
-        /// <para>If changing the Active profile after <see cref="MixedRealityToolkit"/> has been initialized, modify <see cref="ActiveProfile"/> of the active instance directly.</para>
-        /// <para>This function requires the caller script to be executed earlier than the <see cref="MixedRealityToolkit"/> script, which can be achieved by setting 
-        /// <see href="https://docs.unity3d.com/Manual/class-MonoManager.html">Script Execution Order settings</see>.</para>
-        /// <para>You are strongly recommended to see 
-        /// <see href="https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/configuration/mixed-reality-configuration-guide#changing-profiles-at-runtime">here</see> 
-        /// for more information on profile switching.</para>
-        /// </remarks>
-        public static void SetProfileBeforeInitialization(MixedRealityToolkitConfigurationProfile profile)
-        {
-            MixedRealityToolkit toolkit = FindObjectOfType<MixedRealityToolkit>();
-            toolkit.activeProfile = profile;
-        }
-
-        /// <summary>
         /// When a configuration Profile is replaced with a new configuration, force all services to reset and read the new values
         /// </summary>
-        /// <remarks>
-        /// <para>This function should only be used by editor code in most cases.</para>
-        /// <para>Do not call this function if resetting profile at runtime.
-        /// Instead see 
-        /// <see href="https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/configuration/mixed-reality-configuration-guide#changing-profiles-at-runtime">here</see> 
-        /// for more information on profile switching at runtime.</para>
-        /// </remarks>
         public void ResetConfiguration(MixedRealityToolkitConfigurationProfile profile)
         {
             RemoveCurrentProfile(profile);
@@ -329,10 +295,7 @@ namespace Microsoft.MixedReality.Toolkit
             if (IsInitialized)
             {
                 DebugUtilities.LogVerboseFormat("Unregistered service of type {0} was an initialized service, disabling and destroying it", typeof(T));
-                if (activeProfile != null && Application.IsPlaying(activeProfile))
-                {
-                    serviceInstance.Disable();
-                }
+                serviceInstance.Disable();
                 serviceInstance.Destroy();
             }
 
@@ -473,10 +436,10 @@ namespace Microsoft.MixedReality.Toolkit
             }
 
             // If the Boundary system has been selected for initialization in the Active profile, enable it in the project
-            if (ActiveProfile.IsBoundarySystemEnabled && ActiveProfile.ExperienceSettingsProfile != null)
+            if (ActiveProfile.IsBoundarySystemEnabled)
             {
                 DebugUtilities.LogVerbose("Begin registration of the boundary system");
-                object[] args = { ActiveProfile.BoundaryVisualizationProfile, ActiveProfile.ExperienceSettingsProfile.TargetExperienceScale };
+                object[] args = { ActiveProfile.BoundaryVisualizationProfile, ActiveProfile.TargetExperienceScale };
                 if (!RegisterService<IMixedRealityBoundarySystem>(ActiveProfile.BoundarySystemSystemType, args: args) || CoreServices.BoundarySystem == null)
                 {
                     Debug.LogError("Failed to start the Boundary System!");
@@ -721,11 +684,10 @@ namespace Microsoft.MixedReality.Toolkit
             {
                 // Before any Update() of a service is performed check to see if we need to switch profile
                 // If so we instantiate and initialize the services associated with the new profile.
-                if (newProfile != null && IsProfileSwitching)
+                if (newProfile != null)
                 {
                     InitializeNewProfile(newProfile);
                     newProfile = null;
-                    IsProfileSwitching = false;
                 }
                 UpdateAllServices();
             }
@@ -740,7 +702,6 @@ namespace Microsoft.MixedReality.Toolkit
                 // If so we destroy currently running services.
                 if (newProfile != null)
                 {
-                    IsProfileSwitching = true;
                     RemoveCurrentProfile(newProfile);
                 }
             }
@@ -1119,14 +1080,6 @@ namespace Microsoft.MixedReality.Toolkit
                 {
                     UnregisterService<IMixedRealitySpatialAwarenessSystem>();
                 }
-                else if (typeof(IMixedRealitySceneSystem).IsAssignableFrom(type))
-                {
-                    UnregisterService<IMixedRealitySceneSystem>();
-                }
-                else if (typeof(IMixedRealityRaycastProvider).IsAssignableFrom(type))
-                {
-                    UnregisterService<IMixedRealityRaycastProvider>();
-                }
                 else if (typeof(IMixedRealityTeleportSystem).IsAssignableFrom(type))
                 {
                     UnregisterService<IMixedRealityTeleportSystem>();
@@ -1279,9 +1232,9 @@ namespace Microsoft.MixedReality.Toolkit
             for (int i = 0; i < length; i++)
             {
                 IMixedRealityService service = systems[i];
-                if (service is T serviceT && (isNullServiceName || service.Name == serviceName))
+                if (service is T && (isNullServiceName || service.Name == serviceName))
                 {
-                    services.Add(serviceT);
+                    services.Add((T)service);
                 }
             }
 

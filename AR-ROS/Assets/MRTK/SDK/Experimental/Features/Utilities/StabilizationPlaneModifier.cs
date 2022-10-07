@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 
 #if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using UnityEngine.XR.WSA;
 #endif // UNITY_WSA && !UNITY_2020_1_OR_NEWER
 
@@ -176,7 +177,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
 #if UNITY_EDITOR
             debugMesh = GameObject.CreatePrimitive(PrimitiveType.Quad);
             debugMesh.hideFlags |= HideFlags.HideInHierarchy;
-            debugMesh.SetActive(false);
+            debugMesh.gameObject.SetActive(false);
             debugMeshFilter = debugMesh.GetComponent<MeshFilter>();
 #endif
 
@@ -221,7 +222,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             get
             {
                 var gazeProvider = CoreServices.InputSystem?.GazeProvider;
-                if (gazeProvider.IsNotNull() && gazeProvider.Enabled)
+                if (gazeProvider != null && gazeProvider.Enabled)
                 {
                     return gazeProvider.GazeOrigin;
                 }
@@ -238,7 +239,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             get
             {
                 var gazeProvider = CoreServices.InputSystem?.GazeProvider;
-                if (gazeProvider.IsNotNull() && gazeProvider.Enabled)
+                if (gazeProvider != null && gazeProvider.Enabled)
                 {
                     return gazeProvider.GazeDirection;
                 }
@@ -255,7 +256,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
         private bool TryGetGazeHitPosition(out Vector3 hitPosition)
         {
             var gazeProvider = CoreServices.InputSystem?.GazeProvider;
-            if (gazeProvider.IsNotNull() && gazeProvider.Enabled &&
+            if (gazeProvider != null && gazeProvider.Enabled &&
                 gazeProvider.HitInfo.raycastValid)
             {
                 hitPosition = gazeProvider.HitPosition;

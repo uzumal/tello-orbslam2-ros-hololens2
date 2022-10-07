@@ -7,17 +7,15 @@ using System;
 using System.Runtime.InteropServices;
 #if WINDOWS_UWP
 using Windows.Perception.Spatial;
-using Windows.UI.Input.Spatial;
 #if DOTNETWINRT_PRESENT
 using Microsoft.Windows.Graphics.Holographic;
 #else
 using Windows.Graphics.Holographic;
-#endif // DOTNETWINRT_PRESENT
-#else
+#endif
+#elif DOTNETWINRT_PRESENT
 using Microsoft.Windows.Graphics.Holographic;
 using Microsoft.Windows.Perception.Spatial;
-using Microsoft.Windows.UI.Input.Spatial;
-#endif // WINDOWS_UWP
+#endif
 #endif // (UNITY_WSA && DOTNETWINRT_PRESENT) || WINDOWS_UWP
 
 namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
@@ -28,33 +26,12 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
         /// The provider that should be used for the corresponding utilities.
         /// </summary>
         /// <remarks>
-        /// <para>This is intended to be used to support both XR SDK and Unity's legacy XR pipeline, which provide
-        /// different APIs to access these native objects.</para>
+        /// This is intended to be used to support both XR SDK and Unity's legacy XR pipeline, which provide
+        /// different APIs to access these native objects.
         /// </remarks>
         public static IWindowsMixedRealityUtilitiesProvider UtilitiesProvider { get; set; } = null;
 
 #if (UNITY_WSA && DOTNETWINRT_PRESENT) || WINDOWS_UWP
-        private static SpatialInteractionManager spatialInteractionManager = null;
-
-        /// <summary>
-        /// Provides access to the current native SpatialInteractionManager.
-        /// </summary>
-        public static SpatialInteractionManager SpatialInteractionManager
-        {
-            get
-            {
-                if (spatialInteractionManager == null)
-                {
-                    UnityEngine.WSA.Application.InvokeOnUIThread(() =>
-                    {
-                        spatialInteractionManager = SpatialInteractionManager.GetForCurrentView();
-                    }, true);
-                }
-
-                return spatialInteractionManager;
-            }
-        }
-
 #if ENABLE_DOTNET
         [DllImport("DotNetNativeWorkaround.dll", EntryPoint = "MarshalIInspectable")]
         private static extern void GetSpatialCoordinateSystem(IntPtr nativePtr, out SpatialCoordinateSystem coordinateSystem);
@@ -63,10 +40,10 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
         /// Helps marshal WinRT IInspectable objects that have been passed to managed code as an IntPtr.
         /// </summary>
         /// <remarks>
-        /// <para>On .NET Native, IInspectable pointers cannot be marshaled from native to managed code using Marshal.GetObjectForIUnknown.
+        /// On .NET Native, IInspectable pointers cannot be marshaled from native to managed code using Marshal.GetObjectForIUnknown.
         /// This class calls into a native method that specifically marshals the type as a specific WinRT interface, which
-        /// is supported by the marshaller on both .NET Core and .NET Native.</para>
-        /// <para>Please see https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/hand-tracking#net-native for more info.</para>
+        /// is supported by the marshaller on both .NET Core and .NET Native.
+        /// Please see https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/HandTracking.html#net-native for more info.
         /// </remarks>
         private static SpatialCoordinateSystem GetSpatialCoordinateSystem(IntPtr nativePtr)
         {
@@ -88,8 +65,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
         /// Access the underlying native spatial coordinate system.
         /// </summary>
         /// <remarks>
-        /// <para>Changing the state of the native objects received via this API may cause unpredictable
-        /// behavior and rendering artifacts, especially if Unity also reasons about that same state.</para>
+        /// Changing the state of the native objects received via this API may cause unpredictable
+        /// behaviour and rendering artifacts, especially if Unity also reasons about that same state.
         /// </remarks>
         public static SpatialCoordinateSystem SpatialCoordinateSystem
         {
@@ -120,8 +97,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
         /// Access the underlying native current holographic frame.
         /// </summary>
         /// <remarks>
-        /// <para>Changing the state of the native objects received via this API may cause unpredictable
-        /// behavior and rendering artifacts, especially if Unity also reasons about that same state.</para>
+        /// Changing the state of the native objects received via this API may cause unpredictable
+        /// behavior and rendering artifacts, especially if Unity also reasons about that same state.
         /// </remarks>
         public static HolographicFrame CurrentHolographicFrame
         {
@@ -144,28 +121,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
 
         private static SpatialCoordinateSystem spatialCoordinateSystem = null;
 #endif // (UNITY_WSA && DOTNETWINRT_PRESENT) || WINDOWS_UWP
-
-#if WINDOWS_UWP
-        /// <summary>
-        /// Access the underlying native current holographic frame.
-        /// </summary>
-        /// <remarks>
-        /// <para>Changing the state of the native objects received via this API may cause unpredictable
-        /// behavior and rendering artifacts, especially if Unity also reasons about that same state.</para>
-        /// </remarks>
-        internal static global::Windows.Graphics.Holographic.HolographicFrame CurrentWindowsHolographicFrame
-        {
-            get
-            {
-                if (UtilitiesProvider == null || UtilitiesProvider.IHolographicFramePtr == IntPtr.Zero)
-                {
-                    return null;
-                }
-
-                return Marshal.GetObjectForIUnknown(UtilitiesProvider.IHolographicFramePtr) as global::Windows.Graphics.Holographic.HolographicFrame;
-            }
-        }
-#endif // WINDOWS_UWP
 
         [Obsolete("Use the System.Numerics.Vector3 extension method ToUnityVector3 instead.")]
         public static UnityEngine.Vector3 SystemVector3ToUnity(System.Numerics.Vector3 vector)

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
 {
     /// <summary>
-    /// Helper class providing some static utility functions for <see cref="BoundsControl"/> <see cref="HandlesBase">handles</see>
+    /// Helper class providing some static utility functions for <see cref="BoundsControl"/> <see cref="BoundsControlHandlesBase">handles</see>/>
     /// </summary>
     internal class VisualUtils
     {
@@ -39,19 +39,6 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             var b = new Bounds();
             Mesh currentMesh;
             foreach (MeshFilter r in g.GetComponentsInChildren<MeshFilter>())
-            {
-                if ((currentMesh = r.sharedMesh) == null) { continue; }
-
-                if (b.size == Vector3.zero)
-                {
-                    b = currentMesh.bounds;
-                }
-                else
-                {
-                    b.Encapsulate(currentMesh.bounds);
-                }
-            }
-            foreach (SkinnedMeshRenderer r in g.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 if ((currentMesh = r.sharedMesh) == null) { continue; }
 
@@ -159,7 +146,18 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             {
                 if (flattenAxis == FlattenModeType.FlattenAuto)
                 {
-                    flattenAxis = DetermineAxisToFlatten(boundsExtents);
+                    if (boundsExtents.x < boundsExtents.y && boundsExtents.x < boundsExtents.z)
+                    {
+                        flattenAxis = FlattenModeType.FlattenX;
+                    }
+                    else if (boundsExtents.y < boundsExtents.z)
+                    {
+                        flattenAxis = FlattenModeType.FlattenY;
+                    }
+                    else
+                    {
+                        flattenAxis = FlattenModeType.FlattenZ;
+                    }
                 }
 
                 boundsExtents.x = (flattenAxis == FlattenModeType.FlattenX) ? flattenValue : boundsExtents.x;
@@ -168,30 +166,6 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             }
 
             return boundsExtents;
-        }
-
-        /// <summary>
-        /// Determine the axis to flatten based on the bound extents. Useful when <see cref="FlattenModeType"/> is set to <see cref="FlattenModeType.FlattenAuto"/> instead of an explicit axis.
-        /// </summary>
-        /// <param name="boundsExtents">The current bound extents.</param>
-        /// <returns>Determined axis to be flattened.</returns>
-        internal static FlattenModeType DetermineAxisToFlatten(Vector3 boundsExtents)
-        {
-            FlattenModeType axisToFlatten;
-            if (boundsExtents.x < boundsExtents.y && boundsExtents.x < boundsExtents.z)
-            {
-                axisToFlatten = FlattenModeType.FlattenX;
-            }
-            else if (boundsExtents.y < boundsExtents.z)
-            {
-                axisToFlatten = FlattenModeType.FlattenY;
-            }
-            else
-            {
-                axisToFlatten = FlattenModeType.FlattenZ;
-            }
-
-            return axisToFlatten;
         }
 
         /// <summary>
@@ -275,9 +249,6 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
         /// <returns>Flattened indices.</returns>
         internal static List<int> GetFlattenedIndices(FlattenModeType flattenAxis, CardinalAxisType[] axisArray)
         {
-            Debug.Assert(flattenAxis != FlattenModeType.FlattenAuto,
-                         "FlattenAuto passed to GetFlattenedIndices. Resolve FlattenAuto into an actual axis before calling.");
-
             List<int> flattenedIndices = new List<int>();
             for (int i = 0; i < axisArray.Length; ++i)
             {

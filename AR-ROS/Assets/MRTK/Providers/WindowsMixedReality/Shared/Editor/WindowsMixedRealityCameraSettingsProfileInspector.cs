@@ -17,14 +17,12 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Editor
 
         private SerializedProperty renderFromPVCameraForMixedRealityCapture;
         private SerializedProperty reprojectionMethod;
-        private SerializedProperty readingModeEnabled;
 
-        private static readonly GUIContent PVCameraRenderingTitle = new GUIContent("Render from PV Camera (Align holograms)");
-        private static readonly GUIContent ReprojectionMethodTitle = new GUIContent("HoloLens 2 Reprojection Method");
+        private readonly GUIContent pvCameraRenderingTitle = new GUIContent("Render from PV Camera (Align holograms)");
+        private readonly GUIContent reprojectionMethodTitle = new GUIContent("HoloLens 2 Reprojection Method");
 
         private const string MRCDocURL = "https://docs.microsoft.com/windows/mixed-reality/mixed-reality-capture-for-developers#render-from-the-pv-camera-opt-in";
         private const string DepthReprojectionDocURL = "https://docs.microsoft.com/windows/mixed-reality/hologram-stability#reprojection";
-        private const string ReadingModeDocURL = "https://docs.microsoft.com/en-us/hololens/hololens2-display#what-improvements-are-coming-that-will-improve-hololens-2-image-quality";
 
         protected override void OnEnable()
         {
@@ -32,7 +30,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Editor
 
             renderFromPVCameraForMixedRealityCapture = serializedObject.FindProperty("renderFromPVCameraForMixedRealityCapture");
             reprojectionMethod = serializedObject.FindProperty("reprojectionMethod");
-            readingModeEnabled = serializedObject.FindProperty("readingModeEnabled");
         }
 
         public override void OnInspectorGUI()
@@ -46,13 +43,11 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Editor
                 EditorGUILayout.Space();
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("Mixed Reality Capture Settings", EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField("Mixed Reality Capture Settings (Experimental)", EditorStyles.boldLabel);
                     InspectorUIUtility.RenderDocumentationButton(MRCDocURL);
                 }
-
-                EditorGUILayout.HelpBox("On legacy XR, render from PV camera is supported in Unity 2018.4.35f1 and newer if using Unity 2018 and Unity 2019.4.26f1 and newer if using Unity 2019.", MessageType.Info);
-                EditorGUILayout.HelpBox("On Windows XR Plugin, render from PV camera is supported in versions 2.8.0, 4.5.0, and 5.3.0 (and newer in each respective major version).", MessageType.Info);
-                EditorGUILayout.PropertyField(renderFromPVCameraForMixedRealityCapture, PVCameraRenderingTitle);
+                EditorGUILayout.HelpBox("Render from PV Camera is supported on Unity 2018.4.13f1 or newer and 2019.3.0f1 or newer. Enabling the feature on other versions may result in incorrect capture behavior.", MessageType.Info);
+                EditorGUILayout.PropertyField(renderFromPVCameraForMixedRealityCapture, pvCameraRenderingTitle);
 
                 EditorGUILayout.Space();
                 using (new EditorGUILayout.HorizontalScope())
@@ -60,15 +55,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Editor
                     EditorGUILayout.LabelField("Depth Reprojection Settings", EditorStyles.boldLabel);
                     InspectorUIUtility.RenderDocumentationButton(DepthReprojectionDocURL);
                 }
-                EditorGUILayout.PropertyField(reprojectionMethod, ReprojectionMethodTitle);
-
-                EditorGUILayout.Space();
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    EditorGUILayout.LabelField("Reading Mode Settings", EditorStyles.boldLabel);
-                    InspectorUIUtility.RenderDocumentationButton(ReadingModeDocURL);
-                }
-                EditorGUILayout.PropertyField(readingModeEnabled);
+                EditorGUILayout.PropertyField(reprojectionMethod, reprojectionMethodTitle);
 
                 serializedObject.ApplyModifiedProperties();
             }

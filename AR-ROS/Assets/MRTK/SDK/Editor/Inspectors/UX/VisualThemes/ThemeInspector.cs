@@ -270,7 +270,7 @@ namespace Microsoft.MixedReality.Toolkit.UI.Editor
                 SerializedProperty stateProperty = stateProperties.GetArrayElementAtIndex(i);
                 SerializedProperty type = stateProperty.FindPropertyRelative("type");
 
-                if (ThemeStateProperty.IsShaderPropertyType((ThemePropertyTypes)type.intValue))
+                if (ThemeStateProperty.IsShaderPropertyType((ThemePropertyTypes)type.enumValueIndex))
                 {
                     SerializedProperty statePropertyName = stateProperty.FindPropertyRelative("name");
                     SerializedProperty shader = stateProperty.FindPropertyRelative("targetShader");
@@ -281,7 +281,7 @@ namespace Microsoft.MixedReality.Toolkit.UI.Editor
 
                     EditorGUILayout.PropertyField(shader, new GUIContent(statePropertyName.stringValue + " Shader"), false);
 
-                    var propertyList = GetShaderPropertyList(shader.objectReferenceValue as Shader, GetShaderPropertyFilter((ThemePropertyTypes)type.intValue));
+                    var propertyList = GetShaderPropertyList(shader.objectReferenceValue as Shader, GetShaderPropertyFilter((ThemePropertyTypes)type.enumValueIndex));
                     int selectedIndex = propertyList.IndexOf(shaderPropertyname.stringValue);
 
                     Rect pos = EditorGUILayout.GetControlRect();
@@ -326,11 +326,11 @@ namespace Microsoft.MixedReality.Toolkit.UI.Editor
                     shader.objectReferenceValue = StandardShaderUtility.MrtkStandardShader;
 
                     SerializedProperty type = stateProperty.FindPropertyRelative("type");
-                    if (type.intValue == (int)ThemePropertyTypes.Color)
+                    if (type.enumValueIndex == (int)ThemePropertyTypes.Color)
                     {
                         shaderPropertyname.stringValue = "_Color";
                     }
-                    else if (type.intValue == (int)ThemePropertyTypes.Texture)
+                    else if (type.enumValueIndex == (int)ThemePropertyTypes.Texture)
                     {
                         shaderPropertyname.stringValue = "_MainTex";
                     }

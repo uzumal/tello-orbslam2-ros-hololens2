@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using Microsoft.MixedReality.Toolkit.Experimental.Utilities;
 using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 using System.Collections;
 using TMPro;

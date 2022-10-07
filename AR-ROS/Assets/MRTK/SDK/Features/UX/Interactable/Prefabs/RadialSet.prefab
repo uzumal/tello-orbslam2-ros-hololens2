@@ -891,7 +891,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 1
   CanDeselect: 0
-  voiceCommand: Select
+  VoiceCommand: Select
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 1301037372891736}
@@ -950,7 +950,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       Options: []
-  resetOnDestroy: 0
   enabledOnStart: 1
 --- !u!114 &4754899564184264502
 MonoBehaviour:
@@ -1131,7 +1130,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 1
   CanDeselect: 0
-  voiceCommand: Select
+  VoiceCommand: Select
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 1842973494018042}
@@ -1190,7 +1189,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       Options: []
-  resetOnDestroy: 0
   enabledOnStart: 1
 --- !u!114 &3360437626877041567
 MonoBehaviour:
@@ -1553,7 +1551,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 1
   CanDeselect: 0
-  voiceCommand: Select
+  VoiceCommand: Select
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 1903041749280706}
@@ -1612,7 +1610,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       Options: []
-  resetOnDestroy: 0
   enabledOnStart: 1
 --- !u!114 &5855375433444044948
 MonoBehaviour:

@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 #if UNITY_EDITOR
+using UnityEditor;
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 #endif
 
@@ -17,29 +18,24 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// </summary>
     public class ArticulatedHandPose
     {
-        private static readonly TrackedHandJoint[] Joints = Enum.GetValues(typeof(TrackedHandJoint)) as TrackedHandJoint[];
-
-        /// <summary>
-        /// Represents the maximum number of tracked hand joints.
-        /// </summary>
-        public static int JointCount { get; } = Joints.Length;
+        private static readonly int jointCount = Enum.GetNames(typeof(TrackedHandJoint)).Length;
 
         /// <summary>
         /// Joint poses are stored as right-hand poses in camera space.
         /// Output poses are computed in world space, and mirroring on the x axis for the left hand.
         /// </summary>
-        private readonly MixedRealityPose[] localJointPoses;
+        private MixedRealityPose[] localJointPoses;
 
         public ArticulatedHandPose()
         {
-            localJointPoses = new MixedRealityPose[JointCount];
+            localJointPoses = new MixedRealityPose[jointCount];
             SetZero();
         }
 
-        public ArticulatedHandPose(MixedRealityPose[] localJointPoses)
+        public ArticulatedHandPose(MixedRealityPose[] _localJointPoses)
         {
-            this.localJointPoses = new MixedRealityPose[JointCount];
-            Array.Copy(localJointPoses, this.localJointPoses, JointCount);
+            localJointPoses = new MixedRealityPose[jointCount];
+            Array.Copy(_localJointPoses, localJointPoses, jointCount);
         }
 
         public MixedRealityPose GetLocalJointPose(TrackedHandJoint joint, Handedness handedness)
@@ -70,10 +66,10 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             Vector3 position,
             MixedRealityPose[] jointsOut)
         {
-            for (int i = 0; i < JointCount; i++)
+            for (int i = 0; i < jointCount; i++)
             {
                 // Initialize from local offsets
-                MixedRealityPose pose = GetLocalJointPose(Joints[i], handedness);
+                MixedRealityPose pose = GetLocalJointPose((TrackedHandJoint)i, handedness);
                 Vector3 p = pose.Position;
                 Quaternion r = pose.Rotation;
 
@@ -101,7 +97,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             Quaternion invRotation = Quaternion.Inverse(rotation);
             Quaternion invCameraRotation = Quaternion.Inverse(CameraCache.Main.transform.rotation);
 
-            for (int i = 0; i < JointCount; i++)
+            for (int i = 0; i < jointCount; i++)
             {
                 Vector3 p = joints[i].Position;
                 Quaternion r = joints[i].Rotation;
@@ -131,7 +127,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// </summary>
         public void SetZero()
         {
-            for (int i = 0; i < JointCount; i++)
+            for (int i = 0; i < jointCount; i++)
             {
                 localJointPoses[i] = MixedRealityPose.ZeroIdentity;
             }
@@ -142,7 +138,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// </summary>
         public void Copy(ArticulatedHandPose other)
         {
-            Array.Copy(other.localJointPoses, localJointPoses, JointCount);
+            Array.Copy(other.localJointPoses, localJointPoses, jointCount);
         }
 
         /// <summary>
@@ -150,7 +146,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// </summary>
         public void InterpolateOffsets(ArticulatedHandPose poseA, ArticulatedHandPose poseB, float value)
         {
-            for (int i = 0; i < JointCount; i++)
+            for (int i = 0; i < jointCount; i++)
             {
                 var p = Vector3.Lerp(poseA.localJointPoses[i].Position, poseB.localJointPoses[i].Position, value);
                 var r = Quaternion.Slerp(poseA.localJointPoses[i].Rotation, poseB.localJointPoses[i].Rotation, value);
@@ -203,14 +199,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             /// Relaxed hand pose, grab point does not move
             /// </summary>
             OpenSteadyGrabPoint,
-            /// <summary>
-            /// Hand facing upwards, Index and Thumb stretched out to start a teleport
-            /// </summary>
-            TeleportStart,
-            /// <summary>
-            /// Hand facing upwards, Index curled in to finish a teleport
-            /// </summary>
-            TeleportEnd,
         }
 
         [Obsolete("Use SimulatedArticulatedHandPoses class or other custom class")]
@@ -306,12 +294,14 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         [Serializable]
         internal class ArticulatedHandPoseDictionary
         {
+            private static readonly int jointCount = Enum.GetNames(typeof(TrackedHandJoint)).Length;
+
             public ArticulatedHandPoseItem[] items = null;
 
             public void FromJointPoses(MixedRealityPose[] jointPoses)
             {
-                items = new ArticulatedHandPoseItem[JointCount];
-                for (int i = 0; i < JointCount; ++i)
+                items = new ArticulatedHandPoseItem[jointCount];
+                for (int i = 0; i < jointCount; ++i)
                 {
                     items[i].JointIndex = (TrackedHandJoint)i;
                     items[i].pose = jointPoses[i];
@@ -320,7 +310,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
             public void ToJointPoses(MixedRealityPose[] jointPoses)
             {
-                for (int i = 0; i < JointCount; ++i)
+                for (int i = 0; i < jointCount; ++i)
                 {
                     jointPoses[i] = MixedRealityPose.ZeroIdentity;
                 }

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Physics;
-using System;
 using System.Collections;
 using Unity.Profiling;
 using UnityEngine;
@@ -13,8 +12,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// Base Pointer class for pointers that exist in the scene as GameObjects.
     /// </summary>
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/pointers")]
-    public abstract class BaseControllerPointer : ControllerPoseSynchronizer, IMixedRealityQueryablePointer
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Pointers.html")]
+    public abstract class BaseControllerPointer : ControllerPoseSynchronizer, IMixedRealityPointer
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -40,15 +39,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         [SerializeField]
         [Tooltip("The action that will enable the raise the input event for this pointer.")]
         protected MixedRealityInputAction pointerAction = MixedRealityInputAction.None;
-
-        [SerializeField]
-        [Tooltip("The action that will enable the raise the input grab event for this pointer.")]
-        protected MixedRealityInputAction grabAction = MixedRealityInputAction.None;
-
-        /// <summary>
-        /// True if grab is pressed right now
-        /// </summary>
-        protected bool IsGrabPressed = false;
 
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
@@ -83,8 +73,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (SetCursorPerfMarker.Auto())
             {
-                // Destroy the old cursor and replace it with the new one if a new cursor was provided
-                if (cursorInstance != null && newCursor != null)
+                if (cursorInstance != null)
                 {
                     DestroyCursorInstance();
                     cursorInstance = newCursor;
@@ -92,15 +81,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
                 if (cursorInstance == null && cursorPrefab != null)
                 {
-                    // We spawn the cursor at the same level as this pointer by setting its parent to be the same as the pointer's
-                    // In the future, the pointer will not be responsible for instantiating the cursor, so we'll avoid making this assumption about the hierarchy
-                    cursorInstance = Instantiate(cursorPrefab, transform.parent);
+                    cursorInstance = Instantiate(cursorPrefab, transform);
                     isCursorInstantiatedFromPrefab = true;
                 }
 
                 if (cursorInstance != null)
                 {
-                    cursorInstance.name = $"{name}_Cursor";
+                    cursorInstance.name = $"{Handedness}_{name}_Cursor";
 
                     BaseCursor oldC = BaseCursor as BaseCursor;
                     if (oldC != null && enabled)
@@ -170,7 +157,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             await EnsureInputSystemValid();
 
             // We've been destroyed during the await.
-            if (this.IsNull())
+            if (this == null)
             {
                 return;
             }
@@ -185,7 +172,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         protected override void OnDisable()
         {
-            if (IsSelectPressed || IsGrabPressed)
+            if (IsSelectPressed)
             {
                 CoreServices.InputSystem?.RaisePointerUp(this, pointerAction, Handedness);
             }
@@ -194,7 +181,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
             IsHoldPressed = false;
             IsSelectPressed = false;
-            IsGrabPressed = false;
             HasSelectPressedOnce = false;
             BaseCursor?.SetVisibility(false);
 
@@ -226,15 +212,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 base.Controller = value;
 
-                if (base.Controller != null && this.IsNotNull())
+                if (base.Controller != null && this != null)
                 {
-                    // Ensures that the basePointerName is only initialized once
-                    if (basePointerName == string.Empty)
-                    {
-                        basePointerName = gameObject.name;
-                    }
-                    PointerName = $"{Handedness}_{basePointerName}";
-                    SetCursor();
+                    PointerName = gameObject.name;
+                    InputSourceParent = base.Controller.InputSource;
                 }
             }
         }
@@ -255,7 +236,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
-        private string basePointerName = string.Empty;
         private string pointerName = string.Empty;
 
         /// <inheritdoc />
@@ -265,7 +245,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             set
             {
                 pointerName = value;
-                if (this.IsNotNull())
+                if (this != null)
                 {
                     gameObject.name = value;
                 }
@@ -273,15 +253,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         }
 
         /// <inheritdoc />
-        public IMixedRealityInputSource InputSourceParent
-        {
-            get { return base.Controller?.InputSource; }
-
-#if UNITY_2020_3_OR_NEWER
-            [Obsolete("Setting the Input Source Parent directly is no longer supported")]
-#endif
-            protected set { Debug.LogWarning("Setting the Input Source Parent directly is no longer supported"); }
-        }
+        public IMixedRealityInputSource InputSourceParent { get; protected set; }
 
         /// <inheritdoc />
         public IMixedRealityCursor BaseCursor { get; set; }
@@ -309,7 +281,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     return true;
                 }
 
-                if (IsSelectPressed || IsGrabPressed)
+                if (IsSelectPressed)
                 {
                     return true;
                 }
@@ -378,7 +350,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public RayStep[] Rays { get; protected set; } = { new RayStep(Vector3.zero, Vector3.forward) };
 
         /// <inheritdoc />
-        public virtual LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
+        public LayerMask[] PrioritizedLayerMasksOverride { get; set; }
 
         /// <inheritdoc />
         public IMixedRealityFocusHandler FocusTarget { get; set; }
@@ -414,65 +386,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public virtual void OnPreSceneQuery() { }
 
-        /// <inheritdoc />
-        public virtual bool OnSceneQuery(LayerMask[] prioritizedLayerMasks, bool focusIndividualCompoundCollider, out MixedRealityRaycastHit hitInfo, out RayStep Ray, out int rayStepIndex)
-        {
-            float rayStartDistance = 0;
-            var raycastProvider = CoreServices.InputSystem.RaycastProvider;
-
-            switch (SceneQueryType)
-            {
-                case SceneQueryType.SimpleRaycast:
-                    for (int i = 0; i < Rays.Length; i++)
-                    {
-                        if (raycastProvider.Raycast(Rays[i], prioritizedLayerMasks, focusIndividualCompoundCollider, out hitInfo))
-                        {
-                            // Ensure that our distance is the sum of the rays we've traversed so far
-                            hitInfo.distance += rayStartDistance;
-                            Ray = Rays[i];
-                            rayStepIndex = i;
-                            return true;
-                        }
-                        rayStartDistance += Rays[i].Length;
-                    }
-                    break;
-                case SceneQueryType.SphereCast:
-                    for (int i = 0; i < Rays.Length; i++)
-                    {
-                        if (raycastProvider.SphereCast(Rays[i], SphereCastRadius, prioritizedLayerMasks, focusIndividualCompoundCollider, out hitInfo))
-                        {
-                            // Ensure that our distance is the sum of the rays we've traversed so far
-                            hitInfo.distance += rayStartDistance;
-                            Ray = Rays[i];
-                            rayStepIndex = i;
-                            return true;
-                        }
-                        rayStartDistance += Rays[i].Length;
-                    }
-                    break;
-                default:
-                    throw new System.Exception("The Base Controller Pointer does not handle non-raycast scene queries");
-            }
-
-            hitInfo = new MixedRealityRaycastHit();
-            Ray = Rays[0];
-            rayStepIndex = 0;
-            return false;
-        }
-
-        /// <inheritdoc />
-        public virtual bool OnSceneQuery(LayerMask[] prioritizedLayerMasks, bool focusIndividualCompoundCollider, out GameObject hitObject, out Vector3 hitPoint, out float hitDistance)
-        {
-            MixedRealityRaycastHit hitInfo = new MixedRealityRaycastHit();
-            bool querySuccessful = OnSceneQuery(prioritizedLayerMasks, focusIndividualCompoundCollider, out hitInfo, out _, out _);
-
-            hitObject = focusIndividualCompoundCollider ? hitInfo.collider.gameObject : hitInfo.transform.gameObject;
-            hitPoint = hitInfo.point;
-            hitDistance = hitInfo.distance;
-
-            return querySuccessful;
-        }
-
         private static readonly ProfilerMarker OnPostSceneQueryPerfMarker = new ProfilerMarker("[MRTK] BaseControllerPointer.OnPostSceneQuery");
 
         /// <inheritdoc />
@@ -480,19 +393,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (OnPostSceneQueryPerfMarker.Auto())
             {
-                if (grabAction != MixedRealityInputAction.None && InputSourceParent.SourceType == InputSourceType.Controller)
+                if (IsSelectPressed)
                 {
-                    if (IsGrabPressed)
-                    {
-                        CoreServices.InputSystem.RaisePointerDragged(this, grabAction, Handedness);
-                    }
-                }
-                else
-                {
-                    if (IsSelectPressed)
-                    {
-                        CoreServices.InputSystem.RaisePointerDragged(this, MixedRealityInputAction.None, Handedness);
-                    }
+                    CoreServices.InputSystem.RaisePointerDragged(this, MixedRealityInputAction.None, Handedness);
                 }
             }
         }
@@ -581,13 +484,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                         CoreServices.InputSystem.RaisePointerUp(this, pointerAction, Handedness);
                     }
 
-                    if (IsGrabPressed)
-                    {
-                        CoreServices.InputSystem.RaisePointerUp(this, grabAction, Handedness);
-                    }
-
                     IsSelectPressed = false;
-                    IsGrabPressed = false;
                 }
             }
         }
@@ -612,16 +509,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
                     {
                         IsHoldPressed = false;
-                    }
-
-                    if (grabAction != MixedRealityInputAction.None &&
-                        eventData.InputSource.SourceType == InputSourceType.Controller &&
-                        eventData.MixedRealityInputAction == grabAction)
-                    {
-                        IsGrabPressed = false;
-
-                        CoreServices.InputSystem.RaisePointerClicked(this, grabAction, 0, Handedness);
-                        CoreServices.InputSystem.RaisePointerUp(this, grabAction, Handedness);
                     }
 
                     if (eventData.MixedRealityInputAction == pointerAction)
@@ -651,18 +538,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
                     {
                         IsHoldPressed = true;
-                    }
-
-                    if (grabAction != MixedRealityInputAction.None &&
-                        eventData.InputSource.SourceType == InputSourceType.Controller &&
-                        eventData.MixedRealityInputAction == grabAction)
-                    {
-                        IsGrabPressed = true;
-
-                        if (IsInteractionEnabled)
-                        {
-                            CoreServices.InputSystem.RaisePointerDown(this, grabAction, Handedness);
-                        }
                     }
 
                     if (eventData.MixedRealityInputAction == pointerAction)

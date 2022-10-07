@@ -90,27 +90,13 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
             string storagePath = Path.GetFullPath(Path.Combine(Path.Combine(Application.dataPath, ".."), buildInfo.OutputDirectory));
             string solutionProjectPath = Path.GetFullPath(Path.Combine(storagePath, $@"{PlayerSettings.productName}.sln"));
 
-            int exitCode;
-
             // Building the solution requires first restoring NuGet packages - when built through
             // Visual Studio, VS does this automatically - when building via msbuild like we're doing here,
             // we have to do that step manually.
-            // We use msbuild for nuget restore by default, but if a path to nuget.exe is supplied then we use that executable
-            if (string.IsNullOrEmpty(buildInfo.NugetExecutablePath))
-            {
-                exitCode = await Run(msBuildPath,
+            int exitCode = await Run(msBuildPath,
                 $"\"{solutionProjectPath}\" /t:restore {GetMSBuildLoggingCommand(buildInfo.LogDirectory, "nugetRestore.log")}",
                 !Application.isBatchMode,
                 cancellationToken);
-            }
-            else
-            {
-                exitCode = await Run(buildInfo.NugetExecutablePath,
-                $"restore \"{solutionProjectPath}\"",
-                !Application.isBatchMode,
-                cancellationToken);
-            }
-
             if (exitCode != 0)
             {
                 IsBuilding = false;
@@ -158,32 +144,32 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
                     Debug.LogWarning("The build was terminated either by user's keyboard input CTRL+C or CTRL+Break or closing command prompt window.");
                     break;
                 default:
-                {
-                    if (processResult.ExitCode != 0)
                     {
-                        Debug.Log($"Command failed, errorCode: {processResult.ExitCode}");
-
-                        if (Application.isBatchMode)
+                        if (processResult.ExitCode != 0)
                         {
-                            var output = "Command output:\n";
+                            Debug.Log($"Command failed, errorCode: {processResult.ExitCode}");
 
-                            foreach (var message in processResult.Output)
+                            if (Application.isBatchMode)
                             {
-                                output += $"{message}\n";
+                                var output = "Command output:\n";
+
+                                foreach (var message in processResult.Output)
+                                {
+                                    output += $"{message}\n";
+                                }
+
+                                output += "Command errors:";
+
+                                foreach (var error in processResult.Errors)
+                                {
+                                    output += $"{error}\n";
+                                }
+
+                                Debug.LogError(output);
                             }
-
-                            output += "Command errors:";
-
-                            foreach (var error in processResult.Errors)
-                            {
-                                output += $"{error}\n";
-                            }
-
-                            Debug.LogError(output);
                         }
+                        break;
                     }
-                    break;
-                }
             }
             return processResult.ExitCode;
         }
@@ -522,18 +508,6 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
             var uwpBuildInfo = buildInfo as UwpBuildInfo;
 
             Debug.Assert(uwpBuildInfo != null);
-
-            // Here, ResearchModeCapability must come first, in order to avoid schema errors
-            // See https://docs.microsoft.com/windows/uwp/packaging/app-capability-declarations#restricted-capabilities
-            if (uwpBuildInfo.ResearchModeCapabilityEnabled
-#if !UNITY_2021_2_OR_NEWER
-                && EditorUserBuildSettings.wsaSubtarget == WSASubtarget.HoloLens
-#endif // !UNITY_2021_2_OR_NEWER
-            )
-            {
-                AddResearchModeCapability(rootElement);
-            }
-
             if (uwpBuildInfo.DeviceCapabilities != null)
             {
                 AddCapabilities(rootElement, uwpBuildInfo.DeviceCapabilities);
@@ -541,6 +515,11 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
             if (uwpBuildInfo.GazeInputCapabilityEnabled)
             {
                 AddGazeInputCapability(rootElement);
+            }
+
+            if (uwpBuildInfo.ResearchModeCapabilityEnabled && EditorUserBuildSettings.wsaSubtarget == WSASubtarget.HoloLens)
+            {
+                AddResearchModeCapability(rootElement);
             }
 
             rootElement.Save(manifestFilePath);
@@ -580,10 +559,10 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         /// Adds the 'Gaze Input' capability to the manifest.
         /// </summary>
         /// <remarks>
-        /// <para>This is a workaround for versions of Unity which don't have native support
+        /// This is a workaround for versions of Unity which don't have native support
         /// for the 'Gaze Input' capability in its Player Settings preference location.
         /// Note that this function is only public to poke a hole for testing - do not
-        /// take a dependency on this function.</para>
+        /// take a dependency on this function.
         /// </remarks>
         public static void AddGazeInputCapability(XElement rootNode)
         {
@@ -605,10 +584,10 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         /// Adds the 'Research Mode' capability to the manifest.
         /// </summary>
         /// <remarks>
-        /// <para>This is only for research projects and should not be used in production.
+        /// This is only for research projects and should not be used in production.
         /// For further information take a look at https://docs.microsoft.com/windows/mixed-reality/research-mode.
         /// Note that this function is only public to poke a hole for testing - do not
-        /// take a dependency on this function.</para>
+        /// take a dependency on this function.
         /// </remarks>
         public static void AddResearchModeCapability(XElement rootNode)
         {
@@ -641,12 +620,12 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         /// Enables unsafe code in the generated Assembly-CSharp project.
         /// </summary>
         /// <remarks>
-        /// <para>This is not required by the research mode, but not using unsafe code with
-        /// direct memory access results in poor performance. So it is recommended
-        /// to use unsafe code to an extent.</para>
-        /// <para>For further information take a look at https://docs.microsoft.com/windows/mixed-reality/research-mode. </para>
-        /// <para>Note that this function is only public to poke a hole for testing - do not
-        /// take a dependency on this function.</para>
+        /// This is not required by the research mode, but not using unsafe code with
+        /// direct memory access results in poor performance. So its kinda recommended
+        /// to use unsafe code.
+        /// For further information take a look at https://docs.microsoft.com/windows/mixed-reality/research-mode.
+        /// Note that this function is only public to poke a hole for testing - do not
+        /// take a dependency on this function.
         /// </remarks>
         public static void AllowUnsafeCode(XElement rootNode)
         {

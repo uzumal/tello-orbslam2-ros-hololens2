@@ -21,8 +21,6 @@ namespace RosSharp
     [ExecuteInEditMode]
     public class HingeJointLimitsManager : MonoBehaviour
     {
-        private HingeJointAngleCalculator _hingeJointAngleCalculator;
-
         public float LargeAngleLimitMin;
         public float LargeAngleLimitMax;
 
@@ -44,7 +42,6 @@ namespace RosSharp
         private void Awake()
         {
             _hingeJoint = GetComponent<HingeJoint>();
-            _hingeJointAngleCalculator = GetComponent<HingeJointAngleCalculator>();
             RecalculateJointLimits();
         }
 
@@ -122,8 +119,9 @@ namespace RosSharp
         private void UpdateAngles()
         {
             anglePrevious = AngleActual;
-            AngleActual = _hingeJointAngleCalculator.Angle;
 
+            AngleActual = _hingeJoint.angle;
+            
             if (anglePrevious < -90 && AngleActual > 90)
                 RotationNumberActual -= 1;
             else if (anglePrevious > 90 && AngleActual < -90)

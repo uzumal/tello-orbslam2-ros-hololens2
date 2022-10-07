@@ -9,18 +9,20 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// Interface to implement to react to focus enter/exit.
     /// </summary>
     /// <remarks>
-    /// <para>The events on this interface are related to those of <see cref="IMixedRealityFocusChangedHandler"/>, whose event have
-    /// a known ordering with this interface:</para>
-    /// <para>IMixedRealityFocusChangedHandler::OnBeforeFocusChange</para>
-    /// <para>IMixedRealityFocusHandler::OnFocusEnter</para>
-    /// <para>IMixedRealityFocusHandler::OnFocusExit</para>
-    /// <para>IMixedRealityFocusChangedHandler::OnFocusChanged</para>
-    /// <para>Because these two interfaces are different, consumers must be wary about having nested
+    /// The events on this interface are related to those of <see cref="IMixedRealityFocusChangedHandler"/>, whose event have
+    /// a known ordering with this interface:
+    ///
+    /// IMixedRealityFocusChangedHandler::OnBeforeFocusChange
+    /// IMixedRealityFocusHandler::OnFocusEnter
+    /// IMixedRealityFocusHandler::OnFocusExit
+    /// IMixedRealityFocusChangedHandler::OnFocusChanged
+    ///
+    /// Because these two interfaces are different, consumers must be wary about having nested
     /// hierarchies where some game objects will implement both interfaces, and more deeply nested
     /// object within the same parent-child chain that implement a single one of these - such
     /// a presence can lead to scenarios where one interface is invoked on the child object, and then
     /// the other interface is invoked on the parent object (thus, the parent would "miss" getting
-    /// the event that the child had already processed).</para>
+    /// the event that the child had already processed).
     /// </remarks>
     public interface IMixedRealityFocusHandler : IEventSystemHandler
     {
