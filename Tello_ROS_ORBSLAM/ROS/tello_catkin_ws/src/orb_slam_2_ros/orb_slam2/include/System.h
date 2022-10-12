@@ -22,31 +22,30 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include<string>
-#include<thread>
+#include <string>
+#include <thread>
 #include <unistd.h>
-#include<opencv2/core/core.hpp>
+#include <opencv2/core/core.hpp>
 #include <sys/resource.h>
+
 
 #include "Tracking.h"
 #include "FrameDrawer.h"
-#include "MapDrawer.h"
 #include "Map.h"
 #include "LocalMapping.h"
 #include "LoopClosing.h"
 #include "KeyFrameDatabase.h"
 #include "ORBVocabulary.h"
-#include "Viewer.h"
 
 namespace ORB_SLAM2
 {
-
-class Viewer;
 class FrameDrawer;
 class Map;
 class Tracking;
 class LocalMapping;
 class LoopClosing;
+
+struct ORBParameters;
 
 class System
 {
@@ -61,33 +60,31 @@ public:
 public:
 
     // Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.
-    System(const string strVocFile, const string strSettingsFile, const eSensor sensor, const bool bUseViewer = true,
+    System(const string strVocFile, const eSensor sensor, ORBParameters& parameters,
            const std::string & map_file = "", bool load_map = false); // map serialization addition
 
-    // Proccess the given stereo frame. Images must be synchronized and rectified.
+    // Process the given stereo frame. Images must be synchronized and rectified.
     // Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Returns the camera pose (empty if tracking fails).
-    cv::Mat TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timestamp);
+    void TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timestamp);
 
     // Process the given rgbd frame. Depthmap must be registered to the RGB frame.
     // Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Input depthmap: Float (CV_32F).
     // Returns the camera pose (empty if tracking fails).
-    cv::Mat TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const double &timestamp);
+    void TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const double &timestamp);
 
-    // Proccess the given monocular frame
+    // Process the given monocular frame
     // Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Returns the camera pose (empty if tracking fails).
-    cv::Mat TrackMonocular(const cv::Mat &im, const double &timestamp);
-
-    // This stops local mapping thread (map building) and performs only camera tracking.
-    void ActivateLocalizationMode();
-    // This resumes local mapping thread and performs SLAM again.
-    void DeactivateLocalizationMode();
+    void TrackMonocular(const cv::Mat &im, const double &timestamp);
 
     // Returns true if there have been a big map change (loop closure, global BA)
     // since last call to this function
     bool MapChanged();
+
+    // Returns true if Global Bundle Adjustment is running
+    bool isRunningGBA();
 
     // Reset the system (clear map)
     void Reset();
@@ -138,21 +135,16 @@ public:
 
     std::vector<MapPoint*> GetAllMapPoints();
 
-    // Tracker. It receives a frame and computes the associated camera pose.
-    // It also decides when to insert a new keyframe, create some new MapPoints and
-    // performs relocalization if tracking fails.
-    Tracking* mpTracker;
-
-    MapDrawer* mpMapDrawer;
-
-    // The viewer draws the map and the current camera pose. It uses Pangolin.
-    Viewer* mpViewer;
-
-
 private:
     bool SetCallStackSize (const rlim_t kNewStackSize);
 
     rlim_t GetCurrentCallStackSize ();
+
+    // This stops local mapping thread (map building) and performs only camera tracking.
+    void ActivateLocalizationMode();
+
+    // This resumes local mapping thread and performs SLAM again.
+    void DeactivateLocalizationMode();
 
     bool LoadMap(const string &filename);
 
@@ -174,7 +166,10 @@ private:
     // Map structure that stores the pointers to all KeyFrames and MapPoints.
     Map* mpMap;
 
-
+    // Tracker. It receives a frame and computes the associated camera pose.
+    // It also decides when to insert a new keyframe, create some new MapPoints and
+    // performs relocalization if tracking fails.
+    Tracking* mpTracker;
 
     // Local Mapper. It manages the local map and performs local bundle adjustment.
     LocalMapping* mpLocalMapper;
@@ -183,16 +178,12 @@ private:
     // a pose graph optimization and full bundle adjustment (in a new thread) afterwards.
     LoopClosing* mpLoopCloser;
 
-
-
     FrameDrawer* mpFrameDrawer;
-
 
     // System threads: Local Mapping, Loop Closing, Viewer.
     // The Tracking thread "lives" in the main execution thread that creates the System object.
     std::thread* mptLocalMapping;
     std::thread* mptLoopClosing;
-    std::thread* mptViewer;
 
     // Reset flag
     std::mutex mMutexReset;
@@ -211,6 +202,7 @@ private:
 
     // Current position
     cv::Mat current_position_;
+
 };
 
 }// namespace ORB_SLAM

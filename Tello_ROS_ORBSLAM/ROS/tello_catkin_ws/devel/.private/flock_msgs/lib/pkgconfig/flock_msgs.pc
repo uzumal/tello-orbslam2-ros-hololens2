@@ -1,8 +1,8 @@
-prefix=/home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs
+prefix=/home/uzu/Train/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs
 
 Name: flock_msgs
 Description: Description of flock_msgs
 Version: 0.1.0
-Cflags: -I/home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs/include
+Cflags: -I/home/uzu/Train/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs/include
 Libs: -L${prefix}/lib 
 Requires: message_runtime

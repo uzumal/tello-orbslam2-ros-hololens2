@@ -1,4 +1,4 @@
-prefix=/home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_driver
+prefix=/home/uzu/Train/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_driver
 
 Name: flock_driver
 Description: Description of flock_driver

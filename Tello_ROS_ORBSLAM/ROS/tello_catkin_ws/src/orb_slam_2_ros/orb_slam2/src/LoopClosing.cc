@@ -423,7 +423,6 @@ void LoopClosing::CorrectLoop()
     }
 
     // Wait until Local Mapping has effectively stopped
-//    cout << "while(!mpLocalMapper->isStopped())" << endl;
     while(!mpLocalMapper->isStopped())
     {
         std::this_thread::sleep_for(std::chrono::microseconds(1000));
@@ -439,8 +438,6 @@ void LoopClosing::CorrectLoop()
     KeyFrameAndPose CorrectedSim3, NonCorrectedSim3;
     CorrectedSim3[mpCurrentKF]=mg2oScw;
     cv::Mat Twc = mpCurrentKF->GetPoseInverse();
-
-//    cout << "cv::Mat Twc = mpCurrentKF->GetPoseInverse();" << endl;
 
 
     {
@@ -518,8 +515,6 @@ void LoopClosing::CorrectLoop()
             pKFi->UpdateConnections();
         }
 
-        cout << "Start Loop Fusion" << endl;
-
         // Start Loop Fusion
         // Update matched map points and replace if duplicated
         for(size_t i=0; i<mvpCurrentMatchedPoints.size(); i++)
@@ -544,7 +539,6 @@ void LoopClosing::CorrectLoop()
     // Project MapPoints observed in the neighborhood of the loop keyframe
     // into the current keyframe and neighbors using corrected poses.
     // Fuse duplications.
-//    cout << "SearchAndFuse(CorrectedSim3);" << endl;
     SearchAndFuse(CorrectedSim3);
 
 
@@ -570,7 +564,6 @@ void LoopClosing::CorrectLoop()
     }
 
     // Optimize graph
-    cout << "Optimize graph" << endl;
     Optimizer::OptimizeEssentialGraph(mpMap, mpMatchedKF, mpCurrentKF, NonCorrectedSim3, CorrectedSim3, LoopConnections, mbFixScale);
 
     mpMap->InformNewBigChange();

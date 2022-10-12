@@ -23,16 +23,15 @@
 #include "System.h"
 #include "Converter.h"
 #include <thread>
-#include <pangolin/pangolin.h>
 #include <iomanip>
 
 namespace ORB_SLAM2
 {
 
-System::System(const string strVocFile, const string strSettingsFile, const eSensor sensor,
-               const bool bUseViewer, const std::string & map_file, bool load_map): // map serialization addition
-               mSensor(sensor), mpViewer(static_cast<Viewer*>(NULL)), mbReset(false),mbActivateLocalizationMode(false), 
-			   mbDeactivateLocalizationMode(false), map_file(map_file), load_map(load_map)
+System::System(const string strVocFile, const eSensor sensor, ORBParameters& parameters,
+               const std::string & map_file, bool load_map): // map serialization addition
+               mSensor(sensor), mbReset(false),mbActivateLocalizationMode(false), mbDeactivateLocalizationMode(false),
+               map_file(map_file), load_map(load_map)
 {
     // Output welcome message
     cout << endl <<
@@ -40,6 +39,11 @@ System::System(const string strVocFile, const string strSettingsFile, const eSen
     "This program comes with ABSOLUTELY NO WARRANTY;" << endl  <<
     "This is free software, and you are welcome to redistribute it" << endl <<
     "under certain conditions. See LICENSE.txt." << endl << endl;
+
+    cout << "OpenCV version : " << CV_VERSION << endl;
+    cout << "Major version : " << CV_MAJOR_VERSION << endl;
+    cout << "Minor version : " << CV_MINOR_VERSION << endl;
+    cout << "Subminor version : " << CV_SUBMINOR_VERSION << endl;
 
     cout << "Input sensor was set to: ";
 
@@ -49,15 +53,6 @@ System::System(const string strVocFile, const string strSettingsFile, const eSen
         cout << "Stereo" << endl;
     else if(mSensor==RGBD)
         cout << "RGB-D" << endl;
-
-    //Check settings file
-    cv::FileStorage fsSettings(strSettingsFile.c_str(), cv::FileStorage::READ);
-    if(!fsSettings.isOpened())
-    {
-       cerr << "Failed to open settings file at: " << strSettingsFile << endl;
-       exit(-1);
-    }
-
 
     //Load ORB Vocabulary
     cout << endl << "Loading ORB Vocabulary." << endl;
@@ -100,15 +95,11 @@ System::System(const string strVocFile, const string strSettingsFile, const eSen
 
     //Create Drawers. These are used by the Viewer
     mpFrameDrawer = new FrameDrawer(mpMap);
-    cout << "Created Frame Drawer!" << endl << endl;
-    mpMapDrawer = new MapDrawer(mpMap, strSettingsFile);
 
     //Initialize the Tracking thread
     //(it will live in the main thread of execution, the one that called this constructor)
-    mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer, mpMapDrawer,
-                             mpMap, mpKeyFrameDatabase, strSettingsFile, mSensor);
-
-    cout << "Created Tracking!" << endl << endl;
+    mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer,
+                             mpMap, mpKeyFrameDatabase, mSensor, parameters);
 
     //Initialize the Local Mapping thread and launch
     mpLocalMapper = new LocalMapping(mpMap, mSensor==MONOCULAR);
@@ -118,15 +109,6 @@ System::System(const string strVocFile, const string strSettingsFile, const eSen
     mpLoopCloser = new LoopClosing(mpMap, mpKeyFrameDatabase, mpVocabulary, mSensor!=MONOCULAR);
     mptLoopClosing = new thread(&ORB_SLAM2::LoopClosing::Run, mpLoopCloser);
 
-    //Initialize the Viewer thread and launch
-    if(bUseViewer)
-    {
-        cout << "parameter use_viewer is True!" << endl << endl;
-        mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);
-        cout << "Created Viewer!" << endl << endl;
-        mptViewer = new thread(&Viewer::Run, mpViewer);
-        mpTracker->SetViewer(mpViewer);
-    }
     //Set pointers between threads
     mpTracker->SetLocalMapper(mpLocalMapper);
     mpTracker->SetLoopClosing(mpLoopCloser);
@@ -140,7 +122,7 @@ System::System(const string strVocFile, const string strSettingsFile, const eSen
     currently_localizing_only_ = false;
 }
 
-cv::Mat System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timestamp)
+void System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timestamp)
 {
     if(mSensor!=STEREO)
     {
@@ -189,10 +171,9 @@ cv::Mat System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
     current_position_ = Tcw;
-    return Tcw;
 }
 
-cv::Mat System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const double &timestamp)
+void System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const double &timestamp)
 {
     if(mSensor!=RGBD)
     {
@@ -241,10 +222,9 @@ cv::Mat System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const doub
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
     current_position_ = Tcw;
-    return Tcw;
 }
 
-cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp)
+void System::TrackMonocular(const cv::Mat &im, const double &timestamp)
 {
     if(mSensor!=MONOCULAR)
     {
@@ -294,10 +274,7 @@ cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp)
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
 
     current_position_ = Tcw;
-    return Tcw;
 }
-
-
 
 bool System::MapChanged()
 {
@@ -312,6 +289,11 @@ bool System::MapChanged()
         return false;
 }
 
+bool System::isRunningGBA()
+{
+    return  mpLoopCloser->isRunningGBA();
+}
+
 void System::Reset()
 {
     unique_lock<mutex> lock(mMutexReset);
@@ -322,21 +304,12 @@ void System::Shutdown()
 {
     mpLocalMapper->RequestFinish();
     mpLoopCloser->RequestFinish();
-    if(mpViewer)
-    {
-        mpViewer->RequestFinish();
-        while(!mpViewer->isFinished())
-            usleep(5000);
-    }
 
     // Wait until all thread have effectively stopped
     while(!mpLocalMapper->isFinished() || !mpLoopCloser->isFinished() || mpLoopCloser->isRunningGBA())
     {
         std::this_thread::sleep_for(std::chrono::microseconds(5000));
     }
-
-    if(mpViewer)
-        pangolin::BindToContext("ORB-SLAM2: Map Viewer");
 }
 
 void System::SaveTrajectoryTUM(const string &filename)
@@ -541,7 +514,7 @@ bool System::SetCallStackSize (const rlim_t kNewStackSize) {
         return false;
     }
 
-    if (rlimit.rlim_cur < kNewStackSize) {
+    if (rlimit.rlim_cur <= kNewStackSize) {
         rlimit.rlim_cur = kNewStackSize;
         operation_result = setrlimit(RLIMIT_STACK, &rlimit);
         if (operation_result != 0) {
@@ -634,7 +607,7 @@ bool System::SaveMap(const string &filename) {
 }
 
 bool System::LoadMap(const string &filename) {
-    
+
     unique_lock<mutex>MapPointGlobal(MapPoint::mGlobalMutex);
     std::ifstream in(filename, std::ios_base::binary);
     if (!in) {
@@ -663,19 +636,19 @@ bool System::LoadMap(const string &filename) {
 
         it->SetORBvocabulary(mpVocabulary);
         it->ComputeBoW();
-        
+
         if (it->mnFrameId > mnFrameId) {
             mnFrameId = it->mnFrameId;
         }
     }
 
     Frame::nNextId = mnFrameId;
-    
+
     std::cout << " ... done" << std::endl;
     in.close();
 
     SetCallStackSize(kDefaultCallStackSize);
-    
+
     return true;
 }
 

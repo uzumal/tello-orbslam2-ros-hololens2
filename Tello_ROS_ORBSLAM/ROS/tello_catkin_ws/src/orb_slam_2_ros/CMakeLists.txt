@@ -21,6 +21,7 @@ ELSE()
   MESSAGE(ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 ENDIF()
 
+
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/orb_slam2/cmake_modules)
 
 find_package (catkin REQUIRED COMPONENTS
@@ -30,20 +31,23 @@ std_msgs
 cv_bridge
 image_transport
 tf
+tf2_geometry_msgs
+tf2_ros
 sensor_msgs
 dynamic_reconfigure
 message_generation
 )
 
-find_package(OpenCV 3.0 QUIET)
+find_package(OpenCV 4.0 QUIET)
 if(NOT OpenCV_FOUND)
-   find_package(OpenCV 2.4.3 QUIET)
+   find_package(OpenCV 3.0 QUIET)
    if(NOT OpenCV_FOUND)
-      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
+      find_package(OpenCV 2.4.3 QUIET)
+      if(NOT OpenCV_FOUND)
+         message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
+     endif()
    endif()
 endif()
-
-
 
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
@@ -114,14 +118,12 @@ orb_slam2/src/Converter.cc
 orb_slam2/src/MapPoint.cc
 orb_slam2/src/KeyFrame.cc
 orb_slam2/src/Map.cc
-orb_slam2/src/MapDrawer.cc
 orb_slam2/src/Optimizer.cc
 orb_slam2/src/PnPsolver.cc
 orb_slam2/src/Frame.cc
 orb_slam2/src/KeyFrameDatabase.cc
 orb_slam2/src/Sim3Solver.cc
 orb_slam2/src/Initializer.cc
-orb_slam2/src/Viewer.cc
 )
 add_dependencies (${PROJECT_NAME} g2o DBoW2)
 
@@ -170,9 +172,6 @@ target_link_libraries(${PROJECT_NAME}_rgbd
 ${LIBS_ROS}
 ${Pangolin_LIBRARIES}
 )
-
-message(STATUS "printing CATKIN_PACKAGE_LIB_DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}" )
-message(STATUS "printing CATKIN_PACKAGE_BIN_DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}" )
 
 install(TARGETS ${PROJECT_NAME}_mono ${PROJECT_NAME}_stereo ${PROJECT_NAME}_rgbd
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

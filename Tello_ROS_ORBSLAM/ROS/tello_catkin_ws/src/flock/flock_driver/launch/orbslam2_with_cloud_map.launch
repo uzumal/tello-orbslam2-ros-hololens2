@@ -13,10 +13,9 @@
       <param name="reset_map" type="bool" value="false" />
 
       <!-- static parameters -->
-      <param name="use_viewer" type="bool" value="true" />
+      <!-- <param name="use_viewer" type="bool" value="true" /> -->
       <param name="load_map" type="bool" value="false" />
       <param name="map_file" type="string" value="map.bin" />
-      <param name="settings_file" type="string" value="$(find orb_slam2_ros)/orb_slam2/config/Tello.yaml" />
       <param name="voc_file" type="string" value="$(find orb_slam2_ros)/orb_slam2/Vocabulary/ORBvoc.txt" />
 
       <param name="pointcloud_frame_id" type="string" value="map" />
@@ -29,6 +28,23 @@
        <param name="/ORBextractor/nLevels" type="int" value="8" />
        <param name="/ORBextractor/iniThFAST" type="int" value="20" />
        <param name="/ORBextractor/minThFAST" type="int" value="7" />
+
+       <param name="camera_fps" type="int" value="30" />
+       <!-- Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale) -->
+       <!-- <param name="camera_rgb_encoding" type="bool" value="true" /> -->
+
+       <param name="load_calibration_from_cam" type="bool" value="false" />
+       <!-- Camera calibration and distortion parameters (OpenCV) -->
+      <param name="camera_fx" type="double" value="924.873180" />
+      <param name="camera_fy" type="double" value="923.504522" />
+      <param name="camera_cx" type="double" value="486.997346" />
+      <param name="camera_cy" type="double" value="364.308527" />
+       <!-- Camera calibration and distortion parameters (OpenCV) -->
+      <param name="camera_k1" type="double" value="-0.034749" />
+      <param name="camera_k2" type="double" value="0.071514" />
+      <param name="camera_p1" type="double" value="0.000363" />
+      <param name="camera_p2" type="double" value="0.003131" />
+      <param name="camera_k3" type="double" value="0.0" />
   </node>
 
   <!-- <node name="image_muxer" pkg="flock_driver" type="image_muxer.py" output="screen" /> -->

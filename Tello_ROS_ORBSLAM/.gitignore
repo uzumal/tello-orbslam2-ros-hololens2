@@ -1619,6 +1619,7 @@
 *.pyc
 /ROS/tello_catkin_ws/devel/
 /ROS/tello_catkin_ws/build/
+/ROS/tello_catkin_ws/src/orb_slam2_ros/orb_slam2/Vocabulary/ORBvoc.txt
 /Hard Copy/
 /ROS/ccmslam_ws/logs/
 /ROS/ccmslam_ws/devel/

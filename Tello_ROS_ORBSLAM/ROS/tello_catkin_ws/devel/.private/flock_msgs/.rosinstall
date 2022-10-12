@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/uzu/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs/setup.sh
+    local-name: /home/uzu/Train/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/devel/.private/flock_msgs/setup.sh
