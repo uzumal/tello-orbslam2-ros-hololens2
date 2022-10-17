@@ -4,7 +4,8 @@ import rospy
 
 import math
 from sensor_msgs.msg import PointCloud2
-from std_msgs.msg import Empty 
+from std_msgs.msg import Empty, String
+from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import PoseStamped, Point
 from sensor_msgs.msg import Image
 import struct
@@ -47,8 +48,7 @@ class CloudMapSaver(object):
 
         self.bridge = CvBridge()
 
-        self.uzu_pub = rospy.Publisher('uzu_data', PointCloud2, queue_size=10)
-
+        self.track_data_pub = rospy.Publisher('track_data', String, queue_size=1)
 
         self.file_path = rospy.get_param('~OUT_FILE_PATH')
         self.cloud_topic_name = rospy.get_param('~CLOUD_TOPIC_NAME')
@@ -58,7 +58,6 @@ class CloudMapSaver(object):
 #        self.cloud_server_topic_name = rospy.get_param('~CLOUD_SERVER_TOPIC_NAME')
 
         self.received_image = False
-
         # self.updateImageGui = threading.Thread(target = self._getGUIImage)
 
         self.root.wm_title("TELLO Viewer"+str(self.id))
@@ -149,6 +148,7 @@ class CloudMapSaver(object):
         rospy.Subscriber(self.trigger_topic_name, Empty, self.save_cloud_callback)
         rospy.Subscriber(self.pose_topic_name, PoseStamped, self.pose_callback)
         rospy.Subscriber(self.camera_topic_name, Image, self.img_callback)
+        rospy.Subscriber('/tf', TFMessage, self.track_callback)
 
         # rospy.Subscriber(self.cloud_server_topic_name, PointCloud2, self.point_cloud_server1_callback)
 
@@ -417,8 +417,7 @@ class CloudMapSaver(object):
 
     def point_cloud_callback(self, point_cloud):
         fields_str = str(point_cloud.fields)
-	print('-------------------------POINT-CLOUD-------------------------------------------')
-	print(fields_str)
+
         # file.write(fields_str+'\n')
 
         # point_cloud.data is list of uint8[].
@@ -459,6 +458,13 @@ class CloudMapSaver(object):
 		with open(self.file_path, 'w') as file:
 			[file.write(','.join(element)+'\n') for element in self.list_of_pure_lines]
 
+
+    def track_callback(self, track_data):
+	if track_data.transforms[0].transform.translation.x == 0:
+	    if track_data.transforms[0].transform.translation.y == 0:
+	        self.track_data_pub.publish("track losts")
+	else:
+	    self.track_data_pub.publish("track exists")
 
     def point_cloud_server1_callback(self, point_cloud):
         fields_str = str(point_cloud.fields)

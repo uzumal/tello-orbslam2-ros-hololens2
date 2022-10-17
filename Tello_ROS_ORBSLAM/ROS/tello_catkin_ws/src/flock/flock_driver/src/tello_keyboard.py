@@ -280,9 +280,7 @@ if __name__=="__main__":
                         pub_land.publish()
                         continue
                     elif keyname == 'tab':
-			print('haitterunoka----')
                         pub_takeoff.publish()
-			print('uwaaaaaaaaaaa----')
                         continue
                     else:
                         if not keyname in list_of_pressed_keys:

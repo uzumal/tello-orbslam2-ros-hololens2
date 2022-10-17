@@ -134,8 +134,6 @@ class FlockDriver(object):
         self.packet_data = ""
         self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)
         rospy.loginfo(FlightData())
-	print('CvBridge: '+str(self._cv_bridge))
-	print('EVENTFRAME: '+str(self._drone.EVENT_VIDEO_FRAME))
         # rospy.on_shutdown(self.cleanup)
 
 
