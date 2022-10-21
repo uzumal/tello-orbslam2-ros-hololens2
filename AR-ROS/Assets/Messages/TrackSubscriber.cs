@@ -10,31 +10,48 @@ namespace RosSharp.RosBridgeClient
     {
         private bool isMessageReceived = true;
         private GameObject trackText; // Textオブジェクト
-	    private Text trackLost;
+        private Text trackLost;
+
+        private string isTrack;
 
         protected override void Start()
         {
             trackText = GameObject.Find("trackText");
-            trackLost = trackText.GetComponent<Text> ();
+            trackLost = trackText.GetComponent<Text>();
             base.Start();
         }
-        
+
         private void Update()
         {
             if (isMessageReceived)
             {
+                TrackMessage();
+            }
+            else
+            {
+                trackLost.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                trackLost.text = "TRACK LOST\nPLEASE STOP AND LOOK  AROUND SLOWLY";
             }
         }
 
         protected override void ReceiveMessage(MessageTypes.Std.String msg)
         {
             isMessageReceived = true;
-            //Debug.Log("ReceiveMessage : " + msg.data);
-            string data = msg.data;
-            string value = data.Split(':')[1].Trim();
-            Debug.Log(value);
-            // trackがlostした際にユーザ画面に警告表示
-            trackLost.text = "Hello";
+            isTrack = msg.data;
+        }
+
+        void TrackMessage()
+        {
+            if (isTrack == "track exists")
+            {
+                trackLost.color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+                trackLost.text = "MAPPING NOW";
+            }
+            else
+            {
+                trackLost.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                trackLost.text = "TRACK LOST\nPLEASE STOP AND LOOK  AROUND SLOWLY";
+            }
         }
     }
 }

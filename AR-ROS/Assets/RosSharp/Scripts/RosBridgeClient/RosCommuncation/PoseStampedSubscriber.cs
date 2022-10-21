@@ -20,13 +20,21 @@ namespace RosSharp.RosBridgeClient
     public class PoseStampedSubscriber : UnitySubscriber<MessageTypes.Geometry.PoseStamped>
     {
         public Transform PublishedTransform;
+        private GameObject Parent;
 
         private Vector3 position;
         private Quaternion rotation;
         private bool isMessageReceived;
 
+        private int cnt;
+        private float startPositionX;
+        private float startPositionZ;
+
         protected override void Start()
         {
+            cnt = 0;
+            //             Parent = (GameObject)Resources.Load ("Drone1");
+            //             PublishedTransform.transform.parent = Parent.transform;
             base.Start();
         }
 
@@ -51,10 +59,11 @@ namespace RosSharp.RosBridgeClient
 
         private Vector3 GetPosition(MessageTypes.Geometry.PoseStamped message)
         {
+            float _disNum = 1.7f;
             return new Vector3(
-                (float)message.pose.position.x,
+                (float)message.pose.position.x * _disNum,
                 (float)message.pose.position.y,
-                (float)message.pose.position.z);
+                (float)message.pose.position.z * _disNum);
         }
 
         private Quaternion GetRotation(MessageTypes.Geometry.PoseStamped message)

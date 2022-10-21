@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient
     {
         private byte[] byteArray;
         private bool isMessageReceived = false;
-        bool readyToProcessMessage = true;
+        // bool readyToProcessMessage = true;
         private int size;
 
         private Vector3[] pcl;
@@ -26,11 +26,11 @@ namespace RosSharp.RosBridgeClient
         int height;
         int row_step;
         int point_step;
-        
+
         // private GameObject drone;
         // private GameObject pointCloud;
         // private GameObject obj;
-        
+
         protected override void Start()
         {
             // drone = GameObject.Find("droneModel");
@@ -43,20 +43,12 @@ namespace RosSharp.RosBridgeClient
 
         public void Update()
         {
-
             if (isMessageReceived)
-            {
                 PointCloudRendering();
-                isMessageReceived = false;
-            }
-
-
         }
 
-        protected override void ReceiveMessage(PointCloud2 message)
+        protected override void ReceiveMessage(MessageTypes.Sensor.PointCloud2 message)
         {
-
-
             size = message.data.GetLength(0);
 
             byteArray = new byte[size];
@@ -92,10 +84,10 @@ namespace RosSharp.RosBridgeClient
             float r;
             float g;
             float b;
-            
+
             // Cube Size
-            int _disNum = 1;
-            
+            float _disNum = 2.0f;
+
             // Cubeの重なり判定
             // Vector3 halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 
@@ -110,13 +102,13 @@ namespace RosSharp.RosBridgeClient
                 y = BitConverter.ToSingle(byteArray, y_posi);
                 z = BitConverter.ToSingle(byteArray, z_posi);
 
-//                 Debug.Log("prev" + new Vector3(x, z, y));
+                //                 Debug.Log("prev" + new Vector3(x, z, y));
 
-//                 x = (float)Math.Round(x * _disNum, 0, MidpointRounding.AwayFromZero);
-//                 y = (float)Math.Round(y * _disNum, 0, MidpointRounding.AwayFromZero);
-//                 z = (float)Math.Round(z * _disNum, 0, MidpointRounding.AwayFromZero);
-//                 
-                
+                //                 x = (float)Math.Round(x * _disNum, 0, MidpointRounding.AwayFromZero);
+                //                 y = (float)Math.Round(y * _disNum, 0, MidpointRounding.AwayFromZero);
+                //                 z = (float)Math.Round(z * _disNum, 0, MidpointRounding.AwayFromZero);
+                //                 
+
                 x = Mathf.Floor(x * 100) / 100 * _disNum;
                 y = Mathf.Floor(y * 100) / 100 * _disNum;
                 z = Mathf.Floor(z * 100) / 100 * _disNum;
@@ -124,59 +116,63 @@ namespace RosSharp.RosBridgeClient
 
                 rgb_posi = n * point_step + 16;
 
-//                 b = byteArray[rgb_posi + 0];
-//                 g = byteArray[rgb_posi + 1];
-//                 r = byteArray[rgb_posi + 2];
-// 
-//                 r = r / rgb_max;
-//                 g = g / rgb_max;
-//                 b = b / rgb_max;
+                //                 b = byteArray[rgb_posi + 0];
+                //                 g = byteArray[rgb_posi + 1];
+                //                 r = byteArray[rgb_posi + 2];
+                // 
+                //                 r = r / rgb_max;
+                //                 g = g / rgb_max;
+                //                 b = b / rgb_max;
 
-//                 Debug.Log("after" + x);
+                //                 Debug.Log("after" + x);
 
-                if(Mathf.Approximately(x, 0.0f) == false & Mathf.Approximately(y, 0.0f) == false & Mathf.Approximately(z, 0.0f) == false ){
-                    pcl[n] = new Vector3(x, z, y);
-                    // Debug.Log("pcl :" + n + " " + pcl[n]);
-                    // pcl_color[n] = new Color(255, 0, 0);
-                    // preview pointcloud
-                }
-//                 pcl_color[n] = new Color(r, g, b);
+                //                 if(Mathf.Approximately(x, 0.0f) == false & Mathf.Approximately(y, 0.0f) == false & Mathf.Approximately(z, 0.0f) == false ){
+                pcl[n] = new Vector3(x, y, z).Ros2Unity();
+                // Debug.Log("pcl :" + n + " " + pcl[n]);
+                // pcl_color[n] = new Color(255, 0, 0);
+                // preview pointcloud
+                //                 }
+                //                 pcl_color[n] = new Color(r, g, b);
             }
             // DownSampling();
-//             positions = GetPCL();
-//             if (positions == null)
-//             {
-//                 return;
-//             }
-//             for(int i = 0; i < positions.Length; i++){
-//                 int isPosition = myPositions.IndexOf(positions[i]);
-//                 if (!Physics.CheckBox(positions[i], halfExtents, Quaternion.identity)){
-//                     // Check if exists
-//                     if(isPosition < 0){
-// //                         Debug.Log("position :" + i + " " + positions[i]);
-//                         GameObject cloneObject = Instantiate (obj, Vector3.zero, Quaternion.identity);
-//                         cloneObject.transform.parent = pointCloud.transform;
-//                         cloneObject.transform.position = positions[i];
-//                         myPositions.Add (positions[i]);
-//                     }
-//                 }
-//             }
+            //             positions = GetPCL();
+            //             if (positions == null)
+            //             {
+            //                 return;
+            //             }
+            //             for(int i = 0; i < positions.Length; i++){
+            //                 int isPosition = myPositions.IndexOf(positions[i]);
+            //                 if (!Physics.CheckBox(positions[i], halfExtents, Quaternion.identity)){
+            //                     // Check if exists
+            //                     if(isPosition < 0){
+            // //                         Debug.Log("position :" + i + " " + positions[i]);
+            //                         GameObject cloneObject = Instantiate (obj, Vector3.zero, Quaternion.identity);
+            //                         cloneObject.transform.parent = pointCloud.transform;
+            //                         cloneObject.transform.position = positions[i];
+            //                         myPositions.Add (positions[i]);
+            //                     }
+            //                 }
+            //             }
         }
 
-    void DownSampling()
-    {
-        int cnt = 0;
-        // Cubeの重なり判定
-        Vector3 halfExtents = new Vector3(1.0f, 1.0f, 1.0f);
-        for(int i = 0; i < pcl.Length; i++){
-            if (Physics.CheckBox(pcl[i], halfExtents, Quaternion.identity)){
-                pcl[cnt] = pcl[i];
-                cnt++;
-            }else{
-            // Debug.Log("noise");
+        void DownSampling()
+        {
+            int cnt = 0;
+            // Cubeの重なり判定
+            Vector3 halfExtents = new Vector3(1.0f, 1.0f, 1.0f);
+            for (int i = 0; i < pcl.Length; i++)
+            {
+                if (Physics.CheckBox(pcl[i], halfExtents, Quaternion.identity))
+                {
+                    pcl[cnt] = pcl[i];
+                    cnt++;
+                }
+                else
+                {
+                    // Debug.Log("noise");
+                }
             }
         }
-    }
 
         public Vector3[] GetPCL()
         {

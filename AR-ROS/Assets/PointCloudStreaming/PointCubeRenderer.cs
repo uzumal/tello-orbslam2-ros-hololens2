@@ -31,7 +31,7 @@ public class PointCubeRenderer : MonoBehaviour
         ComPosition.SetActive(false);
         myPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
         cnt = 0;
-        InvokeRepeating("ResetMesh", 10.0f, 10.0f);
+        // InvokeRepeating("ResetMesh", 10.0f, 10.0f);
         GeneratePrefab();
     }
 
@@ -59,8 +59,8 @@ public class PointCubeRenderer : MonoBehaviour
         for (int i = 0; i < prefabList.Count; i++)
         {
             prefabList[i].SetActive(false);
-            cnt = 0;
         }
+        // cnt = 0;
         myPositions.Clear();
         myPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
         // foreach(GameObject prefab in prefabList){
@@ -68,6 +68,26 @@ public class PointCubeRenderer : MonoBehaviour
         //     prefabList.Remove(prefab);
         //     cnt = 0;
         // }
+    }
+
+    void Sampling()
+    {
+        Vector3 halfExtents = new Vector3(0.3f, 0.3f, 0.3f);
+
+        for (int i = 0; i < prefabList.Count; i++)
+        {
+            if (prefabList[i].activeSelf == false)
+            {
+                return;
+            }
+            else
+            {
+                if (!Physics.CheckBox(pointCloud.transform.TransformPoint(prefabList[i].transform.localPosition), halfExtents, Quaternion.identity))
+                {
+                    prefabList[i].SetActive(false);
+                }
+            }
+        }
     }
 
     void UpdateMesh()
@@ -85,36 +105,43 @@ public class PointCubeRenderer : MonoBehaviour
         {
             return;
         }
+
+        if (cnt > positions.Length)
+        {
+            ResetMesh();
+        }
         for (int i = 0; i < positions.Length; i++)
         {
             ComPosition.transform.localPosition = positions[i];
             if (!Physics.CheckBox(pointCloud.transform.TransformPoint(ComPosition.transform.localPosition), halfExtents, Quaternion.identity))
             {
-                int isPosition = myPositions.IndexOf(positions[i]);
-                // Check if exists
-                if (isPosition < 0)
+                if (prefabList.Count > i)
                 {
-                    if (prefabList.Count > cnt)
+                    if (prefabList[i].activeSelf == false)
                     {
-                        if (prefabList[cnt].activeSelf == false)
-                        {
-                            prefabList[cnt].transform.localPosition = positions[i];
-                            prefabList[cnt].SetActive(true);
-                            myPositions.Add(positions[i]);
-                            //prefabが足りているからtrueにする(追加)
-                            isPrefabEnough = true;
-                            cnt++;
-                            // break;
-                        }
-                    }
-                    else
-                    {
-                        //もしもprefabが足りずbreakしなかった時の処理(追加)
-                        GeneratePrefab();
+                        prefabList[i].transform.localPosition = positions[i];
+                        prefabList[i].SetActive(true);
+                        prefabList[i].tag = "Building";
+                        myPositions.Add(positions[i]);
+                        //prefabが足りているからtrueにする(追加)
+                        isPrefabEnough = true;
+                        // break;
                     }
                 }
+                else
+                {
+                    //もしもprefabが足りずbreakしなかった時の処理(追加)
+                    GeneratePrefab();
+                }
+                // int isPosition = myPositions.IndexOf(positions[i]);
+                // // Check if exists
+                // if (isPosition < 0)
+                // {
+                // }
             }
         }
+        Sampling();
+        cnt = positions.Length;
     }
 
 }
