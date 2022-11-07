@@ -50,7 +50,7 @@
   <!-- <node name="image_muxer" pkg="flock_driver" type="image_muxer.py" output="screen" /> -->
 
   <node name="cloud_map_saver" pkg="flock_driver" type="cloud_map_saver.py" output="screen">
-  <param name="OUT_FILE_PATH" type="string" value="/home/Log/map_point.txt" />
+  <param name="OUT_FILE_PATH" type="string" value="/home/uzu/map_point.txt" />
   <param name="CLOUD_TOPIC_NAME" type="string" value="/orb_slam2_mono/map_points" />
   <param name="TRIGGER_TOPIC_NAME" type="string" value="/save_cloud_trigger" />
   <param name="POSE_TOPIC_NAME" type="string" value="/orb_slam2_mono/pose" />
@@ -87,11 +87,10 @@
   <param name="~POSE_TOPIC_NAME" type="string" value="/orb_slam2_mono/pose" />
 </node> 
 
-  <node name="tello_keyboard_node" pkg="flock_driver" type="tello_keyboard.py" output="screen">
+  <node name="tello_keyboard_node" pkg="flock_driver" type="tello_autodrive.py" output="screen">
       <param name="ID" type="string" value="" />
       <param name="CMD_FILE_PATH" type="string" value="/home/uzu/Log/cmdList.txt" />
       <param name="CMD_TIME_FILE_PATH" type="string" value="/home/uzu/Log/cmdTimeList.txt" />
-      <param name="SPENT_FILE_PATH" type="string" value="/home/uzu/Log/spentTimeList.txt" />
       <!-- <remap from="/tello/cmd_vel" to="/tello0/cmd_vel" /> -->
       <!-- <remap from="/tello/takeoff" to="/tello0/takeoff" /> -->
       <!-- <remap from="/tello/land" to="/tello0/land" /> -->

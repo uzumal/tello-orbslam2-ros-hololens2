@@ -6,7 +6,7 @@ from __future__ import print_function
 import rospy
 
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Empty, String
+from std_msgs.msg import Empty
 from sensor_msgs.msg import Image
 
 import time
@@ -30,7 +30,6 @@ pygame_screen = None
 bridge = None
 date_fmt = '%Y-%m-%d_%H%M%S'
 id = None
-isStop = False
 
 # import sys, select, termios, tty
 # import keyboard
@@ -219,12 +218,6 @@ def limit_twist(twist):
 # def takeoff():
     # return pub_takeoff.publish()
 
-def collision_callback(msg):
-    if msg:
-	isStop = True
-    else:
-	isStop = False
-
 if __name__=="__main__":
     # settings = termios.tcgetattr(sys.stdin)
 
@@ -243,7 +236,7 @@ if __name__=="__main__":
     pub_land = rospy.Publisher(publish_prefix+'land', Empty, queue_size=1)
     # rospy.Subscriber("camera/image_raw", Image, videoFrameHandler)
     # rospy.Subscriber("/camera/image_raw", Image, videoFrameHandler)
-    rospy.Subscriber('isCollision', String, collision_callback)
+
 
     pygame.init()
     pygame.display.init()
@@ -261,7 +254,6 @@ if __name__=="__main__":
 
     cmd_file_path = rospy.get_param('~CMD_FILE_PATH')
     cmd_time_file_path = rospy.get_param('~CMD_TIME_FILE_PATH')
-    spent_time_file_path = rospy.get_param('~SPENT_FILE_PATH')
 
     twist = Twist()
 
@@ -272,71 +264,66 @@ if __name__=="__main__":
     list_of_pressed_keys = []
     list_of_cmd_keys = []
     list_of_cmd_times = []
-    list_of_times_keys = []
 
     startFlag = False
-    experimentFlag = True
+    i = 0
 
     try:
         while not rospy.is_shutdown():
-	    print(isStop)
-	    if isStop:
-                keyname = pygame.key.name(e.key)
-		if keyname in list_of_pressed_keys:
-                    list_of_pressed_keys.remove(keyname)
-		twist = reset_command(keyname, twist)
-
-            for keyname in list_of_pressed_keys:
-                print('raise_com: ' + keyname)
-		if experimentFlag:
-		    experimentTime = time.time()
-		    experimentFlag = False
-		if startFlag:
-		    list_of_cmd_keys.append(keyname)
-		    list_of_cmd_times.append(round(time.time() - start, 1))
-                twist = raise_command(keyname, twist)
-		
+            
+	    if startFlag:
+		# print(round(time.time() - start, 1))
+		# print(list_of_cmd_times[i])
+		if i > 0 and i < len(list_of_cmd_times) - 1:
+		    interval = round(float(list_of_cmd_times[i]) - float(list_of_cmd_times[i-1]), 1)
+		    if interval != 0:
+			time.sleep(interval)
+		    if list_of_cmd_keys[i] == "KEYUP":
+		    	print(list_of_cmd_keys[i])
+			twist = reset_command(list_of_cmd_keys[i-1],twist)
+		    	# print(twist)
+		    	i += 1
+		    else:
+		    	print(list_of_cmd_keys[i])
+    		    	twist = raise_command(list_of_cmd_keys[i], twist)
+		    	i += 1
+		elif list_of_cmd_times[i] == str(round(time.time() - start, 1)) and i == 0:
+    		    # twist = raise_command(list_of_cmd_keys[i], twist)
+		    i += 1
+		elif i == len(list_of_cmd_times) - 1:
+		    twist = reset_command(list_of_cmd_keys[i-1], twist)
+		    time.sleep(1.0)
+                    pub_land.publish()
+		    break
 
             for e in pygame.event.get():
                 # WASD for movement
                 if e.type == pygame.locals.KEYDOWN:
                     keyname = pygame.key.name(e.key)
                     print('keyname: ' + keyname)
-
-		    if startFlag:
-			# if keyname == 'up' or keyname == 'down' or keyname == 'left' or keyname == 'right'
-			spentTime = time.time() - prevTime
-			print("time")
-			print(time.time())
-			print("prevTime")
-			print(prevTime)
-			prevTime += spentTime
-			print("spentTime")
-			print(spentTime)
-			list_of_times_keys.append(spentTime)
-
                     if keyname == 'escape':
                         # drone.quit()
-			with open(cmd_file_path, 'w') as file:
-			    [file.write(element+'\n') for element in list_of_cmd_keys]
-			with open(cmd_time_file_path, 'w') as file:
-			    [file.write(str(element)+'\n') for element in list_of_cmd_times]
-			with open(spent_time_file_path, 'w') as file:
-			    [file.write(str(element)+'\n') for element in list_of_times_keys]
-			print("---EXPERIMENT TIME---")			
-			print(time.time() - experimentTime)
                         raise KeyboardInterrupt
 
                     if keyname == 'backspace':
                         pub_land.publish()
                         continue
                     elif keyname == 'tab':
+			with open(cmd_file_path, 'r') as file:
+			    list_of_cmd_keys = file.read().splitlines()
+
+			with open(cmd_time_file_path, 'r') as file:
+			    list_of_cmd_times = file.read().splitlines()
+			    print(list_of_cmd_keys)
+			    print(len(list_of_cmd_times) - 1)
+
+                        pub_takeoff.publish()
+                        continue
+		    elif keyname == 'return':
 			if startFlag == False:
 			    start = time.time()
 			    prevTime = start
 			startFlag = True
-                        pub_takeoff.publish()
-                        continue
                     else:
                         if not keyname in list_of_pressed_keys:
                             list_of_pressed_keys.append(keyname)
@@ -346,8 +333,6 @@ if __name__=="__main__":
 
                 elif  e.type == pygame.locals.KEYUP:
                     keyname = pygame.key.name(e.key)
-		    list_of_cmd_keys.append("KEYUP")
-		    list_of_cmd_times.append(round(time.time() - start, 1))
                     print('-' + keyname)
                     if keyname in list_of_pressed_keys:
                         list_of_pressed_keys.remove(keyname)
@@ -364,6 +349,7 @@ if __name__=="__main__":
             #     twist.linear.x = 0; twist.linear.y = 0; twist.linear.z = 0
             #     twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
             #     t = time.time()
+
         pygame.display.quit()
         pygame.quit()
 
