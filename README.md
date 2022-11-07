@@ -4,7 +4,7 @@ under development
 ## Procedure
 1. Ubuntu18.04 install
 2. ROS Melodic
-3. https://github.com/tau-adl/Tello_ROS_ORBSLAM　を参考に作成
+3. https://github.com/tau-adl/Tello_ROS_ORBSLAM
 4. Octomap install（https://github.com/OctoMap/octomap_mapping）
 5. Convert 3D point to Octomap
 6. Send to Unity
@@ -12,8 +12,10 @@ under development
 8. Check correctly for Position
 9. Merge multiple uav's OCtomap
 
+```
 sudo apt-get install ros-melodic-rosbridge-suite
-https://qiita.com/srs/items/1fcbd720e2489a0ce7cf
+roslaunch rosbridge_server rosbridge_websocket.launch 
+```
 
 https://www.youtube.com/watch?v=yPPFK_74rro
 
