@@ -112,6 +112,11 @@ sudo apt install ffmpeg
 sudo apt-get install python-imaging-tk
 ```
 
+### Python Pygame
+```
+sudo apt-get install python-pygame
+```
+  
 ### Pangolin(ver.0.5)本体のインストール
 ```
 cd ~/ROS/
