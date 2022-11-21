@@ -12,18 +12,22 @@ under development
 8. Check correctly for Position
 9. Merge multiple uav's OCtomap
 
-```
-sudo apt-get install ros-melodic-rosbridge-suite
-roslaunch rosbridge_server rosbridge_websocket.launch 
-```
-
-https://www.youtube.com/watch?v=yPPFK_74rro
-
 ### Usage
 if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
 ```
 roslaunch flock_driver orbslam2_with_cloud_map.launch
 ```
+
+```
+sudo apt-get install ros-melodic-rosbridge-suite
+roslaunch rosbridge_server rosbridge_websocket.launch 
+```
+
+```
+roslaunch pcl_ros_processing pcl_downsampling.launch
+```
+
+https://www.youtube.com/watch?v=yPPFK_74rro
 
 ##Build
 ### Installing our version of TelloPy
