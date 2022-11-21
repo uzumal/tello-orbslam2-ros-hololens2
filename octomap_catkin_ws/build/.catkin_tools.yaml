@@ -1,6 +1,0 @@
-devel_space: /home/uzu/drone-slam-octomap/octomap_catkin_ws/devel
-install: false
-install_space: /home/uzu/drone-slam-octomap/octomap_catkin_ws/install
-profile: default
-source_space: /home/uzu/drone-slam-octomap/octomap_catkin_ws/src
-workspace: /home/uzu/drone-slam-octomap/octomap_catkin_ws

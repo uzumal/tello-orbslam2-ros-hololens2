@@ -7,7 +7,7 @@ Thirdparty/DBoW2/lib/
 Thirdparty/g2o/build/
 Thirdparty/g2o/config.h
 Thirdparty/g2o/lib/
-Vocabulary/ORBvoc.txt
+orb_slam2/Vocabulary/ORBvoc.txt
 build/
 *~
 lib/

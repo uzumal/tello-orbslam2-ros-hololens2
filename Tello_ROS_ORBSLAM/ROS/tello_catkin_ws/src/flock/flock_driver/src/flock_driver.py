@@ -78,6 +78,7 @@ class FlockDriver(object):
         # ROS publishers
         self._flight_data_pub = rospy.Publisher(self.publish_prefix+'flight_data', FlightData, queue_size=10)
         self._image_pub = rospy.Publisher(self.publish_prefix+'camera/image_raw', Image, queue_size=10)
+        self._image_pub_rgb = rospy.Publisher(self.publish_prefix+'camera/image_rgb', Image, queue_size=10)
         self._wifi_strength_data_pub = rospy.Publisher(self.publish_prefix+'wifi_strength', Int32, queue_size=10)
         self._light_strength_data_pub = rospy.Publisher(self.publish_prefix+'light_strength', Int32, queue_size=10)
         self._camera_info_pub = rospy.Publisher(self.publish_prefix+'camera/camera_info', CameraInfo, queue_size=10)
@@ -133,6 +134,8 @@ class FlockDriver(object):
         rospy.loginfo(self._drone)
         self.packet_data = ""
         self._drone.subscribe(self._drone.EVENT_VIDEO_FRAME, self.videoFrameHandler)
+	print("-------------------")
+	print(self._drone.EVENT_VIDEO_FRAME)
         rospy.loginfo(FlightData())
         # rospy.on_shutdown(self.cleanup)
 
@@ -364,6 +367,9 @@ class FlockDriver(object):
                 # print("decoded frame")  
                 # Convert PyAV frame => PIL image => OpenCV Mat
                 # color_mat = cv2.cvtColor(numpy.array(frame.to_image()), cv2.COLOR_RGB2BGR)
+		img_rotate_90_clockwise = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+                img_rgb_msg = self._cv_bridge.cv2_to_imgmsg(img_rotate_90_clockwise, 'rgb8')
+                self._image_pub_rgb.publish(img_rgb_msg)
                 color_mat = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
                 # Convert OpenCV Mat => ROS Image message and publish
@@ -376,7 +382,6 @@ class FlockDriver(object):
                 # print("published")
 
             self.packet_data = ""
-
 
 
     def _h264_decode(self, packet_data):

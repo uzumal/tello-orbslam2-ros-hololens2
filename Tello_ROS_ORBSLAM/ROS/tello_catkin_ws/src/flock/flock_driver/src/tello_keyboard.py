@@ -276,15 +276,16 @@ if __name__=="__main__":
 
     startFlag = False
     experimentFlag = True
+    colliCnt = 0
 
     try:
         while not rospy.is_shutdown():
-	    print(isStop)
 	    if isStop:
                 keyname = pygame.key.name(e.key)
 		if keyname in list_of_pressed_keys:
                     list_of_pressed_keys.remove(keyname)
 		twist = reset_command(keyname, twist)
+		colliCnt += 1;
 
             for keyname in list_of_pressed_keys:
                 print('raise_com: ' + keyname)
@@ -325,6 +326,8 @@ if __name__=="__main__":
 			    [file.write(str(element)+'\n') for element in list_of_times_keys]
 			print("---EXPERIMENT TIME---")			
 			print(time.time() - experimentTime)
+			print("---COLLISION COUNT---")			
+			print(colliCnt)
                         raise KeyboardInterrupt
 
                     if keyname == 'backspace':
