@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  App.cpp
+  Main.cpp
+  UnityGenerated.cpp
+C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\App.cpp(26,1): warning C4973: 'Windows::UI::ViewManagement::IApplicationView2::SuppressSystemOverlays::set': 非推奨として設定されています
+C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\App.cpp(26,1): message : メッセージ: 'Use the TryEnterFullScreen method and IsFullScreenMode property instead of SuppressSystemOverlays. For more info, see MSDN.'
+  コード生成しています。
+  コード生成が終了しました。
+  ar-ros-image.vcxproj -> C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\ar-ros-image.exe

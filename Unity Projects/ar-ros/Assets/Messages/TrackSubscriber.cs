@@ -8,29 +8,25 @@ namespace RosSharp.RosBridgeClient
     [RequireComponent(typeof(RosConnector))]
     public class TrackSubscriber : UnitySubscriber<MessageTypes.Std.String>
     {
-        private bool isMessageReceived = true;
-        private GameObject trackText; // Textオブジェクト
-        private Text trackLost;
+        private bool isMessageReceived = false;
+        private GameObject trackAudio; // Textオブジェクト
+        private AudioSource audioSource;
 
         private string isTrack;
+        private bool isMsg;
 
         protected override void Start()
         {
-            trackText = GameObject.Find("trackText");
-            trackLost = trackText.GetComponent<Text>();
             base.Start();
+            trackAudio = GameObject.Find("TrackAudio");
+            audioSource = trackAudio.GetComponent<AudioSource>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (isMessageReceived)
             {
                 TrackMessage();
-            }
-            else
-            {
-                trackLost.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-                trackLost.text = "TRACK LOST\nPLEASE STOP AND LOOK  AROUND SLOWLY";
             }
         }
 
@@ -38,20 +34,21 @@ namespace RosSharp.RosBridgeClient
         {
             isMessageReceived = true;
             isTrack = msg.data;
+            isMsg = true;
         }
 
         void TrackMessage()
         {
-            if (isTrack == "track exists")
+            if (isMsg)
             {
-                trackLost.color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
-                trackLost.text = "MAPPING NOW";
+            
             }
-            else
+            else 
             {
-                trackLost.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-                trackLost.text = "TRACK LOST\nPLEASE STOP AND LOOK  AROUND SLOWLY";
+                if (!audioSource.isPlaying)
+                    audioSource.Play();
             }
+            isMsg = false;
         }
     }
 }

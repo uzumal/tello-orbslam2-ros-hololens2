@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7748386283530466421}
   m_Layer: 0
   m_Name: Point
-  m_TagString: Building
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 109

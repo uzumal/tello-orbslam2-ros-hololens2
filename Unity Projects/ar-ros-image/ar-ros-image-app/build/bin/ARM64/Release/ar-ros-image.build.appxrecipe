@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>DESKTOP-9VHJS6S</Machine>
+    <WindowsUser>Uzumal</WindowsUser>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetOsVersion>10.0</TargetOsVersion>
+    <TargetOsDescription>Windows 10.0</TargetOsDescription>
+    <SolutionConfiguration>Release|ARM64</SolutionConfiguration>
+    <PackageArchitecture>arm64</PackageArchitecture>
+    <PackageIdentityName>a689239d-5bed-45f6-8ce0-1ccbcada04af</PackageIdentityName>
+    <PackageIdentityPublisher>CN=DefaultCompany</PackageIdentityPublisher>
+    <IntermediateOutputPath>C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\obj\ar-ros-image\ARM64\Release\</IntermediateOutputPath>
+    <RemoteDeploymentType>CopyToDevice</RemoteDeploymentType>
+    <PackageRegistrationPath></PackageRegistrationPath>
+    <RemoveNonLayoutFiles>false</RemoveNonLayoutFiles>
+    <DeployOptionalPackages>false</DeployOptionalPackages>
+    <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
+    <LayoutDir>C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\AppX</LayoutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\ar-ros-image.exe">
+      <PackagePath>ar-ros-image.exe</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2019.4.40f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\il2cpp\ARM64\Release\UnityPlayer.winmd">
+      <PackagePath>UnityPlayer.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2019.4.40f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\il2cpp\ARM64\Release\UnityPlayer.dll">
+      <PackagePath>UnityPlayer.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\ar_ros_image.winmd">
+      <PackagePath>ar_ros_image.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\SplashScreen.scale-200.png">
+      <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\Square150x150Logo.scale-200.png">
+      <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\Square44x44Logo.scale-200.png">
+      <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\Square44x44Logo.targetsize-24.png">
+      <PackagePath>Assets\Square44x44Logo.targetsize-24.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\StoreLogo.png">
+      <PackagePath>Assets\StoreLogo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Assets\Wide310x150Logo.scale-200.png">
+      <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\StoreManifest.xml">
+      <PackagePath>StoreManifest.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\mconfig\config.xml">
+      <PackagePath>Data\il2cpp_data\etc\mono\mconfig\config.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\boot.config">
+      <PackagePath>Data\boot.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\2.0\machine.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\2.0\machine.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\2.0\web.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\2.0\web.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.0\machine.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.0\machine.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.0\web.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.0\web.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.5\machine.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.5\machine.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.5\web.config">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.5\web.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\globalgamemanagers">
+      <PackagePath>Data\globalgamemanagers</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\level0">
+      <PackagePath>Data\level0</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\config">
+      <PackagePath>Data\il2cpp_data\etc\mono\config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\Resources\unity default resources">
+      <PackagePath>Data\Resources\unity default resources</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\Resources\unity_builtin_extra">
+      <PackagePath>Data\Resources\unity_builtin_extra</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\globalgamemanagers.assets">
+      <PackagePath>Data\globalgamemanagers.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\resources.assets">
+      <PackagePath>Data\resources.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\sharedassets0.assets">
+      <PackagePath>Data\sharedassets0.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\globalgamemanagers.assets.resS">
+      <PackagePath>Data\globalgamemanagers.assets.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\level0.resS">
+      <PackagePath>Data\level0.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\resources.assets.resS">
+      <PackagePath>Data\resources.assets.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\sharedassets0.assets.resS">
+      <PackagePath>Data\sharedassets0.assets.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\nativePlugins.txt">
+      <PackagePath>Data\nativePlugins.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\sharedassets0.resource">
+      <PackagePath>Data\sharedassets0.resource</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\browscap.ini">
+      <PackagePath>Data\il2cpp_data\etc\mono\browscap.ini</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\2.0\DefaultWsdlHelpGenerator.aspx">
+      <PackagePath>Data\il2cpp_data\etc\mono\2.0\DefaultWsdlHelpGenerator.aspx</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.0\DefaultWsdlHelpGenerator.aspx">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.0\DefaultWsdlHelpGenerator.aspx</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.5\DefaultWsdlHelpGenerator.aspx">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.5\DefaultWsdlHelpGenerator.aspx</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\2.0\settings.map">
+      <PackagePath>Data\il2cpp_data\etc\mono\2.0\settings.map</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.0\settings.map">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.0\settings.map</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.5\settings.map">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.5\settings.map</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\2.0\Browsers\Compat.browser">
+      <PackagePath>Data\il2cpp_data\etc\mono\2.0\Browsers\Compat.browser</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.0\Browsers\Compat.browser">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.0\Browsers\Compat.browser</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\etc\mono\4.5\Browsers\Compat.browser">
+      <PackagePath>Data\il2cpp_data\etc\mono\4.5\Browsers\Compat.browser</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Metadata\global-metadata.dat">
+      <PackagePath>Data\il2cpp_data\Metadata\global-metadata.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Resources\I18N.CJK.dll-resources.dat">
+      <PackagePath>Data\il2cpp_data\Resources\I18N.CJK.dll-resources.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Resources\mscorlib.dll-resources.dat">
+      <PackagePath>Data\il2cpp_data\Resources\mscorlib.dll-resources.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Resources\RosBridgeClientUWP.dll-resources.dat">
+      <PackagePath>Data\il2cpp_data\Resources\RosBridgeClientUWP.dll-resources.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Resources\System.Data.dll-resources.dat">
+      <PackagePath>Data\il2cpp_data\Resources\System.Data.dll-resources.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\Data\il2cpp_data\Resources\System.Threading.Channels.dll-resources.dat">
+      <PackagePath>Data\il2cpp_data\Resources\System.Threading.Channels.dll-resources.dat</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\ar-ros-image\AudioPluginMsHRTF.dll">
+      <PackagePath>AudioPluginMsHRTF.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\GameAssembly.dll">
+      <PackagePath>GameAssembly.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.30035.0</Version>
+      <Architecture>ARM</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.30035.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\ARM\Microsoft.VCLibs.ARM.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.30035.0</Version>
+      <Architecture>ARM64</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.30035.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\ARM64\Microsoft.VCLibs.ARM64.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.30035.0</Version>
+      <Architecture>x64</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.30035.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x64\Microsoft.VCLibs.x64.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.30035.0</Version>
+      <Architecture>x86</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.30035.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x86\Microsoft.VCLibs.x86.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+  </ItemGroup>
+</Project>

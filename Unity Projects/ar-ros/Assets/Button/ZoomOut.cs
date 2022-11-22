@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class ZoomOut : MonoBehaviour
 {
-    private GameObject drone;
+    private GameObject world1;
+    private GameObject world2;
     private GameObject button;
-    private GameObject Cloud;
+    private GameObject Cloud1;
+    private GameObject Cloud2;
+    private GameObject Building;
     Finish finishScript;
 
     void Start()
     {
-        drone = GameObject.Find("World");
+        world1 = GameObject.Find("World1");
+        world2 = GameObject.Find("World2");
         button = GameObject.Find("Finish");
-        Cloud = GameObject.Find("Cloud1");
+        Cloud1 = GameObject.Find("Cloud1");
+        Cloud2 = GameObject.Find("Cloud2");
+        Building = GameObject.Find("Building");
         finishScript = button.GetComponent<Finish>();
     }
 
@@ -22,11 +28,23 @@ public class ZoomOut : MonoBehaviour
     {
         if (finishScript.cntClick == 0)
         {
-            drone.transform.position += new Vector3(0, 0, 0.05f);
+            world1.transform.position += new Vector3(0, 0, 0.05f);
         }
-        else
+        else if (finishScript.cntClick == 1)
         {
-            Cloud.transform.localPosition += new Vector3(0, 0, 0.05f);
+            Cloud1.transform.localPosition += new Vector3(0, 0, 0.05f);
+        }
+        else if (finishScript.cntClick == 2)
+        {
+            world2.transform.localPosition += new Vector3(0, 0, 0.05f);
+        }
+        else if (finishScript.cntClick == 3)
+        {
+            Cloud2.transform.localPosition += new Vector3(0, 0, 0.05f);
+        }
+        else if (finishScript.cntClick == 4)
+        {
+            Building.transform.localPosition += new Vector3(0, 0, 0.05f);
         }
     }
 }

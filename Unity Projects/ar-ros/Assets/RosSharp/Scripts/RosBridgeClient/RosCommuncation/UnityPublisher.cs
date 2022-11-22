@@ -25,6 +25,9 @@ namespace RosSharp.RosBridgeClient
 
         private RosConnector rosConnector;
 
+        private GameObject isCollision;
+        CollisionMsg collisionMsg;
+
         protected virtual void Start()
         {
             rosConnector = GetComponent<RosConnector>();

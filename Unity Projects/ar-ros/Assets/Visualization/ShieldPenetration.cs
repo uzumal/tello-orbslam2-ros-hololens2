@@ -27,11 +27,6 @@ public class ShieldPenetration : MonoBehaviour
     private int layerMask_;
 
     /// <summary>
-    /// マテリアル比較用
-    /// </summary>
-    private bool Compare_Material;
-
-    /// <summary>
     /// 半透明マテリアル
     /// </summary>
     private Material mat;
@@ -79,12 +74,13 @@ public class ShieldPenetration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        drone = GameObject.Find("droneModel");
+        drone = GameObject.Find("droneModel1");
         mat = Resources.Load<Material>("Temparent_obj") as Material;
         mat_default = Resources.Load<Material>("Default") as Material;
-        prevDronePosition = new Vector3(100,100,100);
-        prevUserPosition = new Vector3(100,100,100);
-        if(drone == null){
+        prevDronePosition = new Vector3(100, 100, 100);
+        prevUserPosition = new Vector3(100, 100, 100);
+        if (drone == null)
+        {
             Debug.Log("null");
         }
         layerMask_ = 1;
@@ -97,12 +93,12 @@ public class ShieldPenetration : MonoBehaviour
         Vector3 _difference = (drone.transform.position - this.transform.position);
         Vector3 _direction = _difference.normalized;
         Ray _ray = new Ray(this.transform.position, _direction);
-        Quaternion angle = new Quaternion(0f,0f,0f,0f);
+        Quaternion angle = new Quaternion(0f, 0f, 0f, 0f);
 
         // 前回の結果を退避してから、Raycast して今回の遮蔽物のリストを取得する
         // RaycastHit[] _hits = Physics.RaycastAll(_ray, _difference.magnitude, layerMask_);
         // RaycastHit[] _hits = Physics.SphereCastAll(this.transform.position, 0.03f ,_direction, _difference.magnitude, layerMask_);
-        RaycastHit[] _hits = Physics.BoxCastAll(this.transform.position, Vector3.one * 0.2f, _direction, angle,  _difference.magnitude, layerMask_);
+        RaycastHit[] _hits = Physics.BoxCastAll(this.transform.position, Vector3.one * 0.3f, _direction, angle, _difference.magnitude, layerMask_);
         //MaskObjectのRendererコンポーネント
 
         rendererHitsPrevs_ = rendererHitsList_.ToArray();
@@ -112,21 +108,36 @@ public class ShieldPenetration : MonoBehaviour
         nowDronePosition = drone.transform.position;
         nowUserPosition = this.transform.position;
 
-        if(prevDronePosition != nowDronePosition | prevDronePosition != nowUserPosition){
-        // 遮蔽物は一時的にすべて描画機能を無効にする。
+        if (prevDronePosition != nowDronePosition | prevDronePosition != nowUserPosition)
+        {
+            // 遮蔽物は一時的にすべて描画機能を無効にする。
             foreach (RaycastHit _hit in _hits)
             {
-                if(_hit.collider.gameObject.CompareTag("Building")){
+                if (_hit.collider.gameObject.CompareTag("Building"))
+                {
                     // 遮蔽物の Renderer コンポーネントを無効にする
                     Renderer _renderer = _hit.collider.gameObject.GetComponent<Renderer>();
                     if (_renderer != null)
-                    {   
+                    {
                         _renderer.material = mat;
                         rendererHitsList_.Add(_renderer);
                         obst = true;
                         float distance = Vector3.SqrMagnitude(nowDronePosition - _hit.collider.gameObject.transform.position);
-                        if(distance <= 3){
-                            _renderer.material.color = new Color32(0,0,0,0);
+                        if (distance <= 0.3)
+                        {
+                            _renderer.material.color = new Color32(255, 0, 0, 100);
+                        }
+                        else if (0.3 < distance && distance <= 0.6)
+                        {
+                            _renderer.material.color = new Color32(255, 255, 0, 50);
+                        }
+                        else if (0.6 < distance && distance <= 0.9)
+                        {
+                            _renderer.material.color = new Color32(0, 255, 0, 10);
+                        }
+                        else
+                        {
+                            _renderer.material.color = new Color32(0, 255, 0, 0);
                         }
                     }
                 }

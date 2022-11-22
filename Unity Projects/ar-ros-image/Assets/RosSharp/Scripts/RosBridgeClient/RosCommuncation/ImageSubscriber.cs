@@ -28,9 +28,9 @@ namespace RosSharp.RosBridgeClient
 
         protected override void Start()
         {
-			base.Start();
+            base.Start();
             texture2D = new Texture2D(1, 1);
-            meshRenderer.material = new Material(Shader.Find("Standard"));
+            //meshRenderer.material = new Material(Shader.Find("Standard"));
         }
         private void Update()
         {
@@ -54,4 +54,3 @@ namespace RosSharp.RosBridgeClient
 
     }
 }
-

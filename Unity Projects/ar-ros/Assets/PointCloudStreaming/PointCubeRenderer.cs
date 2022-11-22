@@ -7,8 +7,8 @@ using RosSharp.RosBridgeClient;
 public class PointCubeRenderer : MonoBehaviour
 {
     public PointCloudSubscriber subscriber;
+    public DownCloudSubscriber subscriber1;
 
-    private GameObject drone;
     private GameObject pointCloud;
     private GameObject obj;
     private GameObject ComPosition;
@@ -23,10 +23,16 @@ public class PointCubeRenderer : MonoBehaviour
     private List<Transform> transformCache = new List<Transform>();
     private float seconds;
 
+    private GameObject button;
+    Finish finishScript;
+
+    bool isCalledOnce = false;
+
+    public LayerMask m_LayerMask;
+
 
     void Start()
     {
-        drone = GameObject.Find("droneModel");
         pointCloud = GameObject.Find("PointCloud1");
         obj = (GameObject)Resources.Load("Point");
         ComPosition = Instantiate(obj);
@@ -35,14 +41,31 @@ public class PointCubeRenderer : MonoBehaviour
         myPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
         cnt = 0;
         // InvokeRepeating("ResetMesh", 10.0f, 10.0f);
+        button = GameObject.Find("Finish");
+        finishScript = button.GetComponent<Finish>();
         GeneratePrefab();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-	    seconds += Time.deltaTime;
-        UpdateMesh();
+        if (finishScript.cntClick == 5)
+        {
+            if (!isCalledOnce)
+            {
+                isCalledOnce = true;
+                for (int i = 0; i < prefabList.Count; i++)
+                {
+                    Destroy(prefabList[i]);
+                }
+            }
+            VisualizeMesh();
+        }
+        else
+        {
+            seconds += Time.deltaTime;
+            UpdateMesh();
+        }
     }
 
     void GeneratePrefab()
@@ -70,7 +93,7 @@ public class PointCubeRenderer : MonoBehaviour
 
     void Sampling()
     {
-        Vector3 halfExtents = new Vector3(0.1f, 0.1f, 0.1f);
+        Vector3 halfExtents = new Vector3(0.2f, 0.2f, 0.2f);
 
         for (int i = 0; i < cnt; i++)
         {
@@ -80,7 +103,7 @@ public class PointCubeRenderer : MonoBehaviour
             }
             else
             {
-                if (!Physics.CheckBox(pointCloud.transform.TransformPoint(prefabList[i].transform.localPosition), halfExtents, Quaternion.identity))
+                if (!Physics.CheckBox(prefabList[i].transform.position, halfExtents, Quaternion.identity))
                 {
                     prefabList[i].SetActive(false);
                 }
@@ -91,13 +114,19 @@ public class PointCubeRenderer : MonoBehaviour
     void UpdateMesh()
     {
         //positions = subscriber.pcl;
-        positions = subscriber.GetPCL();
+        if (finishScript.cntClick >= 2)
+        {
+            positions = subscriber1.GetPCL();
+        }
+        else{
+            positions = subscriber.GetPCL();
+        }
 
         //prefabが足りないか判定する変数(追加)
         // bool isPrefabEnough = false;
 
         // Cubeの重なり判定
-        Vector3 halfExtents = new Vector3(0.001f, 0.001f, 0.001f);
+        Vector3 halfExtents = new Vector3(0.01f, 0.01f, 0.01f);
 
         if (positions == null)
         {
@@ -113,7 +142,7 @@ public class PointCubeRenderer : MonoBehaviour
         for (int i = 0; i < positions.Length; i++)
         {
             ComPosition.transform.localPosition = positions[i];
-            if (!Physics.CheckBox(pointCloud.transform.TransformPoint(ComPosition.transform.localPosition), halfExtents, Quaternion.identity))
+            if (!Physics.CheckBox(ComPosition.transform.position, halfExtents, Quaternion.identity))
             {
                 if (prefabList.Count > i)
                 {
@@ -139,6 +168,35 @@ public class PointCubeRenderer : MonoBehaviour
         }
         Sampling();
         cnt = 0;
+    }
+
+    void VisualizeMesh()
+    {
+        Vector3 halfExtents = new Vector3(0.1f, 0.1f, 0.1f);
+
+        positions = subscriber1.GetPCL();
+        if (positions == null)
+        {
+            return;
+        }
+        for (int i = 0; i < positions.Length; i++)
+        {
+            ComPosition.transform.localPosition = positions[i];
+            if (!Physics.CheckBox(ComPosition.transform.position, halfExtents, Quaternion.identity, m_LayerMask))
+            {
+                Collider[] _hits = Physics.OverlapBox(ComPosition.transform.position, Vector3.one * 0.5f);
+                foreach (Collider _hit in _hits)
+                {
+                    Renderer _renderer = _hit.gameObject.GetComponent<Renderer>();
+                    if (_hit.gameObject.CompareTag("noVisualize"))
+                    {
+                        _renderer.material.color = new Color32(255, 255, 255, 255);
+                        _hit.gameObject.tag = "Building";
+                        _hit.gameObject.layer = 0;
+                    }
+                }
+            }
+        }
     }
 
 }

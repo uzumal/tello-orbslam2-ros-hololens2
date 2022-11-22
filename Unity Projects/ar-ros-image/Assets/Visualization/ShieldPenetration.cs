@@ -79,7 +79,7 @@ public class ShieldPenetration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        drone = GameObject.Find("droneModel");
+        drone = GameObject.Find("droneModel1");
         mat = Resources.Load<Material>("Temparent_obj") as Material;
         mat_default = Resources.Load<Material>("Default") as Material;
         prevDronePosition = new Vector3(100,100,100);

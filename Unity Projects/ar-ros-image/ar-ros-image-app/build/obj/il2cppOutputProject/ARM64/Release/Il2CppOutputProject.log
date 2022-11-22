@@ -1,0 +1,11 @@
+﻿  Building GameAssembly.dll with MsvcWinRtToolChain
+  	Msvc Install Version: 15.0
+  	Msvc Install SDK Directory: C:\Program Files (x86)\Windows Kits\10
+  	Msvc Linker Path: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.29.30133\bin\HostX64\ARM64\link.exe
+  	Msvc Compiler Path: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.29.30133\bin\HostX64\ARM64\cl.exe
+  
+  	Output directory: C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\bin\ARM64\Release
+  	Cache directory: C:\Users\Uzumal\OneDrive\ドキュメント\drone-slam-octomap\Unity Projects\ar-ros-image\ar-ros-image-app\build\obj\il2cppOutputProject\ARM64\Release
+  ObjectFiles: 528 of which compiled: 0
+  Total compilation time: 1866 milliseconds.
+  Cleaned up 1 object files.
