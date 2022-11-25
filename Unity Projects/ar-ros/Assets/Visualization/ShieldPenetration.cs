@@ -24,7 +24,7 @@ public class ShieldPenetration : MonoBehaviour
     /// <summary>
     /// 遮蔽物とするレイヤーマスク。
     /// </summary>
-    private int layerMask_;
+    public LayerMask layerMask_;
 
     /// <summary>
     /// 半透明マテリアル
@@ -83,11 +83,10 @@ public class ShieldPenetration : MonoBehaviour
         {
             Debug.Log("null");
         }
-        layerMask_ = 1;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // カメラと被写体を結ぶ ray を作成
         Vector3 _difference = (drone.transform.position - this.transform.position);
@@ -113,8 +112,8 @@ public class ShieldPenetration : MonoBehaviour
             // 遮蔽物は一時的にすべて描画機能を無効にする。
             foreach (RaycastHit _hit in _hits)
             {
-                if (_hit.collider.gameObject.CompareTag("Building"))
-                {
+                //if (_hit.collider.gameObject.CompareTag("Building"))
+                //{
                     // 遮蔽物の Renderer コンポーネントを無効にする
                     Renderer _renderer = _hit.collider.gameObject.GetComponent<Renderer>();
                     if (_renderer != null)
@@ -125,22 +124,22 @@ public class ShieldPenetration : MonoBehaviour
                         float distance = Vector3.SqrMagnitude(nowDronePosition - _hit.collider.gameObject.transform.position);
                         if (distance <= 0.3)
                         {
-                            _renderer.material.color = new Color32(255, 0, 0, 100);
+                            _renderer.material.color = new Color32(255, 0, 0, 150);
                         }
                         else if (0.3 < distance && distance <= 0.6)
                         {
-                            _renderer.material.color = new Color32(255, 255, 0, 50);
+                            _renderer.material.color = new Color32(255, 255, 0, 100);
                         }
-                        else if (0.6 < distance && distance <= 0.9)
+                        else if (0.6 < distance && distance <= 1.5)
                         {
-                            _renderer.material.color = new Color32(0, 255, 0, 10);
+                            _renderer.material.color = new Color32(0, 255, 0, 50);
                         }
                         else
                         {
                             _renderer.material.color = new Color32(0, 255, 0, 0);
                         }
                     }
-                }
+                //}
             }
             // 前回まで対象で、今回対象でなくなったものは、表示を元に戻す。
             foreach (Renderer _renderer in rendererHitsPrevs_.Except<Renderer>(rendererHitsList_))

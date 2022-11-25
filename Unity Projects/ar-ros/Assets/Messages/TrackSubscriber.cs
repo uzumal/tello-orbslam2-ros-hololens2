@@ -15,6 +15,8 @@ namespace RosSharp.RosBridgeClient
         private string isTrack;
         private bool isMsg;
 
+        private float seconds;
+
         protected override void Start()
         {
             base.Start();
@@ -24,9 +26,15 @@ namespace RosSharp.RosBridgeClient
 
         private void FixedUpdate()
         {
+            seconds += Time.deltaTime;
+
             if (isMessageReceived)
             {
-                TrackMessage();
+                if (seconds >= 1.5)
+                {
+                    TrackMessage();
+                    seconds = 0;
+                }
             }
         }
 

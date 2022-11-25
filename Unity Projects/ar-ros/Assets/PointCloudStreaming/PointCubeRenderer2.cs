@@ -30,6 +30,8 @@ public class PointCubeRenderer2 : MonoBehaviour
 
     public LayerMask m_LayerMask;
 
+    public LayerMask colli_LayerMask;
+
 
     void Start()
     {
@@ -114,14 +116,7 @@ public class PointCubeRenderer2 : MonoBehaviour
     void UpdateMesh()
     {
         //positions = subscriber.pcl;
-        if (finishScript.cntClick >= 4)
-        {
-            positions = subscriber1.GetPCL();
-        }
-        else
-        {
-            positions = subscriber.GetPCL();
-        }
+        positions = subscriber.GetPCL();
 
         //prefabが足りないか判定する変数(追加)
         // bool isPrefabEnough = false;
@@ -185,16 +180,16 @@ public class PointCubeRenderer2 : MonoBehaviour
             ComPosition.transform.localPosition = positions[i];
             if (!Physics.CheckBox(ComPosition.transform.position, halfExtents, Quaternion.identity, m_LayerMask))
             {
-                Collider[] _hits = Physics.OverlapBox(ComPosition.transform.position, Vector3.one * 0.5f);
+                Collider[] _hits = Physics.OverlapBox(ComPosition.transform.position, Vector3.one * 0.5f, Quaternion.identity, colli_LayerMask);
                 foreach (Collider _hit in _hits)
                 {
                     Renderer _renderer = _hit.gameObject.GetComponent<Renderer>();
-                    if (_hit.gameObject.CompareTag("noVisualize"))
-                    {
-                        _renderer.material.color = new Color32(255, 255, 255, 255);
-                        _hit.gameObject.tag = "Building";
-                        _hit.gameObject.layer = 0;
-                    }
+                    //if (_hit.gameObject.CompareTag("noVisualize"))
+                    //{
+                    _renderer.material.color = new Color32(255, 255, 255, 255);
+                    //_hit.gameObject.tag = "Building";
+                    _hit.gameObject.layer = 9;
+                    //}
                 }
             }
         }

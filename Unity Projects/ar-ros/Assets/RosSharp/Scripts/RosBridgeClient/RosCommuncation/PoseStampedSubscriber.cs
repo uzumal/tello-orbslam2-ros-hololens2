@@ -54,8 +54,6 @@ namespace RosSharp.RosBridgeClient
         private void ProcessMessage()
         {
             PublishedTransform.localPosition = position;
-            Vector3 pos = PublishedTransform.localPosition;
-            pos.y -= 0.01f;
             PublishedTransform.localRotation = rotation;
             PublishedTransform.localRotation = Quaternion.Euler(0.0f, PublishedTransform.localRotation.eulerAngles.y, 0.0f);
 
@@ -63,7 +61,7 @@ namespace RosSharp.RosBridgeClient
 
         private Vector3 GetPosition(MessageTypes.Geometry.PoseStamped message)
         {
-            float _disNum = 3.0f;
+            float _disNum = 1.0f;
             return new Vector3(
                 (float)message.pose.position.x * _disNum,
                 (float)message.pose.position.y * _disNum,
