@@ -462,8 +462,8 @@ class CloudMapSaver(object):
     def track_callback(self, track_data):
 	if track_data.transforms[0].child_frame_id == "base_link":
 	    if track_data.transforms[0].transform.translation.x == 0:
-	        if track_data.transforms[0].transform.translation.y == 0:
-	            self.track_data_pub.publish("track losts")
+	        # if track_data.transforms[0].transform.translation.y == 0:
+            	self.track_data_pub.publish("track losts")
 	    else:
 	        self.track_data_pub.publish("track exists")
 

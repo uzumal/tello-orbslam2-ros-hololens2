@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-
+# coding: UTF-8
 from __future__ import print_function
 
 # import roslib; roslib.load_manifest('teleop_twist_keyboard')
+
 import rospy
 
 from geometry_msgs.msg import Twist
@@ -15,6 +16,10 @@ import pygame.display
 import pygame.key
 import pygame.locals
 import pygame.font
+
+import random, string
+
+import os
 
 from cv_bridge import CvBridge, CvBridgeError
 
@@ -220,10 +225,16 @@ def limit_twist(twist):
     # return pub_takeoff.publish()
 
 def collision_callback(msg):
-    if msg:
-	isStop = True
-    else:
-	isStop = False
+    global isStop
+    isStop = True
+    rospy.loginfo("Message '{}' recieved".format(msg.data))
+
+def randstr(length):
+    return ''.join([chr(random.randint(97, 122)) for _ in range(length)])
+
+def save_file_at_dir(dir_path, filename, file_content, mode='a'):
+    with open(os.path.join(dir_path, filename), mode) as f:
+        f.write(str(file_content)+'\n')
 
 if __name__=="__main__":
     # settings = termios.tcgetattr(sys.stdin)
@@ -277,25 +288,28 @@ if __name__=="__main__":
     startFlag = False
     experimentFlag = True
     colliCnt = 0
+    new_dir_path = '/home/uzu/Log/' + randstr(5)
+    os.makedirs(new_dir_path)
 
     try:
         while not rospy.is_shutdown():
 	    if isStop:
-                keyname = pygame.key.name(e.key)
-		if keyname in list_of_pressed_keys:
+		for keyname in list_of_pressed_keys:
                     list_of_pressed_keys.remove(keyname)
-		twist = reset_command(keyname, twist)
-		colliCnt += 1;
-
-            for keyname in list_of_pressed_keys:
-                print('raise_com: ' + keyname)
-		if experimentFlag:
-		    experimentTime = time.time()
-		    experimentFlag = False
-		if startFlag:
-		    list_of_cmd_keys.append(keyname)
-		    list_of_cmd_times.append(round(time.time() - start, 1))
-                twist = raise_command(keyname, twist)
+		    twist = reset_command(keyname, twist)
+		    colliCnt += 1;
+		    isStop = False
+            	    twist = limit_twist(twist)
+            	    pub_twist.publish(twist)
+		    #time.sleep(1)
+                    continue
+	    else:
+            	for keyname in list_of_pressed_keys:
+                    print('raise_com: ' + keyname)
+		    if startFlag:
+		    	list_of_cmd_keys.append(keyname)
+		    	list_of_cmd_times.append(round(time.time() - start, 1))
+                    twist = raise_command(keyname, twist)
 		
 
             for e in pygame.event.get():
@@ -324,9 +338,14 @@ if __name__=="__main__":
 			    [file.write(str(element)+'\n') for element in list_of_cmd_times]
 			with open(spent_time_file_path, 'w') as file:
 			    [file.write(str(element)+'\n') for element in list_of_times_keys]
-			print("---EXPERIMENT TIME---")			
+			for element in list_of_times_keys:
+			    save_file_at_dir(new_dir_path, 'spent_time_file.txt', element)
+			save_file_at_dir(new_dir_path, 'command_count_file.txt', len(list_of_cmd_keys))
+			print("---EXPERIMENT TIME---")
+			save_file_at_dir(new_dir_path, 'experiment_time_file.txt', time.time() - experimentTime)
 			print(time.time() - experimentTime)
-			print("---COLLISION COUNT---")			
+			print("---COLLISION COUNT---")
+			save_file_at_dir(new_dir_path, 'collision_count_file.txt', colliCnt)		
 			print(colliCnt)
                         raise KeyboardInterrupt
 
@@ -334,12 +353,18 @@ if __name__=="__main__":
                         pub_land.publish()
                         continue
                     elif keyname == 'tab':
+                        pub_takeoff.publish()
+			print("-----PLEASE PRESS RETURN-----")
 			if startFlag == False:
 			    start = time.time()
-			    prevTime = start
-			startFlag = True
-                        pub_takeoff.publish()
                         continue
+		    elif keyname == 'return':
+			if startFlag == False:
+			    prevTime = time.time()
+		    	if experimentFlag:
+		    	    experimentTime = time.time()
+		    	experimentFlag = False
+			startFlag = True
                     else:
                         if not keyname in list_of_pressed_keys:
                             list_of_pressed_keys.append(keyname)
