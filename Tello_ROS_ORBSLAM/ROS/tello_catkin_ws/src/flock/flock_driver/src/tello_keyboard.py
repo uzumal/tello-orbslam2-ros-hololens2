@@ -21,6 +21,8 @@ import random, string
 
 import os
 
+import datetime
+
 from cv_bridge import CvBridge, CvBridgeError
 
 from subprocess import Popen, PIPE
@@ -284,11 +286,13 @@ if __name__=="__main__":
     list_of_cmd_keys = []
     list_of_cmd_times = []
     list_of_times_keys = []
+    sum_of_keys = []
 
     startFlag = False
     experimentFlag = True
     colliCnt = 0
-    new_dir_path = '/home/uzu/Log/' + randstr(5)
+    dt_now = datetime.datetime.now()
+    new_dir_path = '/home/uzu/Log/' + dt_now.strftime('%Y-%m-%d %H:%M:%S')
     os.makedirs(new_dir_path)
 
     try:
@@ -340,7 +344,7 @@ if __name__=="__main__":
 			    [file.write(str(element)+'\n') for element in list_of_times_keys]
 			for element in list_of_times_keys:
 			    save_file_at_dir(new_dir_path, 'spent_time_file.txt', element)
-			save_file_at_dir(new_dir_path, 'command_count_file.txt', len(list_of_cmd_keys))
+			save_file_at_dir(new_dir_path, 'command_count_file.txt', len(sum_of_keys)-2)
 			print("---EXPERIMENT TIME---")
 			save_file_at_dir(new_dir_path, 'experiment_time_file.txt', time.time() - experimentTime)
 			print(time.time() - experimentTime)
@@ -374,6 +378,7 @@ if __name__=="__main__":
 
                 elif  e.type == pygame.locals.KEYUP:
                     keyname = pygame.key.name(e.key)
+		    sum_of_keys.append(keyname)
 		    list_of_cmd_keys.append("KEYUP")
 		    list_of_cmd_times.append(round(time.time() - start, 1))
                     print('-' + keyname)
