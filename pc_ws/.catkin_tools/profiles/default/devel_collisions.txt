@@ -1,1 +1,0 @@
-/home/uzu/pc_ws/devel/./cmake.lock 1
