@@ -1,0 +1,5 @@
+<launch>
+  <node name="pcl_downsampling" pkg="pcl_ros_processing" type="downsampling">
+    <remap from="input" to="/orb_slam2_mono/map_points" />
+  </node>
+</launch>
