@@ -379,8 +379,9 @@ if __name__=="__main__":
                 elif  e.type == pygame.locals.KEYUP:
                     keyname = pygame.key.name(e.key)
 		    sum_of_keys.append(keyname)
-		    list_of_cmd_keys.append("KEYUP")
-		    list_of_cmd_times.append(round(time.time() - start, 1))
+		    if startFlag:
+		    	list_of_cmd_keys.append("KEYUP")
+		    	list_of_cmd_times.append(round(time.time() - start, 1))
                     print('-' + keyname)
                     if keyname in list_of_pressed_keys:
                         list_of_pressed_keys.remove(keyname)
