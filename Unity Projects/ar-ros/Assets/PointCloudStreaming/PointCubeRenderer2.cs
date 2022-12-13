@@ -187,7 +187,7 @@ public class PointCubeRenderer2 : MonoBehaviour
                     //if (_hit.gameObject.CompareTag("noVisualize"))
                     //{
                     _renderer.material.color = new Color32(255, 255, 255, 255);
-                    //_hit.gameObject.tag = "Building";
+                    _hit.gameObject.tag = "Building";
                     _hit.gameObject.layer = 9;
                     //}
                 }

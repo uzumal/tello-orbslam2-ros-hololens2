@@ -28,7 +28,13 @@ public class Finish : MonoBehaviour
         pointcloud2 = GameObject.Find("PointCloudSub2");
         obj = (GameObject)Resources.Load("target");
         p_MeshRenderer = Building.GetComponent<MeshRenderer>();
+        Invoke("Activate", 5);
         // Building.gameObject.SetActive(false);
+    }
+
+    void Activate()
+    {
+        Building.SetActive(false);
     }
 
     void GeneratePrefab()
@@ -61,9 +67,9 @@ public class Finish : MonoBehaviour
         }
         else if (cntClick == 3)
         {
-            Building.gameObject.SetActive(true);
-            //pointcloud2.GetComponent<PointCloudSubscriber2>().enabled = false;
-            //pointcloud2.GetComponent<DownCloudSubscriber2>().enabled = true;
+            Building.SetActive(true);
+            pointcloud2.GetComponent<PointCloudSubscriber2>().enabled = false;
+            pointcloud2.GetComponent<DownCloudSubscriber2>().enabled = true;
             buttonConfigHelper.MainLabelText = "Building Finish";
         }
         else if (cntClick == 2)

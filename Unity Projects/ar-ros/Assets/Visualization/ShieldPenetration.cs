@@ -76,7 +76,7 @@ public class ShieldPenetration : MonoBehaviour
     {
         drone = GameObject.Find("droneModel1");
         mat = Resources.Load<Material>("Temparent_obj") as Material;
-        mat_default = Resources.Load<Material>("Default") as Material;
+        mat_default = Resources.Load<Material>("Building") as Material;
         prevDronePosition = new Vector3(100, 100, 100);
         prevUserPosition = new Vector3(100, 100, 100);
         if (drone == null)
@@ -97,7 +97,7 @@ public class ShieldPenetration : MonoBehaviour
         // 前回の結果を退避してから、Raycast して今回の遮蔽物のリストを取得する
         // RaycastHit[] _hits = Physics.RaycastAll(_ray, _difference.magnitude, layerMask_);
         // RaycastHit[] _hits = Physics.SphereCastAll(this.transform.position, 0.03f ,_direction, _difference.magnitude, layerMask_);
-        RaycastHit[] _hits = Physics.BoxCastAll(this.transform.position, Vector3.one * 0.3f, _direction, angle, _difference.magnitude, layerMask_);
+        RaycastHit[] _hits = Physics.BoxCastAll(this.transform.position, Vector3.one * 0.2f, _direction, angle, _difference.magnitude, layerMask_);
         //MaskObjectのRendererコンポーネント
 
         rendererHitsPrevs_ = rendererHitsList_.ToArray();
@@ -121,14 +121,14 @@ public class ShieldPenetration : MonoBehaviour
                         _renderer.material = mat;
                         rendererHitsList_.Add(_renderer);
                         obst = true;
-                        float distance = Vector3.SqrMagnitude(nowDronePosition - _hit.collider.gameObject.transform.position);
+                        float distance = Vector3.SqrMagnitude(nowDronePosition - _hit.point);
                         if (distance <= 0.3)
                         {
-                            _renderer.material.color = new Color32(255, 0, 0, 150);
+                            _renderer.material.color = new Color32(255, 0, 0, 130);
                         }
                         else if (0.3 < distance && distance <= 0.6)
                         {
-                            _renderer.material.color = new Color32(255, 255, 0, 100);
+                            _renderer.material.color = new Color32(255, 255, 0, 80);
                         }
                         else if (0.6 < distance && distance <= 1.5)
                         {
