@@ -1,18 +1,11 @@
-# drone-slam-octomap
-under development
+# tello-orbslam2-ros-hololens2
 
-## Procedure
-1. Ubuntu18.04 install
-2. ROS Melodic
-3. https://github.com/tau-adl/Tello_ROS_ORBSLAM
-4. Octomap install（https://github.com/OctoMap/octomap_mapping）
-5. Convert 3D point to Octomap
-6. Send to Unity
-7. positioning
-8. Check correctly for Position
-9. Merge multiple uav's OCtomap
+Software for visualizing drone mapping environments using HoloLens2.
+I am using this software for my Master's research, please cite the paper when using the program.
 
-### Usage
+It is developed using [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), [ROS-SHARP](https://github.com/EricVoll/ros-sharp), and [Unity](https://unity3d.com/).
+
+## Usage
 if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
 ```
 roslaunch flock_driver orbslam2_with_cloud_map.launch
@@ -27,80 +20,16 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 roslaunch pcl_ros_processing pcl_downsampling.launch
 ```
 
-https://www.youtube.com/watch?v=yPPFK_74rro
 
-##Build
-### Installing our version of TelloPy
-based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
+# Prerequisites
+We have tested the library in **Ubuntu **18.04**. 
+https://github.com/tau-adl/Tello_ROS_ORBSLAM
+基本的に必要なライブラリは揃えているため，フォルダーに移動し，各パッケージをインストール
 ```
-cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
-sudo python setup.py install
+cd ~/tello-orbslam2-ros-hololens2/Requirements/
 ```
-### Installing orbslam2
-based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
-```
-cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
-catkin init
-catkin clean
-catkin build --mem-limit 70% -j1
-```
-
-sudo apt-get install ros-<rosdistro>-rosbridge-server
-roslaunch rosbridge_server rosbridge_websocket.launch
-
-
-## Add the enviroment setup to bashrc
-```
-echo "source $PWD/devel/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-```
-
-sudo apt-get install ros-melodic-octomap ros-melodic-octomap-mapping ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-octomap-rviz-plugins ros-melodic-octomap-server
-
-
-### Ubuntu18.04 install
-VirtualBox install
-https://www.virtualbox.org/
-Ubuntu18.04 install
-https://www.ubuntulinux.jp/News/ubuntu2004-ja-remix
-- memory size
-  - 7000MB
-- プロセッサー
-  - 6
-- File size
-  - 20.00GB
-- 光学ディスク
-  - ubuntu20.04-desktop.isoを使用
-- install Ubuntu for Japanese
-- スナップショットの作成
-- 最新版へ更新
-```
-sudo apt update
-sudo apt upgrade
-```
-### ROS Melodic install
-[https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
-](http://wiki.ros.org/melodic/Installation/Ubuntu)
-
-### GitHub
-- git install
-```
-sudo apt-get install git
-git config --global user.name [任意のユーザ名]
-git config --global user.email [任意のユーザ名]
-```
-- ssh
-```
-ssh-keygen -t rsa -C "メールアドレス"
-cat ~/.ssh/id_rsa.pub | clip.exe
-```
-- Githubへ登録後
-```
-ssh -T git@github.com
-```
-
-## Requirement Packages(全て自身でインストールしたい人)
-```
+## Setup Software
+Install what you need
 ### catking tools
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
@@ -120,11 +49,11 @@ sudo apt-get install python-imaging-tk
 ```
 sudo apt-get install python-pygame
 ```
-  
-### Pangolin(ver.0.5)本体のインストール
+
+### Pangolin
+We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface. Dowload and install instructions can be found at: https://github.com/stevenlovegrove/Pangolin.
+
 ```
-cd ~/ROS/
-git clone --recursive https://github.com/stevenlovegrove/Pangolin.git -b v0.5
 sudo apt install libgl1-mesa-dev
 sudo apt install libglew-dev
 sudo apt-get install libxkbcommon-dev
@@ -135,9 +64,10 @@ cmake ..
 cmake --build .
 sudo make install
 ```
+
 ### Pybind11
+[pybind11](https://github.com/pybind/pybind11) is a lightweight header-only library that exposes C++ types in Python and vice versa, mainly to create Python bindings of existing C++ code. 
 ```
-git clone https://github.com/pybind/pybind11.git
 cd pybind
 mkdir build
 cmake ..
@@ -145,37 +75,71 @@ make -j6
 sudo make install
 ```
 
-### OpenCV 3.4.0
+### Eigen3
+Required by g2o (see below). Download and install instructions can be found at: http://eigen.tuxfamily.org. **Required at least 3.1.0**.
 ```
-# root権限
+cd eigen-3.3.7
+mkdir build
+cd build
+cmake ..
+# make check (not definitely)
+sudo make install
+```
+
+### DBoW2 and g2o (Included in Thirdparty folder)
+We use modified versions of the [DBoW2](https://github.com/dorian3d/DBoW2) library to perform place recognition and [g2o](https://github.com/RainerKuemmerle/g2o) library to perform non-linear optimizations. Both modified libraries (which are BSD) are included in the *Thirdparty* folder.
+```
+cd DBoW2
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+### h264decoder
+```
+cd h264decoder
+mkdir build
+cd build
+cmake ..
+make
+```
+now copy it to python path
+```
+sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
+```
+
+### OpenCV 3.4.0
+We use [OpenCV](http://opencv.org) to manipulate images and features. Dowload and install instructions can be found at: http://opencv.org. **Required at OpenCV 3.4.0**.
+```
+# root authority
 sudo su -
 
 apt-get update
 apt-get upgrade
 
-# libjasper-devを入れるためにリポジトリを追加
+# Add repository to include libjasper-dev
 add-apt-repository "deb http://security.ubuntu.com/ubuntu bionic-security main"
 
-# 依存パッケージをインストールする
+# install dependent packages
 apt-get -y install build-essential checkinstall cmake unzip pkg-config yasm
 apt-get -y install git gfortran python3-dev
 apt-get -y install libjpeg8-dev libjasper-dev libpng12-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine2-dev libv4l-dev
 apt-get -y install libjpeg-dev libpng-dev libtiff-dev libtbb-dev
 apt-get -y install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev libxvidcore-dev libx264-dev libgtk-3-dev
 
-# opencvとopencv_contribのソースをgithubからダウンロードする（zipに圧縮しているものでも可）
-#  masterにチェックアウトしているものも見かけるけど、それだと開発中のバージョンになるので、タグから最新のバージョンを指定する
+# Specify the latest version from the tag
 cd /usr/local/src
 git clone https://github.com/opencv/opencv.git
 git clone https://github.com/opencv/opencv_contrib.git
 cd opencv_contrib
-# 本環境は3.２.0を使用したが、Github上のバージョンを要確認
+# change the version
 cd opencv_contrib
 git checkout -b 3.4.0 refs/tags/3.2.0
 cd ../opencv/
 git checkout -b 3.4.0 refs/tags/3.2.0
 
-# ビルドしてインストールする
+# Build and Install
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_FFMPEG=ON -D WITH_CUDA=ON -DWITH_NVCUVID=ON -DBUILD_opencv_cudacodec=OFF -DCUDA_GENERATION=Pascal ..
@@ -185,12 +149,74 @@ make install
 echo /usr/local/lib > /etc/ld.so.conf.d/opencv.conf
 ldconfig -v
 
-# きちんとインストールされていることを確認する
-#   opencvっていうコマンドはないので注意
+# Check the OpenCV Version
 opencv_version
 
 exit
 ```
+
+##Build
+### Installing our version of TelloPy
+based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
+```
+cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
+sudo python setup.py install
+```
+### Installing orbslam2
+based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
+```
+cd ~/tello-orbslam2-ros-hololens2/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
+catkin init
+catkin clean
+catkin build --mem-limit 70% -j1
+```
+
+#### Add the enviroment setup to bashrc
+```
+echo "source $PWD/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Installing rosbridge-server
+[rosbridge](http://wiki.ros.org/ja/rosbridge) allows dynamic socket and web-socket based access to the full capabilities of ROS. 
+```
+sudo apt-get install ros-melodic-rosbridge-server
+roslaunch rosbridge_server rosbridge_websocket.launch
+```
+
+### Installing pcl_ros_processing
+[pcl_ros_processing](https://github.com/karaage0703/pcl_ros_processing) allows downsampling pointcloud from ros-orb-slam2.
+```
+cd pc_ws
+catkin init
+catkin build
+```
+#### Add the enviroment setup to bashrc
+```
+echo "source $PWD/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+# Appendix
+## Use as appropriate
+### cmakeのversion-update
+```
+wget https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz
+tar xvf cmake-3.14.0.tar.gz
+cd ~/Downloads/cmake-3.14.0   # or wherever you downloaded cmake
+./bootstrap --prefix=$HOME/cmake-install
+make 
+make install
+export PATH=$HOME/cmake-install/bin:$PATH
+export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
+```
+### lock対処
+```
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock-frontend
+```
+## For users who install from scratch by themselves
 ### Eigen3
 ```
 cd ~
@@ -231,17 +257,10 @@ make
 sudo make install
 ```
 
-# Building
-## Getting the code
-git clone
-## Install
-基本的に必要なライブラリは揃えているため，フォルダーに移動し，各パッケージをインストール
+### Pangolin(ver.0.5)本体のインストール
 ```
-cd ~/drone-slam-octomap/Requirements/
-```
-
-### Pangolin
-```
+cd ~/ROS/
+git clone --recursive https://github.com/stevenlovegrove/Pangolin.git -b v0.5
 sudo apt install libgl1-mesa-dev
 sudo apt install libglew-dev
 sudo apt-get install libxkbcommon-dev
@@ -252,87 +271,12 @@ cmake ..
 cmake --build .
 sudo make install
 ```
-
-Pybind11
+### Pybind11
 ```
+git clone https://github.com/pybind/pybind11.git
 cd pybind
 mkdir build
 cmake ..
 make -j6
 sudo make install
-```
-
-### Eigen3
-```
-cd eigen-3.3.7
-mkdir build
-cd build
-cmake ..
-# make check (not definitely)
-sudo make install
-```
-
-### g2o, DBoW2
-```
-cd DBoW2(対象のフォルダー)
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-```
-### h264decoder
-```
-cd h264decoder
-mkdir build
-cd build
-cmake ..
-make
-```
-now copy it to python path
-```
-sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
-```
-
-## Octomap
-```
-sudo apt-get install ros-melodic-octomap ros-melodic-octomap-server ros-melodic-octomap-mapping ros-melodic-octomap-ros ros-melodic-octomap-msgs
-```
-run:
-```
-cd ~/octomap_catkin_ws
-catkin build
-source devel/setup.bash
-```
-
-then just run:
-
-```
-roslaunch octomap_server octomap_mapping.launch
-```
-
-## ORB-SLAMの違い
-元コードを改修
-- Tello_ROS_ORBSLAM > ROS > tello_catkin_ws > src > orb_slam_2_ros > CMakeLists
-  - CmakeFile_changed2の使用
-  - $ {PROJECT_SOURCE_DIR} /orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.soの追加
-- 
-
-## Appendix
-### cmakeのversion-update
-```
-wget https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz
-tar xvf cmake-3.14.0.tar.gz
-cd ~/Downloads/cmake-3.14.0   # or wherever you downloaded cmake
-./bootstrap --prefix=$HOME/cmake-install
-make 
-make install
-export PATH=$HOME/cmake-install/bin:$PATH
-export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
-```
-### lock対処
-```
-sudo rm /var/lib/apt/lists/lock
-sudo rm /var/lib/dpkg/lock
-sudo rm /var/lib/dpkg/lock-frontend
 ```
