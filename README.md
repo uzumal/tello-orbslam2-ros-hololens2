@@ -1,12 +1,11 @@
 # tello-orbslam2-ros-hololens2
 
-<!-- [![Version](https://img.shields.io/github/v/tag/Unity-Technologies/Unity-Robotics-Hub)](https://github.com/Unity-Technologies/Unity-Robotics-Hub/releases) -->
-![version](https://img.shields.io/badge/version-1.0-orange)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
+<a href="https://github.com/uzumal/tello-orbslam2-ros-hololens2/releases"><img src="https://img.shields.io/github/v/release/uzumal/tello-orbslam2-ros-hololens2?color=2B90B6&label=" alt="release"></a>
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![ROS](https://img.shields.io/badge/ros-melodic-brightgreen)
 ![Unity](https://img.shields.io/badge/unity-2019.4+-brightgreen)
 
-Software for visualizing drone mapping environments using HoloLens2.
+  Software for visualizing drone mapping environments using HoloLens2.
 I am using this software for my Master's research, please cite the paper when using the program.
 
 It is developed using [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), [ROS-SHARP](https://github.com/EricVoll/ros-sharp), and [Unity](https://unity3d.com/).
