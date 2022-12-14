@@ -5,6 +5,24 @@ I am using this software for my Master's research, please cite the paper when us
 
 It is developed using [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), [ROS-SHARP](https://github.com/EricVoll/ros-sharp), and [Unity](https://unity3d.com/).
 
+## Getting Started
+### [How to Use](#Usage)
+
+refer to how using ros command.
+
+### [Quick Installation Instructions](#Prerequisites)
+
+Brief steps on installing the Require packages.
+
+### [Appendix](#Appendix)
+
+If you need any help, I suggest you refer to it.
+
+### [HoloLens Setup](#HoloLensSetup)
+
+A brief description of how to set up to HoloLens2 (Unity).
+
+<a id="Usage"></a>
 ## Usage
 if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
 ```
@@ -20,38 +38,39 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 roslaunch pcl_ros_processing pcl_downsampling.launch
 ```
 
-
-# Prerequisites
+<a id="Prerequisites"></a>
+## Prerequisites
 We have tested the library in **Ubuntu **18.04**. 
-https://github.com/tau-adl/Tello_ROS_ORBSLAM
-基本的に必要なライブラリは揃えているため，フォルダーに移動し，各パッケージをインストール
+
+basically have all the necessary libraries, so move to the folder and install each package
+
 ```
 cd ~/tello-orbslam2-ros-hololens2/Requirements/
 ```
-## Setup Software
+### Setup Software
 Install what you need
-### catking tools
+#### catking tools
 ```
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install python-catkin-tools
 ```
-### ffmpeg
+#### ffmpeg
 ```
 sudo apt install ffmpeg
 ```
-### Python PIL
+#### Python PIL
 ```
 sudo apt-get install python-imaging-tk
 ```
 
-### Python Pygame
+#### Python Pygame
 ```
 sudo apt-get install python-pygame
 ```
 
-### Pangolin
+#### Pangolin
 We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface. Dowload and install instructions can be found at: https://github.com/stevenlovegrove/Pangolin.
 
 ```
@@ -66,7 +85,7 @@ cmake --build .
 sudo make install
 ```
 
-### Pybind11
+#### Pybind11
 [pybind11](https://github.com/pybind/pybind11) is a lightweight header-only library that exposes C++ types in Python and vice versa, mainly to create Python bindings of existing C++ code. 
 ```
 cd pybind
@@ -76,7 +95,7 @@ make -j6
 sudo make install
 ```
 
-### Eigen3
+#### Eigen3
 Required by g2o (see below). Download and install instructions can be found at: http://eigen.tuxfamily.org. **Required at least 3.1.0**.
 ```
 cd eigen-3.3.7
@@ -87,7 +106,7 @@ cmake ..
 sudo make install
 ```
 
-### DBoW2 and g2o (Included in Thirdparty folder)
+#### DBoW2 and g2o (Included in Thirdparty folder)
 We use modified versions of the [DBoW2](https://github.com/dorian3d/DBoW2) library to perform place recognition and [g2o](https://github.com/RainerKuemmerle/g2o) library to perform non-linear optimizations. Both modified libraries (which are BSD) are included in the *Thirdparty* folder.
 ```
 cd DBoW2
@@ -97,7 +116,7 @@ cmake ..
 make
 sudo make install
 ```
-### h264decoder
+#### h264decoder
 ```
 cd h264decoder
 mkdir build
@@ -110,7 +129,7 @@ now copy it to python path
 sudo cp ~/ROS/h264decoder/libh264decoder.so /usr/local/lib/python2.7/dist-packages
 ```
 
-### OpenCV 3.4.0
+#### OpenCV 3.4.0
 We use [OpenCV](http://opencv.org) to manipulate images and features. Dowload and install instructions can be found at: http://opencv.org. **Required at OpenCV 3.4.0**.
 ```
 # root authority
@@ -156,7 +175,7 @@ opencv_version
 exit
 ```
 
-##Build
+## Build
 ### Installing our version of TelloPy
 based on https://github.com/dji-sdk/Tello-Python and https://github.com/hanyazou/TelloPy
 ```
@@ -164,7 +183,8 @@ cd ~/drone-slam-octomap/Tello_ROS_ORBSLAM/TelloPy
 sudo python setup.py install
 ```
 ### Installing orbslam2
-based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS 
+based on https://github.com/appliedAI-Initiative/orb_slam_2_ros and https://github.com/rayvburn/ORB-SLAM2_ROS and https://github.com/tau-adl/Tello_ROS_ORBSLAM
+
 ```
 cd ~/tello-orbslam2-ros-hololens2/Tello_ROS_ORBSLAM/ROS/tello_catkin_ws/
 catkin init
@@ -198,9 +218,28 @@ echo "source $PWD/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-# Appendix
-## Use as appropriate
-### cmakeのversion-update
+<a id="HoloLensSetup"></a>
+## HoloLens Setup
+
+Unzipping below files
+
+>tello-orbslam2-ros-hololens2/Unity Projects/ar-ros-package.zip  
+>tello-orbslam2-ros-hololens2/Unity Projects/mrtk-ros-droneImage-package.zip
+
+and please import these package files.
+
+You must change IP address to yours IP address in below file.
+
+>tello-orbslam2-ros-hololens2/Unity Projects/ar-ros/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/RosConnector.cs
+
+If you want to change the connection point, check the second pc checkbox (see figure).
+
+<img width="463" alt="スクリーンショット 2022-12-13 9 40 36" src="https://user-images.githubusercontent.com/52265875/207198455-0c185ad9-73d7-4227-9505-700415ccedff.png">
+
+<a id="Appendix"></a>
+## Appendix
+### Use as appropriate
+#### cmakeのversion-update
 ```
 wget https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz
 tar xvf cmake-3.14.0.tar.gz
@@ -211,14 +250,14 @@ make install
 export PATH=$HOME/cmake-install/bin:$PATH
 export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
 ```
-### lock対処
+#### lock対処
 ```
 sudo rm /var/lib/apt/lists/lock
 sudo rm /var/lib/dpkg/lock
 sudo rm /var/lib/dpkg/lock-frontend
 ```
-## For users who install from scratch by themselves
-### Eigen3
+### For users who install from scratch by themselves
+#### Eigen3
 ```
 cd ~
 mkdir eigen_ws
@@ -231,7 +270,7 @@ cmake ..
 # make check (not definitely)
 sudo make install
 ```
-### g2o
+#### g2o
 ```
 sudo apt install libsuitesparse-dev - qtdeclarative5-dev - qt5-qmake - libqglviewer-dev
 mkdir ~/g2o_ws
@@ -244,7 +283,7 @@ cmake ..
 make
 sudo make install
 ```
-### DBoW2
+#### DBoW2
 ```
 sudo apt-get install libboost-dev
 mkdir ~/DBoW2_ws
@@ -258,7 +297,7 @@ make
 sudo make install
 ```
 
-### Pangolin(ver.0.5)本体のインストール
+#### Pangolin(ver.0.5)本体のインストール
 ```
 cd ~/ROS/
 git clone --recursive https://github.com/stevenlovegrove/Pangolin.git -b v0.5
@@ -272,7 +311,7 @@ cmake ..
 cmake --build .
 sudo make install
 ```
-### Pybind11
+#### Pybind11
 ```
 git clone https://github.com/pybind/pybind11.git
 cd pybind
