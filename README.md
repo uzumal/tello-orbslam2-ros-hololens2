@@ -1,5 +1,11 @@
 # tello-orbslam2-ros-hololens2
 
+<!-- [![Version](https://img.shields.io/github/v/tag/Unity-Technologies/Unity-Robotics-Hub)](https://github.com/Unity-Technologies/Unity-Robotics-Hub/releases) -->
+![version](https://img.shields.io/badge/version-1.0-orange)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![ROS](https://img.shields.io/badge/ros-melodic-brightgreen)
+![Unity](https://img.shields.io/badge/unity-2019.4+-brightgreen)
+
 Software for visualizing drone mapping environments using HoloLens2.
 I am using this software for my Master's research, please cite the paper when using the program.
 
@@ -27,7 +33,7 @@ A brief description of how to set up to HoloLens2 (Unity).
 
 <a id="Usage"></a>
 ## Usage
-if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
+> **Note**: if u use a virtual-box, you must connect TELLO-XXXXX before launch Ubuntu.
 ```
 roslaunch flock_driver orbslam2_with_cloud_map.launch
 ```
@@ -235,9 +241,9 @@ You must change IP address to yours IP address in below file.
 
 >tello-orbslam2-ros-hololens2/Unity Projects/ar-ros/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/RosConnector.cs
 
-If you want to change the connection point, check the second pc checkbox (see figure).
-
 <img width="463" alt="スクリーンショット 2022-12-13 9 40 36" src="https://user-images.githubusercontent.com/52265875/207198455-0c185ad9-73d7-4227-9505-700415ccedff.png">
+
+> **Note**: If you want to change the connection point, check the second pc checkbox (see figure).
 
 <a id="Appendix"></a>
 ## Appendix
