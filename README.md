@@ -250,7 +250,7 @@ make install
 export PATH=$HOME/cmake-install/bin:$PATH
 export CMAKE_PREFIX_PATH=$HOME/cmake-install:$CMAKE_PREFIX_PATH
 ```
-#### lock対処
+#### If you encounter a lock error
 ```
 sudo rm /var/lib/apt/lists/lock
 sudo rm /var/lib/dpkg/lock
@@ -297,7 +297,7 @@ make
 sudo make install
 ```
 
-#### Pangolin(ver.0.5)本体のインストール
+#### Pangolin(ver.0.5)
 ```
 cd ~/ROS/
 git clone --recursive https://github.com/stevenlovegrove/Pangolin.git -b v0.5
