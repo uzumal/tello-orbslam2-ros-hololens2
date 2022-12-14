@@ -5,6 +5,9 @@ I am using this software for my Master's research, please cite the paper when us
 
 It is developed using [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), [ROS-SHARP](https://github.com/EricVoll/ros-sharp), and [Unity](https://unity3d.com/).
 
+## Licence
+The source code is released under [GPLv3](http://www.gnu.org/licenses/) license.
+
 ## Getting Started
 ### [How to Use](#Usage)
 
@@ -320,3 +323,6 @@ cmake ..
 make -j6
 sudo make install
 ```
+
+## Disclaimer
+This is research code, it is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of merchantability or fitness for a particular purpose.
