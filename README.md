@@ -10,6 +10,11 @@ I am using this software for my Master's research, please cite the paper when us
 
 It is developed using [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), [ROS-SHARP](https://github.com/EricVoll/ros-sharp), and [Unity](https://unity3d.com/).
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/52265875/212625454-10438ca8-d59b-496c-80c1-b21a4f7d1453.gif" width = "420" height = "237"/>
+  <img src="https://user-images.githubusercontent.com/52265875/212625607-7e5866fc-0bc2-439c-b473-9fc933c24635.gif" width = "420" height = "237"/>
+</p>
+
 ## Licence
 The source code is released under [GPLv3](http://www.gnu.org/licenses/) license.
 
@@ -47,11 +52,16 @@ roslaunch pcl_ros_processing pcl_downsampling.launch
 ```
 
 <a id="Prerequisites"></a>
+ 
 ## Prerequisites
 We have tested the library in **Ubuntu **18.04**. 
 
 basically have all the necessary libraries, so move to the folder and install each package
 
+ <p id="demo1" align="center">
+  <img src="https://user-images.githubusercontent.com/52265875/212626601-8be1e8fe-323a-4172-9c4c-8454e1a5333d.png" width = "470" height = "270"/>
+ </p>
+ 
 ```
 cd ~/tello-orbslam2-ros-hololens2/Requirements/
 ```
@@ -229,6 +239,11 @@ source ~/.bashrc
 <a id="HoloLensSetup"></a>
 ## HoloLens Setup
 
+ <p id="demo1" align="center">
+  <img src="https://user-images.githubusercontent.com/52265875/212626420-5f17ae48-a42a-4337-8742-a63528fde20e.png" width = "420" height = "237"/>
+  <img src="https://user-images.githubusercontent.com/52265875/212626544-ce830865-a6a8-4802-8f3b-cdca70bc958e.png" width = "420" height = "237"/>
+ </p>
+ 
 Unzipping below files
 
 >tello-orbslam2-ros-hololens2/Unity Projects/ar-ros-package.zip  
