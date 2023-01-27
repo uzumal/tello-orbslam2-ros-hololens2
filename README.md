@@ -239,9 +239,12 @@ source ~/.bashrc
 <a id="HoloLensSetup"></a>
 ## HoloLens Setup
 
- <p id="demo1" align="center">
+ <p id="demo" align="center">
   <img src="https://user-images.githubusercontent.com/52265875/212626420-5f17ae48-a42a-4337-8742-a63528fde20e.png" width = "350" height = "207"/>
-  <img src="https://user-images.githubusercontent.com/52265875/212626544-ce830865-a6a8-4802-8f3b-cdca70bc958e.png" width = "350" height = "207"/>
+ </p>
+ 
+ <p id="demo1" align="center">
+  <img src="https://user-images.githubusercontent.com/52265875/212626544-ce830865-a6a8-4802-8f3b-cdca70bc958e.png" width = "600" height = "207"/>
  </p>
  
 Unzipping below files
